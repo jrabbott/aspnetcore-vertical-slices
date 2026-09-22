@@ -1,0 +1,75 @@
+@model WeatherApp.Features.Weather.Forecast.ForecastResponse
+@{
+    ViewData["Title"] = "Forecast";
+}
+
+<section class="page">
+    <header class="page-header">
+        <h1>Forecast</h1>
+        <p>View a multi-day forecast for a supported city.</p>
+    </header>
+
+    <form method="get" asp-action="Index" class="search-form" novalidate>
+        <div class="field">
+            <label for="City">City</label>
+            <input id="City"
+                   name="City"
+                   value="@Model.Request.City"
+                   class="input"
+                   placeholder="e.g. Paris"
+                   autocomplete="off" />
+            @if (Model.Searched && string.IsNullOrWhiteSpace(Model.Request.City))
+            {
+                <span class="field-error">Please enter a city name.</span>
+            }
+        </div>
+        <div class="field">
+            <label for="Days">Days</label>
+            <input id="Days"
+                   name="Days"
+                   type="number"
+                   min="1"
+                   max="7"
+                   value="@Model.Request.Days"
+                   class="input" />
+        </div>
+        <button type="submit" class="btn btn-primary">Get forecast</button>
+    </form>
+
+    @if (Model.Searched)
+    {
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div class="alert alert-error" role="alert">@Model.ErrorMessage</div>
+        }
+        else if (Model.Found)
+        {
+            <article class="forecast-result">
+                <h2>@Model.City, @Model.Country</h2>
+                <ul class="forecast-list">
+                    @foreach (var day in Model.Days)
+                    {
+                        <li>
+                            <div class="forecast-date">@day.Date.ToString("ddd, MMM d")</div>
+                            <div class="forecast-summary">@day.Summary</div>
+                            <div class="forecast-temp">@day.TemperatureC&deg;C / @day.TemperatureF&deg;F</div>
+                            <div class="forecast-meta">Humidity @day.HumidityPercent% · Wind @day.WindSpeedKph km/h</div>
+                        </li>
+                    }
+                </ul>
+            </article>
+        }
+    }
+
+    <aside class="hint">
+        <h2>Example cities</h2>
+        <ul class="chip-list">
+            @foreach (var city in Model.ExampleCities)
+            {
+                <li>
+                    <a asp-action="Index" asp-route-city="@city">@city</a>
+                </li>
+            }
+        </ul>
+    </aside>
+</section>

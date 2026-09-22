@@ -1,0 +1,77 @@
+@model WeatherApp.Features.Weather.Search.SearchResponse
+@{
+    ViewData["Title"] = "Search";
+}
+
+<section class="page">
+    <header class="page-header">
+        <h1>Search weather</h1>
+        <p>Look up the current conditions for a supported city.</p>
+    </header>
+
+    <form method="get" asp-action="Index" class="search-form" novalidate>
+        <div class="field">
+            <label for="City">City</label>
+            <input id="City"
+                   name="City"
+                   value="@Model.Request.City"
+                   class="input"
+                   placeholder="e.g. London"
+                   autocomplete="off" />
+            @if (Model.Searched && string.IsNullOrWhiteSpace(Model.Request.City))
+            {
+                <span class="field-error">Please enter a city name.</span>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    @if (Model.Searched)
+    {
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div class="alert alert-error" role="alert">@Model.ErrorMessage</div>
+        }
+        else if (Model.Found)
+        {
+            <article class="weather-result">
+                <h2>@Model.City, @Model.Country</h2>
+                <p class="summary">@Model.Summary</p>
+                <dl class="weather-stats">
+                    <div>
+                        <dt>Temperature</dt>
+                        <dd>@Model.TemperatureC&deg;C / @Model.TemperatureF&deg;F</dd>
+                    </div>
+                    <div>
+                        <dt>Humidity</dt>
+                        <dd>@Model.HumidityPercent%</dd>
+                    </div>
+                    <div>
+                        <dt>Wind</dt>
+                        <dd>@Model.WindSpeedKph km/h</dd>
+                    </div>
+                </dl>
+                <p class="actions">
+                    <a class="btn btn-secondary" asp-controller="Forecast" asp-action="Index" asp-route-city="@Model.City">View forecast</a>
+                    <form method="post" asp-controller="AddFavorite" asp-action="Index" class="inline-form">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="City" value="@Model.City" />
+                        <button type="submit" class="btn btn-secondary">Add to favorites</button>
+                    </form>
+                </p>
+            </article>
+        }
+    }
+
+    <aside class="hint">
+        <h2>Example cities</h2>
+        <ul class="chip-list">
+            @foreach (var city in Model.ExampleCities)
+            {
+                <li>
+                    <a asp-action="Index" asp-route-city="@city">@city</a>
+                </li>
+            }
+        </ul>
+    </aside>
+</section>

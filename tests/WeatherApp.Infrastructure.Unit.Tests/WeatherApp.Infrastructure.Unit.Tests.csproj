@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\WeatherApp.Infrastructure\WeatherApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\WeatherApp.Domain\WeatherApp.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
