@@ -8,6 +8,35 @@ public sealed class FavoritesEndpointTests(WeatherAppFactory factory) : IClassFi
     private readonly WeatherAppFactory _factory = factory ?? throw new ArgumentNullException(nameof(factory));
 
     [Fact]
+    public async Task Favorites_AreIsolatedPerBrowserSession()
+    {
+        HttpClient clientA = _factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false
+        });
+        HttpClient clientB = _factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false
+        });
+
+        IDocument pageA = await HtmlDocument.ParseAsync(await clientA.GetAsync("/weather/favorites"));
+        string token = HtmlDocument.AntiForgeryToken(pageA);
+
+        using FormUrlEncodedContent content = Form(token, "Madrid");
+        HttpResponseMessage addResponse = await clientA.PostAsync("/weather/favorites/add", content);
+        Assert.Equal(HttpStatusCode.Redirect, addResponse.StatusCode);
+
+        IDocument afterAddA = await HtmlDocument.ParseAsync(await clientA.GetAsync("/weather/favorites"));
+        Assert.Contains(
+            afterAddA.QuerySelectorAll("ul.favorites-list > li h2"),
+            heading => heading.TextContent.Trim() == "Madrid");
+
+        IDocument pageB = await HtmlDocument.ParseAsync(await clientB.GetAsync("/weather/favorites"));
+        Assert.Contains("You have no favorite cities yet", pageB.QuerySelector("p.empty")?.TextContent);
+        Assert.Empty(pageB.QuerySelectorAll("ul.favorites-list > li"));
+    }
+
+    [Fact]
     public async Task Favorites_EmptyStore_ShowsEmptyState()
     {
         HttpClient client = _factory.CreateClientWithFavorites([]);

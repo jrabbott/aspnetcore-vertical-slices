@@ -12,12 +12,6 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Development");
-
-        builder.ConfigureTestServices(services =>
-        {
-            services.RemoveAll<IFavoritesStore>();
-            services.AddSingleton<IFavoritesStore>(_ => new FavoritesStore([]));
-        });
     }
 
     public HttpClient CreateClientWithFavorites(
@@ -25,15 +19,23 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
         WebApplicationFactoryClientOptions? options = null)
     {
         string[] cities = initialCities?.ToArray() ?? [];
+        WebApplicationFactoryClientOptions clientOptions = options ?? new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        };
 
+        // Empty list: use real session-backed store (cookie jar isolates browsers).
+        if (cities.Length == 0)
+        {
+            return CreateClient(clientOptions);
+        }
+
+        // Non-empty seed (including ungeocodable cities): deterministic in-memory store.
         return WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
             {
                 services.RemoveAll<IFavoritesStore>();
                 services.AddSingleton<IFavoritesStore>(_ => new FavoritesStore(cities));
-            })).CreateClient(options ?? new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            });
+            })).CreateClient(clientOptions);
     }
 
     public HttpClient CreateProductionClient(WebApplicationFactoryClientOptions? options = null)

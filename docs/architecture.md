@@ -195,7 +195,8 @@ Examples in this app:
 - `src/WeatherApp.Infrastructure/Weather/IWeatherClient.cs`
 - `src/WeatherApp.Infrastructure/Weather/WeatherClient.cs` — Open-Meteo geocoding + forecast HTTP client
 - `src/WeatherApp.Infrastructure/Favorites/IFavoritesStore.cs`
-- `src/WeatherApp.Infrastructure/Favorites/FavoritesStore.cs` — in-memory favorites
+- `src/WeatherApp.Infrastructure/Favorites/FavoritesStore.cs` — in-memory list (tests / doubles)
+- `src/WeatherApp/Favorites/SessionFavoritesStore.cs` — per-browser session store used in production
 
 Feature handlers depend on abstractions such as `IWeatherClient`, not on concrete providers.
 
@@ -235,7 +236,7 @@ For a trivial one-page app, VSA can be more structure than you need. Prefer the 
 - handlers
 - FluentValidation request validators
 - `IWeatherClient` / `WeatherClient` (typed `HttpClient` → Open-Meteo)
-- `IFavoritesStore` / `FavoritesStore`
+- `IFavoritesStore` / `SessionFavoritesStore` (ASP.NET Core session; in-memory distributed cache)
 - the feature view location expander
 
 There is no assembly scanning. Reading `Program.cs` should make the application's wiring obvious.

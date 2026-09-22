@@ -42,6 +42,8 @@ Weather data comes from the free [Open-Meteo](https://open-meteo.com/) geocoding
 
 Unknown / ungeocodable cities are handled with user-facing messages.
 
+Favorites are stored **per browser session** (cookie session + in-memory cache). Closing the browser or waiting out the idle timeout clears them; different browsers do not share a list.
+
 ## Tests
 
 ```bash

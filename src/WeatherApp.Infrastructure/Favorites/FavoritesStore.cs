@@ -1,7 +1,8 @@
 namespace WeatherApp.Infrastructure.Favorites;
 
 /// <summary>
-/// Process-wide in-memory favorites store for the sample application.
+/// In-memory favorites list. Used by unit tests and as a test double in integration tests.
+/// Production uses session-backed <c>SessionFavoritesStore</c> in the web host.
 /// </summary>
 public sealed class FavoritesStore(IEnumerable<string> initialCities) : IFavoritesStore
 {
