@@ -41,7 +41,8 @@
     <!-- Handlers/validators already accept CancellationToken; tests omit TestContext wiring for clarity. -->
     <!-- xUnit method names intentionally use underscores (Method_When_Then). -->
     <!-- Integration/unit tests naturally couple many framework types; keep metrics gates on production code. -->
-    <NoWarn>$(NoWarn);xUnit1051;CA1707;CA1506</NoWarn>
+    <!-- HttpClient/HttpResponseMessage ownership in stub handlers trips CA2000 without adding signal. -->
+    <NoWarn>$(NoWarn);xUnit1051;CA1707;CA1506;CA2000</NoWarn>
   </PropertyGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">

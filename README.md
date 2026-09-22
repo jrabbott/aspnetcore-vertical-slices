@@ -2,7 +2,7 @@
 
 ASP.NET Core MVC + Razor for presentation, with Vertical Slice Architecture for feature organisation.
 
-A small, runnable weather application that shows how VSA can be applied to a conventional ASP.NET Core MVC + Razor Views app — without MediatR, AutoMapper, generic repositories, or other ceremony frameworks.
+A small, runnable weather application that shows how VSA can be applied to a conventional ASP.NET Core MVC + Razor Views app — without MediatR, AutoMapper, generic repositories, or other ceremony frameworks. Live weather comes from the free [Open-Meteo](https://open-meteo.com/) API (no key required for non-commercial use).
 
 ## Quick start
 
