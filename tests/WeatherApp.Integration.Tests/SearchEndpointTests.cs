@@ -24,35 +24,46 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
     public async Task Search_RendersFeatureViewAndLayout()
     {
         var response = await _client.GetAsync("/weather/search");
-        var html = await response.Content.ReadAsStringAsync();
+        var document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Contains("Search weather", html);
-        Assert.Contains("WeatherApp", html);
-        Assert.Contains("/weather/forecast", html);
-        Assert.Contains("/weather/favorites", html);
-        Assert.Contains("site.css", html);
+        Assert.Equal("Search weather", document.QuerySelector("h1")?.TextContent.Trim());
+        Assert.Equal("WeatherApp", document.QuerySelector("a.brand")?.TextContent.Trim());
+        Assert.NotNull(document.QuerySelector("nav.site-nav a[href='/weather/forecast']"));
+        Assert.NotNull(document.QuerySelector("nav.site-nav a[href='/weather/favorites']"));
+        Assert.NotNull(document.QuerySelector("link[href*='site.css']"));
+        Assert.NotNull(document.QuerySelector("form.search-form input[name='City']"));
     }
 
     [Fact]
     public async Task Search_KnownCity_ShowsCurrentWeather()
     {
         var response = await _client.GetAsync("/weather/search?city=London");
-        var html = await response.Content.ReadAsStringAsync();
+        var document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Contains("London, United Kingdom", html);
-        Assert.Contains("&deg;C", html);
+
+        var result = document.QuerySelector("article.weather-result");
+        Assert.NotNull(result);
+        Assert.Equal("London, United Kingdom", result.QuerySelector("h2")?.TextContent.Trim());
+        Assert.False(string.IsNullOrWhiteSpace(result.QuerySelector("p.summary")?.TextContent));
+        Assert.Contains("°C", result.TextContent);
+        Assert.Contains("°F", result.TextContent);
+        Assert.NotNull(result.QuerySelector("a[href='/weather/forecast?city=London']"));
     }
 
     [Fact]
     public async Task Search_UnknownCity_ShowsError()
     {
         var response = await _client.GetAsync("/weather/search?city=Atlantis");
-        var html = await response.Content.ReadAsStringAsync();
+        var document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Contains("No weather data found", html);
-        Assert.Contains("Atlantis", html);
+
+        var alert = document.QuerySelector(".alert.alert-error");
+        Assert.NotNull(alert);
+        Assert.Contains("No weather data found", alert.TextContent);
+        Assert.Contains("Atlantis", alert.TextContent);
+        Assert.Null(document.QuerySelector("article.weather-result"));
     }
 }

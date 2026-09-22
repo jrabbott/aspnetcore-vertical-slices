@@ -53,7 +53,7 @@ Test projects:
 | Project | Purpose |
 |---|---|
 | `tests/WeatherApp.Architecture.Tests` | Project + feature boundary rules (NetArchTest) |
-| `tests/WeatherApp.Integration.Tests` | HTTP routes via `WebApplicationFactory` |
+| `tests/WeatherApp.Integration.Tests` | HTTP routes via `WebApplicationFactory`, with AngleSharp DOM assertions |
 | `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler + FluentValidation unit tests |
 | `tests/WeatherApp.Domain.Unit.Tests` | Domain model unit tests |
 | `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client + favorites store unit tests |

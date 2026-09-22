@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text.RegularExpressions;
 
 namespace WeatherApp.Integration.Tests;
 
@@ -16,19 +15,20 @@ public sealed class FavoritesEndpointTests : IClassFixture<WeatherAppFactory>
     public async Task Favorites_EmptyStore_ShowsEmptyState()
     {
         var response = await _client.GetAsync("/weather/favorites");
-        var html = await response.Content.ReadAsStringAsync();
+        var document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Contains("You have no favorite cities yet", html);
-        Assert.Contains("Add a favorite", html);
+        Assert.Contains("You have no favorite cities yet", document.QuerySelector("p.empty")?.TextContent);
+        Assert.Equal("Add a favorite", document.QuerySelector("section.add-favorite h2")?.TextContent.Trim());
+        Assert.Empty(document.QuerySelectorAll("ul.favorites-list > li"));
     }
 
     [Fact]
     public async Task AddAndRemoveFavorite_RoundTrip()
     {
         var page = await _client.GetAsync("/weather/favorites");
-        var html = await page.Content.ReadAsStringAsync();
-        var token = ExtractAntiForgeryToken(html);
+        var document = await HtmlDocument.ParseAsync(page);
+        var token = HtmlDocument.AntiForgeryToken(document);
 
         var addResponse = await _client.PostAsync(
             "/weather/favorites/add",
@@ -41,12 +41,13 @@ public sealed class FavoritesEndpointTests : IClassFixture<WeatherAppFactory>
         Assert.Equal(HttpStatusCode.Redirect, addResponse.StatusCode);
         Assert.Equal("/weather/favorites", addResponse.Headers.Location?.ToString());
 
-        var afterAdd = await _client.GetAsync("/weather/favorites");
-        var afterAddHtml = await afterAdd.Content.ReadAsStringAsync();
-        Assert.Contains("<h2>Madrid</h2>", afterAddHtml);
-        Assert.Contains("Madrid was added", afterAddHtml);
+        var afterAdd = await HtmlDocument.ParseAsync(await _client.GetAsync("/weather/favorites"));
+        Assert.Contains("Madrid was added", afterAdd.QuerySelector(".alert.alert-success")?.TextContent);
+        Assert.Contains(
+            afterAdd.QuerySelectorAll("ul.favorites-list > li h2"),
+            heading => heading.TextContent.Trim() == "Madrid");
 
-        var removeToken = ExtractAntiForgeryToken(afterAddHtml);
+        var removeToken = HtmlDocument.AntiForgeryToken(afterAdd);
         var removeResponse = await _client.PostAsync(
             "/weather/favorites/remove",
             new FormUrlEncodedContent(new Dictionary<string, string>
@@ -57,20 +58,10 @@ public sealed class FavoritesEndpointTests : IClassFixture<WeatherAppFactory>
 
         Assert.Equal(HttpStatusCode.Redirect, removeResponse.StatusCode);
 
-        var afterRemove = await _client.GetAsync("/weather/favorites");
-        var afterRemoveHtml = await afterRemove.Content.ReadAsStringAsync();
-        Assert.Contains("Madrid was removed", afterRemoveHtml);
-        Assert.DoesNotContain("<h2>Madrid</h2>", afterRemoveHtml);
-    }
-
-    private static string ExtractAntiForgeryToken(string html)
-    {
-        var match = Regex.Match(
-            html,
-            """name="__RequestVerificationToken"[^>]*value="([^"]+)""",
-            RegexOptions.IgnoreCase);
-
-        Assert.True(match.Success, "Anti-forgery token was not found in the page.");
-        return match.Groups[1].Value;
+        var afterRemove = await HtmlDocument.ParseAsync(await _client.GetAsync("/weather/favorites"));
+        Assert.Contains("Madrid was removed", afterRemove.QuerySelector(".alert.alert-success")?.TextContent);
+        Assert.DoesNotContain(
+            afterRemove.QuerySelectorAll("ul.favorites-list > li h2"),
+            heading => heading.TextContent.Trim() == "Madrid");
     }
 }
