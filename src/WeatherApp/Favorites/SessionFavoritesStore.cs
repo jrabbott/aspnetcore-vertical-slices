@@ -8,7 +8,7 @@ namespace WeatherApp.Favorites;
 /// </summary>
 public sealed class SessionFavoritesStore(IHttpContextAccessor httpContextAccessor) : IFavoritesStore
 {
-    private const string SessionKey = "WeatherApp.Favorites";
+    private const string _sessionKey = "WeatherApp.Favorites";
 
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
@@ -74,12 +74,12 @@ public sealed class SessionFavoritesStore(IHttpContextAccessor httpContextAccess
 
     private List<string> Read()
     {
-        string? json = Session.GetString(SessionKey);
+        string? json = Session.GetString(_sessionKey);
         return string.IsNullOrWhiteSpace(json) ? [] : JsonSerializer.Deserialize<List<string>>(json) ?? [];
     }
 
     private void Write(List<string> cities)
     {
-        Session.SetString(SessionKey, JsonSerializer.Serialize(cities));
+        Session.SetString(_sessionKey, JsonSerializer.Serialize(cities));
     }
 }
