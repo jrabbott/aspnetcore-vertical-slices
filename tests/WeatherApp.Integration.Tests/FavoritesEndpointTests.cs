@@ -140,6 +140,22 @@ public sealed class FavoritesEndpointTests : IClassFixture<WeatherAppFactory>
             document.QuerySelector(".alert.alert-error")?.TextContent);
     }
 
+    [Fact]
+    public async Task RemoveFavorite_BlankCity_ShowsError()
+    {
+        var client = _factory.CreateClientWithFavorites([]);
+        var page = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favorites"));
+        var token = HtmlDocument.AntiForgeryToken(page);
+
+        var response = await client.PostAsync("/weather/favorites/remove", Form(token, ""));
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+
+        var document = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favorites"));
+        Assert.Contains(
+            "A city is required to remove a favorite",
+            document.QuerySelector(".alert.alert-error")?.TextContent);
+    }
+
     private static FormUrlEncodedContent Form(string token, string city) =>
         new(new Dictionary<string, string>
         {
