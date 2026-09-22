@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    env:
+      # Enables ContinuousIntegrationBuild + TreatWarningsAsErrors (Directory.Build.props).
+      CI: true
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore (locked)
+        run: dotnet restore aspnetcore-vertical-slices.slnx --locked-mode
+
+      - name: Build
+        run: dotnet build aspnetcore-vertical-slices.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test aspnetcore-vertical-slices.slnx --configuration Release --no-build --verbosity minimal

@@ -80,6 +80,15 @@ NuGet package versions are managed centrally in `Directory.Packages.props`. Proj
 
 Style and analyzer policy lives in `.editorconfig` (formatting, naming, nullable gates, and severity overrides). Code metrics thresholds for CA1501/CA1502/CA1505/CA1506 are in `CodeMetricsConfig.txt` (included as an `AdditionalFiles` item).
 
+## CI and dependency updates
+
+GitHub Actions (`.github/workflows/ci.yml`) restores with `--locked-mode`, builds, and tests on pushes to `main` and on pull requests (`CI=true`).
+
+Dependabot (`.github/dependabot.yml`) keeps noise low:
+
+- **NuGet** (weekly): one grouped PR for minor/patch; majors grouped separately
+- **GitHub Actions** (monthly): one grouped PR for all Actions
+
 ## Microsoft Testing Platform
 
 Test projects use **xUnit.net v3** with the **Microsoft Testing Platform** runner:
