@@ -69,3 +69,7 @@ Architecture rules include:
   - Each slice owns its Controller / Request / Handler / Response (validators where the slice accepts input)
 
 More detail: [Architecture](architecture.md).
+
+## Central Package Management
+
+NuGet package versions are managed centrally in `Directory.Packages.props`. Project files reference packages without `Version` attributes.

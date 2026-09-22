@@ -35,6 +35,7 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 │   └── getting-started.md
 ├── aspnetcore-vertical-slices.slnx
 ├── Directory.Build.props
+├── Directory.Packages.props          # Central Package Management
 ├── global.json
 └── README.md
 ```
