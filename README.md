@@ -95,8 +95,7 @@ Genuinely shared Razor infrastructure remains conventional:
 
 ```text
 Views/Shared/
-├── _Layout.cshtml
-└── _ValidationScriptsPartial.cshtml
+└── _Layout.cshtml
 ```
 
 Shared layout, navigation, and reusable partials stay under `Views/Shared/` because they are application-wide — not owned by a single slice.
