@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Razor;
 
-namespace WeatherApp.Infrastructure.Razor;
+namespace WeatherApp.Razor;
 
 /// <summary>
 /// Expands Razor view locations so feature controllers can resolve

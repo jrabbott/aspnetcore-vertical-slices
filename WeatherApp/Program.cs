@@ -4,7 +4,7 @@ using WeatherApp.Features.Weather.Forecast;
 using WeatherApp.Features.Weather.RemoveFavorite;
 using WeatherApp.Features.Weather.Search;
 using WeatherApp.Infrastructure.Favorites;
-using WeatherApp.Infrastructure.Razor;
+using WeatherApp.Razor;
 using WeatherApp.Infrastructure.Weather;
 using Microsoft.AspNetCore.Mvc.Razor;
 

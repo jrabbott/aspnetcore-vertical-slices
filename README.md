@@ -110,7 +110,9 @@ This sample targets **.NET 10 / ASP.NET Core 10** and uses the standard MVC exte
 
 Configured in `Program.cs` via `RazorViewEngineOptions`, and implemented by:
 
-`Infrastructure/Razor/FeatureViewLocationExpander.cs`
+`WeatherApp/Razor/FeatureViewLocationExpander.cs`
+
+(The expander is MVC presentation configuration, so it lives in the web project rather than `WeatherApp.Infrastructure`.)
 
 The expander reads the controller's namespace (for example `WeatherApp.Features.Weather.Search`) and adds:
 
@@ -180,24 +182,25 @@ It is acceptable for different response models to contain similar properties. Du
 
 ## Where infrastructure belongs
 
-Infrastructure stays outside feature slices.
+Infrastructure is a separate project (`WeatherApp.Infrastructure`) and stays outside feature slices.
 
 Examples in this app:
 
-- `Infrastructure/Weather/IWeatherClient.cs`
-- `Infrastructure/Weather/WeatherClient.cs` — deterministic fake weather data
-- `Infrastructure/Favorites/IFavoritesStore.cs`
-- `Infrastructure/Favorites/FavoritesStore.cs` — in-memory favorites
-- `Infrastructure/Razor/FeatureViewLocationExpander.cs`
+- `WeatherApp.Infrastructure/Weather/IWeatherClient.cs`
+- `WeatherApp.Infrastructure/Weather/WeatherClient.cs` — deterministic fake weather data
+- `WeatherApp.Infrastructure/Favorites/IFavoritesStore.cs`
+- `WeatherApp.Infrastructure/Favorites/FavoritesStore.cs` — in-memory favorites
 
 Feature handlers depend on abstractions such as `IWeatherClient`, not on concrete providers.
 
+The MVC-specific `FeatureViewLocationExpander` remains in the web project (`WeatherApp/Razor`) because it is presentation configuration, not application infrastructure.
+
 ## Where domain code belongs
 
-Domain concepts remain independent of MVC and infrastructure:
+Domain concepts live in `WeatherApp.Domain` and remain independent of MVC and infrastructure:
 
-- `Domain/Weather/Location.cs`
-- `Domain/Weather/WeatherReading.cs`
+- `WeatherApp.Domain/Weather/Location.cs`
+- `WeatherApp.Domain/Weather/WeatherReading.cs`
 
 Keep the domain small. Only introduce domain types when they add clarity.
 
@@ -222,29 +225,32 @@ For a trivial one-page app, VSA can be more structure than you need. Prefer the 
 ## Project structure
 
 ```text
-WeatherApp/
+WeatherApp/                      # ASP.NET Core MVC host + feature slices
 ├── Features/
 │   ├── Home/
-│   │   ├── HomeController.cs
-│   │   └── Error.cshtml
 │   └── Weather/
 │       ├── Search/
 │       ├── Forecast/
 │       ├── Favorites/
 │       ├── AddFavorite/
 │       └── RemoveFavorite/
-├── Domain/Weather/
-├── Infrastructure/
-│   ├── Weather/
-│   ├── Favorites/
-│   └── Razor/
+├── Razor/
+│   └── FeatureViewLocationExpander.cs
 ├── Views/Shared/
 ├── wwwroot/
 ├── _ViewImports.cshtml
 ├── _ViewStart.cshtml
 └── Program.cs
 
+WeatherApp.Domain/               # Domain model (no MVC / infrastructure deps)
+└── Weather/
+
+WeatherApp.Infrastructure/       # Weather client + favorites store
+├── Weather/
+└── Favorites/
+
 WeatherApp.Tests/
+├── Architecture/                # Project boundary / VSA structure rules
 ├── Unit/
 ├── Integration/
 └── Fakes/
@@ -295,6 +301,13 @@ The solution includes `WeatherApp.Tests` with:
 
 - **Unit tests** for slice handlers and `WeatherClient` (hand-written fakes, no mocking framework)
 - **Integration tests** using `WebApplicationFactory<Program>` for routes, feature views, layout, and favorites add/remove
+- **Architecture tests** (NetArchTest + assembly-reference checks) that enforce project boundaries and VSA structure:
+  - Domain does not reference Infrastructure, Web, or ASP.NET Core
+  - Infrastructure references Domain but not Web / MVC
+  - Web references Domain and Infrastructure
+  - Controllers and handlers live under `WeatherApp.Features`
+  - Handlers do not depend on MVC `Controller`
+  - Feature view location expander stays in the web project
 
 ```bash
 dotnet test aspnetcore-vertical-slices.slnx
