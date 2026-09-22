@@ -197,7 +197,7 @@ public sealed class FeatureBoundaryTests
         Assert.True(result.IsSuccessful, FormatFailures(result));
     }
 
-    private static string FormatFailures(TestResult result)
+    private static string FormatFailures(NetArchTest.Rules.TestResult result)
     {
         if (result.IsSuccessful || result.FailingTypes is null || !result.FailingTypes.Any())
         {

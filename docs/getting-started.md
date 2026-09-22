@@ -73,3 +73,14 @@ More detail: [Architecture](architecture.md).
 ## Central Package Management
 
 NuGet package versions are managed centrally in `Directory.Packages.props`. Project files reference packages without `Version` attributes.
+
+## Microsoft Testing Platform
+
+Test projects use **xUnit.net v3** with the **Microsoft Testing Platform** runner:
+
+- `global.json` sets `"test": { "runner": "Microsoft.Testing.Platform" }`
+- `Directory.Build.props` sets `UseMicrosoftTestingPlatformRunner` and `OutputType=Exe` for `*.Tests` projects
+
+```bash
+dotnet test aspnetcore-vertical-slices.slnx
+```

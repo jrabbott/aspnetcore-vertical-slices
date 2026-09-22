@@ -36,7 +36,7 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 ├── aspnetcore-vertical-slices.slnx
 ├── Directory.Build.props
 ├── Directory.Packages.props          # Central Package Management
-├── global.json
+├── global.json                       # .NET 10 SDK + MTP test runner
 └── README.md
 ```
 

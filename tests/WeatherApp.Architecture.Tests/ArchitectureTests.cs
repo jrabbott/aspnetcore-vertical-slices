@@ -142,7 +142,7 @@ public sealed class ArchitectureTests
             .Select(name => name!)
             .ToArray();
 
-    private static string FormatFailures(TestResult result)
+    private static string FormatFailures(NetArchTest.Rules.TestResult result)
     {
         if (result.IsSuccessful || result.FailingTypes is null)
         {
