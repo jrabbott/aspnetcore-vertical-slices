@@ -66,4 +66,20 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
         Assert.Contains("Atlantis", alert.TextContent);
         Assert.Null(document.QuerySelector("article.weather-result"));
     }
+
+    [Fact]
+    public async Task Search_BlankCity_ShowsFieldError()
+    {
+        var response = await _client.GetAsync("/weather/search?city=");
+        var document = await HtmlDocument.ParseAsync(response);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(
+            "Please enter a city name.",
+            document.QuerySelector(".field-error")?.TextContent.Trim());
+        Assert.Contains(
+            "Please enter a city name.",
+            document.QuerySelector(".alert.alert-error")?.TextContent);
+        Assert.Null(document.QuerySelector("article.weather-result"));
+    }
 }

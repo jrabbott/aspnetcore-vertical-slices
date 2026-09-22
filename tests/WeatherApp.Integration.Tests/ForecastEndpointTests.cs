@@ -12,6 +12,20 @@ public sealed class ForecastEndpointTests : IClassFixture<WeatherAppFactory>
     }
 
     [Fact]
+    public async Task Forecast_WithoutCity_ShowsEmptyForm()
+    {
+        var response = await _client.GetAsync("/weather/forecast");
+        var document = await HtmlDocument.ParseAsync(response);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("Forecast", document.QuerySelector("h1")?.TextContent.Trim());
+        Assert.NotNull(document.QuerySelector("form.search-form input[name='City']"));
+        Assert.Null(document.QuerySelector("article.forecast-result"));
+        Assert.Null(document.QuerySelector(".alert.alert-error"));
+        Assert.Null(document.QuerySelector(".field-error"));
+    }
+
+    [Fact]
     public async Task Forecast_KnownCity_RendersMultiDayList()
     {
         var response = await _client.GetAsync("/weather/forecast?city=Paris&days=3");
@@ -46,6 +60,22 @@ public sealed class ForecastEndpointTests : IClassFixture<WeatherAppFactory>
         Assert.NotNull(alert);
         Assert.Contains("No forecast found", alert.TextContent);
         Assert.Contains("Nowhere", alert.TextContent);
+        Assert.Null(document.QuerySelector("article.forecast-result"));
+    }
+
+    [Fact]
+    public async Task Forecast_BlankCity_ShowsFieldError()
+    {
+        var response = await _client.GetAsync("/weather/forecast?city=");
+        var document = await HtmlDocument.ParseAsync(response);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(
+            "Please enter a city name.",
+            document.QuerySelector(".field-error")?.TextContent.Trim());
+        Assert.Contains(
+            "Please enter a city name.",
+            document.QuerySelector(".alert.alert-error")?.TextContent);
         Assert.Null(document.QuerySelector("article.forecast-result"));
     }
 }

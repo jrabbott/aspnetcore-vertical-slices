@@ -27,6 +27,17 @@ public sealed class WeatherClientTests
         Assert.Null(reading);
     }
 
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task GetCurrentAsync_BlankCity_ReturnsNull(string? city)
+    {
+        var reading = await _client.GetCurrentAsync(city!);
+
+        Assert.Null(reading);
+    }
+
     [Fact]
     public async Task GetForecastAsync_KnownCity_ReturnsDays()
     {
@@ -42,5 +53,44 @@ public sealed class WeatherClientTests
         var forecast = await _client.GetForecastAsync("Nowhere", days: 5);
 
         Assert.Empty(forecast);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task GetForecastAsync_BlankCity_ReturnsEmpty(string? city)
+    {
+        var forecast = await _client.GetForecastAsync(city!, days: 3);
+
+        Assert.Empty(forecast);
+    }
+
+    [Theory]
+    [InlineData(0, 1)]
+    [InlineData(99, 7)]
+    public async Task GetForecastAsync_ClampsDays(int requestedDays, int expectedDays)
+    {
+        var forecast = await _client.GetForecastAsync("London", requestedDays);
+
+        Assert.Equal(expectedDays, forecast.Count);
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_Canceled_Throws()
+    {
+        using var cts = new CancellationTokenSource();
+        await cts.CancelAsync();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(
+            () => _client.GetCurrentAsync("London", cts.Token));
+    }
+
+    [Fact]
+    public void KnownCities_ContainsSupportedCities()
+    {
+        Assert.Contains("London", WeatherClient.KnownCities);
+        Assert.Contains("Tokyo", WeatherClient.KnownCities);
+        Assert.Equal(5, WeatherClient.KnownCities.Count);
     }
 }
