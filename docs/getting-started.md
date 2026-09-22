@@ -72,7 +72,11 @@ More detail: [Architecture](architecture.md).
 
 ## Central Package Management
 
-NuGet package versions are managed centrally in `Directory.Packages.props`. Project files reference packages without `Version` attributes.
+NuGet package versions are managed centrally in `Directory.Packages.props`. Project files reference packages without `Version` attributes. Restores use per-project `packages.lock.json` files (`RestorePackagesWithLockFile`).
+
+## Build hardening
+
+`Directory.Build.props` enables SDK analyzers (`latest-recommended`), code-style enforcement, deterministic builds, NuGet audit (high+), and artifacts output under `.artifacts/`. When `CI=true` (GitHub Actions), builds also set `ContinuousIntegrationBuild` and `TreatWarningsAsErrors`.
 
 ## Microsoft Testing Platform
 

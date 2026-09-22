@@ -135,7 +135,7 @@ public sealed class ArchitectureTests
             typeof(WeatherApp.Razor.FeatureViewLocationExpander).Assembly.GetName().Name);
     }
 
-    private static IReadOnlyCollection<string> GetReferencedAssemblyNames(Assembly assembly) =>
+    private static string[] GetReferencedAssemblyNames(Assembly assembly) =>
         assembly.GetReferencedAssemblies()
             .Select(a => a.Name)
             .Where(name => !string.IsNullOrWhiteSpace(name))
