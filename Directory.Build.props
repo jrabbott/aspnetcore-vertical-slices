@@ -29,13 +29,19 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Code metrics thresholds for CA1501 / CA1502 / CA1505 / CA1506 (see .editorconfig). -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)CodeMetricsConfig.txt" />
+  </ItemGroup>
+
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
     <IsPackable>false</IsPackable>
     <OutputType>Exe</OutputType>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     <!-- Handlers/validators already accept CancellationToken; tests omit TestContext wiring for clarity. -->
     <!-- xUnit method names intentionally use underscores (Method_When_Then). -->
-    <NoWarn>$(NoWarn);xUnit1051;CA1707</NoWarn>
+    <!-- Integration/unit tests naturally couple many framework types; keep metrics gates on production code. -->
+    <NoWarn>$(NoWarn);xUnit1051;CA1707;CA1506</NoWarn>
   </PropertyGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">

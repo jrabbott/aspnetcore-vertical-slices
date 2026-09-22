@@ -1,0 +1,18 @@
+# Code metrics thresholds for CA1501 / CA1502 / CA1505 / CA1506.
+# Format: RuleId(Optional SymbolKind): Threshold
+# Wired via Directory.Build.props AdditionalFiles.
+
+# CA1501: inheritance depth (default 5)
+CA1501: 4
+
+# CA1502: cyclomatic complexity (default Method 25)
+CA1502(Method): 10
+CA1502(Type): 40
+
+# CA1505: maintainability index — warn when below threshold (default 10)
+CA1505(Method): 20
+CA1505(Type): 20
+
+# CA1506: class coupling (defaults Type 95 / other symbols 40)
+CA1506(Method): 15
+CA1506(Type): 30

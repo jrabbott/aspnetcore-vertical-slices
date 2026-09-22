@@ -1,0 +1,15 @@
+using Microsoft.AspNetCore.Mvc.Razor;
+using WeatherApp.Razor;
+
+namespace WeatherApp.Hosting;
+
+internal static class WeatherAppMvcServiceCollectionExtensions
+{
+    public static IServiceCollection AddWeatherAppMvc(this IServiceCollection services)
+    {
+        services.AddControllersWithViews();
+        services.Configure<RazorViewEngineOptions>(options =>
+            options.ViewLocationExpanders.Add(new FeatureViewLocationExpander()));
+        return services;
+    }
+}

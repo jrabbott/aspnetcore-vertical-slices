@@ -18,6 +18,16 @@ public sealed class FavoritesHandler(IFavoritesStore favoritesStore, IWeatherCli
         _ = request;
 
         IReadOnlyList<string> favoriteCities = _favoritesStore.GetAll();
+        IReadOnlyList<FavoriteCity> items = await LoadFavoriteCitiesAsync(favoriteCities, cancellationToken);
+        IReadOnlyList<string> suggested = BuildSuggestedCities(favoriteCities);
+
+        return FavoritesResponse.Create(items, suggested, statusMessage, statusIsError);
+    }
+
+    private async Task<IReadOnlyList<FavoriteCity>> LoadFavoriteCitiesAsync(
+        IReadOnlyList<string> favoriteCities,
+        CancellationToken cancellationToken)
+    {
         var items = new List<FavoriteCity>(favoriteCities.Count);
 
         foreach (string city in favoriteCities)
@@ -26,12 +36,15 @@ public sealed class FavoritesHandler(IFavoritesStore favoritesStore, IWeatherCli
             items.Add(FavoriteCity.FromReading(city, reading));
         }
 
-        string[] suggested =
+        return items;
+    }
+
+    private static IReadOnlyList<string> BuildSuggestedCities(IReadOnlyList<string> favoriteCities)
+    {
+        return
         [
             .. WeatherClient.KnownCities
                 .Where(c => !favoriteCities.Contains(c, StringComparer.OrdinalIgnoreCase))
         ];
-
-        return FavoritesResponse.Create(items, suggested, statusMessage, statusIsError);
     }
 }

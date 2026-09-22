@@ -78,7 +78,7 @@ NuGet package versions are managed centrally in `Directory.Packages.props`. Proj
 
 `Directory.Build.props` enables SDK analyzers (`latest-recommended`), code-style enforcement, deterministic builds, NuGet audit (high+), and artifacts output under `.artifacts/`. When `CI=true` (GitHub Actions), builds also set `ContinuousIntegrationBuild` and `TreatWarningsAsErrors`.
 
-Style and analyzer policy lives in `.editorconfig` (formatting, naming, nullable gates, and severity overrides).
+Style and analyzer policy lives in `.editorconfig` (formatting, naming, nullable gates, and severity overrides). Code metrics thresholds for CA1501/CA1502/CA1505/CA1506 are in `CodeMetricsConfig.txt` (included as an `AdditionalFiles` item).
 
 ## Microsoft Testing Platform
 
