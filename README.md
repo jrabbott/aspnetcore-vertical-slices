@@ -104,7 +104,7 @@ Shared layout, navigation, and reusable partials stay under `Views/Shared/` beca
 
 Feature views intentionally live outside the conventional `Views/` directory.
 
-This sample targets **.NET 9 / ASP.NET Core 9** and uses the standard MVC extension point:
+This sample targets **.NET 10 / ASP.NET Core 10** and uses the standard MVC extension point:
 
 `IViewLocationExpander`
 
@@ -126,7 +126,7 @@ return View(response);
 
 No hard-coded view paths are required.
 
-This approach is appropriate for ASP.NET Core 9 because:
+This approach is appropriate for ASP.NET Core 10 because:
 
 1. `IViewLocationExpander` remains the idiomatic MVC API for customizing view lookup.
 2. Configuration is centralized — controllers stay unaware of physical view paths.
@@ -271,10 +271,10 @@ Unknown cities are handled cleanly with user-facing messages. No external API ke
 
 ## How to run
 
-Requirements: [.NET 9 SDK](https://dotnet.microsoft.com/download)
+Requirements: [.NET 10 SDK](https://dotnet.microsoft.com/download)
 
 ```bash
-dotnet restore
+dotnet restore aspnetcore-vertical-slices.slnx
 dotnet run --project WeatherApp
 ```
 
