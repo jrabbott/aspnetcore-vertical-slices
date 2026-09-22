@@ -1,43 +1,38 @@
 using FluentValidation;
+using FluentValidation.Results;
+using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Features.Weather.Search;
 
-public sealed class SearchHandler
+public sealed class SearchHandler(IWeatherClient weatherClient, IValidator<SearchRequest> validator)
 {
-    private readonly IWeatherClient _weatherClient;
-    private readonly IValidator<SearchRequest> _validator;
-
-    public SearchHandler(IWeatherClient weatherClient, IValidator<SearchRequest> validator)
-    {
-        _weatherClient = weatherClient;
-        _validator = validator;
-    }
+    private readonly IWeatherClient _weatherClient = weatherClient;
+    private readonly IValidator<SearchRequest> _validator = validator;
 
     public async Task<SearchResponse> HandleAsync(
         SearchRequest request,
         bool searched,
         CancellationToken cancellationToken = default)
     {
-        var exampleCities = WeatherClient.KnownCities.ToArray();
+        ArgumentNullException.ThrowIfNull(request);
+
+        string[] exampleCities = [.. WeatherClient.KnownCities];
 
         if (!searched)
         {
             return SearchResponse.Empty(request, exampleCities);
         }
 
-        var validation = await _validator.ValidateAsync(request, cancellationToken);
+        ValidationResult validation = await _validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)
         {
             return SearchResponse.Invalid(request, validation.Errors[0].ErrorMessage, exampleCities);
         }
 
-        var reading = await _weatherClient.GetCurrentAsync(request.City!, cancellationToken);
-        if (reading is null)
-        {
-            return SearchResponse.NotFound(request, request.City!, exampleCities);
-        }
-
-        return SearchResponse.FromReading(request, reading, exampleCities);
+        WeatherReading? reading = await _weatherClient.GetCurrentAsync(request.City!, cancellationToken);
+        return reading is null
+            ? SearchResponse.NotFound(request, request.City!, exampleCities)
+            : SearchResponse.FromReading(request, reading, exampleCities);
     }
 }

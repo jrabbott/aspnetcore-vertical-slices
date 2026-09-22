@@ -1,3 +1,4 @@
+using FluentValidation.Results;
 using WeatherApp.Features.Weather.Forecast;
 
 namespace WeatherApp.Unit.Tests;
@@ -12,7 +13,7 @@ public sealed class ForecastRequestValidatorTests
     [InlineData("   ")]
     public async Task Validate_WhenCityMissing_Fails(string? city)
     {
-        var result = await _validator.ValidateAsync(new ForecastRequest { City = city, Days = 5 });
+        ValidationResult result = await _validator.ValidateAsync(new ForecastRequest { City = city, Days = 5 });
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.ErrorMessage == "Please enter a city name.");
@@ -24,7 +25,7 @@ public sealed class ForecastRequestValidatorTests
     [InlineData(-1)]
     public async Task Validate_WhenDaysOutOfRange_Fails(int days)
     {
-        var result = await _validator.ValidateAsync(new ForecastRequest { City = "Paris", Days = days });
+        ValidationResult result = await _validator.ValidateAsync(new ForecastRequest { City = "Paris", Days = days });
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.ErrorMessage == "Days must be between 1 and 7.");
@@ -33,7 +34,7 @@ public sealed class ForecastRequestValidatorTests
     [Fact]
     public async Task Validate_WhenRequestValid_Succeeds()
     {
-        var result = await _validator.ValidateAsync(new ForecastRequest { City = "Paris", Days = 3 });
+        ValidationResult result = await _validator.ValidateAsync(new ForecastRequest { City = "Paris", Days = 3 });
 
         Assert.True(result.IsValid);
     }

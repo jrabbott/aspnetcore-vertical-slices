@@ -9,9 +9,9 @@ namespace WeatherApp.Architecture.Tests;
 /// </summary>
 public sealed class FeatureBoundaryTests
 {
-    private static readonly Assembly WebAssembly = typeof(Program).Assembly;
+    private static readonly Assembly _webAssembly = typeof(Program).Assembly;
 
-    private static readonly string[] WeatherFeatureSlices =
+    private static readonly string[] _weatherFeatureSlices =
     [
         "WeatherApp.Features.Weather.Search",
         "WeatherApp.Features.Weather.Forecast",
@@ -26,9 +26,9 @@ public sealed class FeatureBoundaryTests
         {
             var data = new TheoryData<string, string>();
 
-            foreach (var slice in WeatherFeatureSlices)
+            foreach (string slice in _weatherFeatureSlices)
             {
-                foreach (var other in WeatherFeatureSlices.Where(s => s != slice))
+                foreach (string? other in _weatherFeatureSlices.Where(s => s != slice))
                 {
                     data.Add(slice, other);
                 }
@@ -42,7 +42,7 @@ public sealed class FeatureBoundaryTests
     [MemberData(nameof(FeatureSlicePairs))]
     public void Feature_Slice_Should_Not_Depend_On_Sibling_Feature_Slices(string slice, string otherSlice)
     {
-        var result = Types.InAssembly(WebAssembly)
+        NetArchTest.Rules.TestResult result = Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespace(slice)
             .ShouldNot()
@@ -62,7 +62,7 @@ public sealed class FeatureBoundaryTests
     [InlineData("WeatherApp.Features.Weather.RemoveFavorite", "RemoveFavorite")]
     public void Feature_Slice_Should_Own_Its_Controller_Request_And_Handler(string sliceNamespace, string sliceName)
     {
-        var types = Types.InAssembly(WebAssembly)
+        var types = Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespace(sliceNamespace)
             .GetTypes()
@@ -81,7 +81,7 @@ public sealed class FeatureBoundaryTests
     [InlineData("WeatherApp.Features.Weather.RemoveFavorite", "RemoveFavorite")]
     public void Feature_Slice_Should_Own_Its_Request_Validator(string sliceNamespace, string sliceName)
     {
-        var types = Types.InAssembly(WebAssembly)
+        var types = Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespace(sliceNamespace)
             .GetTypes()
@@ -99,7 +99,7 @@ public sealed class FeatureBoundaryTests
     [InlineData("WeatherApp.Features.Weather.RemoveFavorite", "RemoveFavorite")]
     public void Feature_Slice_Should_Own_Its_Response(string sliceNamespace, string sliceName)
     {
-        var types = Types.InAssembly(WebAssembly)
+        var types = Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespace(sliceNamespace)
             .GetTypes()
@@ -117,12 +117,14 @@ public sealed class FeatureBoundaryTests
     [InlineData("WeatherApp.Features.Weather.RemoveFavorite")]
     public void Feature_Controller_Should_Only_Use_Handler_From_Same_Slice(string sliceNamespace)
     {
-        var otherHandlers = WeatherFeatureSlices
-            .Where(s => s != sliceNamespace)
-            .Select(s => $"{s}.{s[(s.LastIndexOf('.') + 1)..]}Handler")
-            .ToArray();
+        string[] otherHandlers =
+        [
+            .. _weatherFeatureSlices
+                .Where(s => s != sliceNamespace)
+                .Select(s => $"{s}.{s[(s.LastIndexOf('.') + 1)..]}Handler")
+        ];
 
-        var result = Types.InAssembly(WebAssembly)
+        NetArchTest.Rules.TestResult result = Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespace(sliceNamespace)
             .And()
@@ -139,24 +141,25 @@ public sealed class FeatureBoundaryTests
     [Fact]
     public void Feature_Handlers_Should_Not_Depend_On_Other_Feature_Handlers()
     {
-        var handlerTypes = Types.InAssembly(WebAssembly)
+        Type[] handlerTypes = [.. Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespaceStartingWith("WeatherApp.Features.Weather")
             .And()
             .HaveNameEndingWith("Handler")
-            .GetTypes()
-            .ToArray();
+            .GetTypes()];
 
-        foreach (var handlerType in handlerTypes)
+        foreach (Type? handlerType in handlerTypes)
         {
-            var otherHandlers = handlerTypes
-                .Where(t => t != handlerType)
-                .Select(t => t.FullName!)
-                .ToArray();
+            string?[] otherHandlers =
+            [
+                .. handlerTypes
+                    .Where(t => t != handlerType)
+                    .Select(t => t.FullName)
+            ];
 
-            var result = Types.InAssembly(WebAssembly)
+            NetArchTest.Rules.TestResult result = Types.InAssembly(_webAssembly)
                 .That()
-                .ResideInNamespace(handlerType.Namespace!)
+                .ResideInNamespace(handlerType.Namespace)
                 .And()
                 .HaveName(handlerType.Name)
                 .ShouldNot()
@@ -172,7 +175,7 @@ public sealed class FeatureBoundaryTests
     [Fact]
     public void Weather_Feature_Types_Should_Not_Depend_On_Home_Feature()
     {
-        var result = Types.InAssembly(WebAssembly)
+        NetArchTest.Rules.TestResult result = Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespaceStartingWith("WeatherApp.Features.Weather")
             .ShouldNot()
@@ -185,7 +188,7 @@ public sealed class FeatureBoundaryTests
     [Fact]
     public void Feature_Types_Should_Not_Depend_On_Program_Or_View_Location_Expander()
     {
-        var result = Types.InAssembly(WebAssembly)
+        NetArchTest.Rules.TestResult result = Types.InAssembly(_webAssembly)
             .That()
             .ResideInNamespaceStartingWith("WeatherApp.Features")
             .ShouldNot()
@@ -199,11 +202,8 @@ public sealed class FeatureBoundaryTests
 
     private static string FormatFailures(NetArchTest.Rules.TestResult result)
     {
-        if (result.IsSuccessful || result.FailingTypes is null || !result.FailingTypes.Any())
-        {
-            return "Architecture rule failed.";
-        }
-
-        return "Failing types: " + string.Join(", ", result.FailingTypes.Select(t => t.FullName));
+        return result.IsSuccessful || result.FailingTypes is null || !result.FailingTypes.Any()
+            ? "Architecture rule failed."
+            : "Failing types: " + string.Join(", ", result.FailingTypes.Select(t => t.FullName));
     }
 }

@@ -2,20 +2,15 @@ using System.Net;
 
 namespace WeatherApp.Integration.Tests;
 
-public sealed class ForecastEndpointTests : IClassFixture<WeatherAppFactory>
+public sealed class ForecastEndpointTests(WeatherAppFactory factory) : IClassFixture<WeatherAppFactory>
 {
-    private readonly HttpClient _client;
-
-    public ForecastEndpointTests(WeatherAppFactory factory)
-    {
-        _client = factory.CreateClient();
-    }
+    private readonly HttpClient _client = (factory ?? throw new ArgumentNullException(nameof(factory))).CreateClient();
 
     [Fact]
     public async Task Forecast_WithoutCity_ShowsEmptyForm()
     {
-        var response = await _client.GetAsync("/weather/forecast");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/forecast");
+        AngleSharp.Dom.IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("Forecast", document.QuerySelector("h1")?.TextContent.Trim());
@@ -28,16 +23,16 @@ public sealed class ForecastEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Forecast_KnownCity_RendersMultiDayList()
     {
-        var response = await _client.GetAsync("/weather/forecast?city=Paris&days=3");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/forecast?city=Paris&days=3");
+        AngleSharp.Dom.IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = document.QuerySelector("article.forecast-result");
+        AngleSharp.Dom.IElement? result = document.QuerySelector("article.forecast-result");
         Assert.NotNull(result);
         Assert.Equal("Paris, France", result.QuerySelector("h2")?.TextContent.Trim());
 
-        var days = result.QuerySelectorAll("ul.forecast-list > li");
+        AngleSharp.Dom.IHtmlCollection<AngleSharp.Dom.IElement> days = result.QuerySelectorAll("ul.forecast-list > li");
         Assert.Equal(3, days.Length);
         Assert.All(days, day =>
         {
@@ -51,12 +46,12 @@ public sealed class ForecastEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Forecast_UnknownCity_ShowsError()
     {
-        var response = await _client.GetAsync("/weather/forecast?city=Nowhere");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/forecast?city=Nowhere");
+        AngleSharp.Dom.IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var alert = document.QuerySelector(".alert.alert-error");
+        AngleSharp.Dom.IElement? alert = document.QuerySelector(".alert.alert-error");
         Assert.NotNull(alert);
         Assert.Contains("No forecast found", alert.TextContent);
         Assert.Contains("Nowhere", alert.TextContent);
@@ -66,8 +61,8 @@ public sealed class ForecastEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Forecast_BlankCity_ShowsFieldError()
     {
-        var response = await _client.GetAsync("/weather/forecast?city=");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/forecast?city=");
+        AngleSharp.Dom.IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal(

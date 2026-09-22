@@ -78,6 +78,8 @@ NuGet package versions are managed centrally in `Directory.Packages.props`. Proj
 
 `Directory.Build.props` enables SDK analyzers (`latest-recommended`), code-style enforcement, deterministic builds, NuGet audit (high+), and artifacts output under `.artifacts/`. When `CI=true` (GitHub Actions), builds also set `ContinuousIntegrationBuild` and `TreatWarningsAsErrors`.
 
+Style and analyzer policy lives in `.editorconfig` (formatting, naming, nullable gates, and severity overrides).
+
 ## Microsoft Testing Platform
 
 Test projects use **xUnit.net v3** with the **Microsoft Testing Platform** runner:

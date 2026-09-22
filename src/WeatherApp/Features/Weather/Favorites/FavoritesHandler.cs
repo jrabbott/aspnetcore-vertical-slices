@@ -1,18 +1,13 @@
+using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Favorites;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Features.Weather.Favorites;
 
-public sealed class FavoritesHandler
+public sealed class FavoritesHandler(IFavoritesStore favoritesStore, IWeatherClient weatherClient)
 {
-    private readonly IFavoritesStore _favoritesStore;
-    private readonly IWeatherClient _weatherClient;
-
-    public FavoritesHandler(IFavoritesStore favoritesStore, IWeatherClient weatherClient)
-    {
-        _favoritesStore = favoritesStore;
-        _weatherClient = weatherClient;
-    }
+    private readonly IFavoritesStore _favoritesStore = favoritesStore;
+    private readonly IWeatherClient _weatherClient = weatherClient;
 
     public async Task<FavoritesResponse> HandleAsync(
         FavoritesRequest request,
@@ -22,18 +17,20 @@ public sealed class FavoritesHandler
     {
         _ = request;
 
-        var favoriteCities = _favoritesStore.GetAll();
+        IReadOnlyList<string> favoriteCities = _favoritesStore.GetAll();
         var items = new List<FavoriteCity>(favoriteCities.Count);
 
-        foreach (var city in favoriteCities)
+        foreach (string city in favoriteCities)
         {
-            var reading = await _weatherClient.GetCurrentAsync(city, cancellationToken);
+            WeatherReading? reading = await _weatherClient.GetCurrentAsync(city, cancellationToken);
             items.Add(FavoriteCity.FromReading(city, reading));
         }
 
-        var suggested = WeatherClient.KnownCities
-            .Where(c => !favoriteCities.Contains(c, StringComparer.OrdinalIgnoreCase))
-            .ToArray();
+        string[] suggested =
+        [
+            .. WeatherClient.KnownCities
+                .Where(c => !favoriteCities.Contains(c, StringComparer.OrdinalIgnoreCase))
+        ];
 
         return FavoritesResponse.Create(items, suggested, statusMessage, statusIsError);
     }

@@ -1,4 +1,5 @@
 using System.Net;
+using AngleSharp.Dom;
 
 namespace WeatherApp.Integration.Tests;
 
@@ -8,13 +9,18 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
 
     public SearchEndpointTests(WeatherAppFactory factory)
     {
-        _client = factory.CreateClient(new() { AllowAutoRedirect = false });
+        ArgumentNullException.ThrowIfNull(factory);
+
+        _client = factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false
+        });
     }
 
     [Fact]
     public async Task Root_RedirectsToSearch()
     {
-        var response = await _client.GetAsync("/");
+        HttpResponseMessage response = await _client.GetAsync("/");
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Equal("/weather/search", response.Headers.Location?.ToString());
@@ -23,8 +29,8 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Search_RendersFeatureViewAndLayout()
     {
-        var response = await _client.GetAsync("/weather/search");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/search");
+        IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("Search weather", document.QuerySelector("h1")?.TextContent.Trim());
@@ -38,12 +44,12 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Search_KnownCity_ShowsCurrentWeather()
     {
-        var response = await _client.GetAsync("/weather/search?city=London");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/search?city=London");
+        IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = document.QuerySelector("article.weather-result");
+        IElement? result = document.QuerySelector("article.weather-result");
         Assert.NotNull(result);
         Assert.Equal("London, United Kingdom", result.QuerySelector("h2")?.TextContent.Trim());
         Assert.False(string.IsNullOrWhiteSpace(result.QuerySelector("p.summary")?.TextContent));
@@ -55,12 +61,12 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Search_UnknownCity_ShowsError()
     {
-        var response = await _client.GetAsync("/weather/search?city=Atlantis");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/search?city=Atlantis");
+        IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var alert = document.QuerySelector(".alert.alert-error");
+        IElement? alert = document.QuerySelector(".alert.alert-error");
         Assert.NotNull(alert);
         Assert.Contains("No weather data found", alert.TextContent);
         Assert.Contains("Atlantis", alert.TextContent);
@@ -70,8 +76,8 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Search_BlankCity_ShowsFieldError()
     {
-        var response = await _client.GetAsync("/weather/search?city=");
-        var document = await HtmlDocument.ParseAsync(response);
+        HttpResponseMessage response = await _client.GetAsync("/weather/search?city=");
+        IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal(

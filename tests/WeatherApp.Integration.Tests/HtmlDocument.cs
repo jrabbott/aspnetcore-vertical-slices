@@ -10,13 +10,13 @@ internal static class HtmlDocument
 
     public static async Task<IDocument> ParseAsync(HttpResponseMessage response)
     {
-        var html = await response.Content.ReadAsStringAsync();
+        string html = await response.Content.ReadAsStringAsync();
         return await Context.OpenAsync(request => request.Content(html));
     }
 
     public static string AntiForgeryToken(IDocument document)
     {
-        var input = document.QuerySelector<IHtmlInputElement>("input[name='__RequestVerificationToken']");
+        IHtmlInputElement? input = document.QuerySelector<IHtmlInputElement>("input[name='__RequestVerificationToken']");
         Assert.NotNull(input);
         Assert.False(string.IsNullOrWhiteSpace(input.Value));
         return input.Value;

@@ -32,7 +32,7 @@ public sealed class WeatherClient : IWeatherClient
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (!TryResolveCity(city, out var profile))
+        if (!TryResolveCity(city, out CityWeatherProfile profile))
         {
             return Task.FromResult<WeatherReading?>(null);
         }
@@ -57,20 +57,20 @@ public sealed class WeatherClient : IWeatherClient
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (!TryResolveCity(city, out var profile))
+        if (!TryResolveCity(city, out CityWeatherProfile profile))
         {
             return Task.FromResult<IReadOnlyList<WeatherReading>>(Array.Empty<WeatherReading>());
         }
 
         days = Math.Clamp(days, 1, 7);
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var seed = StableHash(profile.City);
+        int seed = StableHash(profile.City);
         var readings = new List<WeatherReading>(days);
 
-        for (var i = 0; i < days; i++)
+        for (int i = 0; i < days; i++)
         {
-            var temperatureOffset = ((seed + i * 3) % 7) - 3;
-            var summaryIndex = Math.Abs(seed + i) % ForecastSummaries.Length;
+            int temperatureOffset = ((seed + i * 3) % 7) - 3;
+            int summaryIndex = Math.Abs(seed + i) % ForecastSummaries.Length;
 
             readings.Add(new WeatherReading
             {
@@ -90,22 +90,17 @@ public sealed class WeatherClient : IWeatherClient
 
     private static bool TryResolveCity(string city, out CityWeatherProfile profile)
     {
-        profile = default!;
+        profile = default;
 
-        if (string.IsNullOrWhiteSpace(city))
-        {
-            return false;
-        }
-
-        return Cities.TryGetValue(city.Trim(), out profile!);
+        return !string.IsNullOrWhiteSpace(city) && Cities.TryGetValue(city.Trim(), out profile);
     }
 
     private static int StableHash(string value)
     {
         unchecked
         {
-            var hash = 17;
-            foreach (var ch in value.ToUpperInvariant())
+            int hash = 17;
+            foreach (char ch in value.ToUpperInvariant())
             {
                 hash = hash * 31 + ch;
             }

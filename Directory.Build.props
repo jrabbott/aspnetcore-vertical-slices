@@ -3,6 +3,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Required so IDE0005 (unused usings) runs during build. CS1591 remains silenced in .editorconfig. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest-recommended</AnalysisLevel>

@@ -11,6 +11,8 @@ public sealed class FeatureViewLocationExpander : IViewLocationExpander
 {
     public void PopulateValues(ViewLocationExpanderContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         if (context.ActionContext.ActionDescriptor is ControllerActionDescriptor descriptor
             && descriptor.ControllerTypeInfo.Namespace is { } ns)
         {
@@ -22,20 +24,23 @@ public sealed class FeatureViewLocationExpander : IViewLocationExpander
         ViewLocationExpanderContext context,
         IEnumerable<string> viewLocations)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(viewLocations);
+
         if (context.ActionContext.ActionDescriptor is ControllerActionDescriptor descriptor
             && descriptor.ControllerTypeInfo.Namespace is { } ns)
         {
             const string featuresMarker = ".Features.";
-            var markerIndex = ns.IndexOf(featuresMarker, StringComparison.Ordinal);
+            int markerIndex = ns.IndexOf(featuresMarker, StringComparison.Ordinal);
 
             if (markerIndex >= 0)
             {
-                var featurePath = ns[(markerIndex + featuresMarker.Length)..].Replace('.', '/');
+                string featurePath = ns[(markerIndex + featuresMarker.Length)..].Replace('.', '/');
                 yield return $"/Features/{featurePath}/{{0}}.cshtml";
             }
         }
 
-        foreach (var location in viewLocations)
+        foreach (string location in viewLocations)
         {
             yield return location;
         }

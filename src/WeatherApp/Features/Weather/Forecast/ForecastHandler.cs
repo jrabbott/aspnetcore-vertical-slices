@@ -1,43 +1,38 @@
 using FluentValidation;
+using FluentValidation.Results;
+using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Features.Weather.Forecast;
 
-public sealed class ForecastHandler
+public sealed class ForecastHandler(IWeatherClient weatherClient, IValidator<ForecastRequest> validator)
 {
-    private readonly IWeatherClient _weatherClient;
-    private readonly IValidator<ForecastRequest> _validator;
-
-    public ForecastHandler(IWeatherClient weatherClient, IValidator<ForecastRequest> validator)
-    {
-        _weatherClient = weatherClient;
-        _validator = validator;
-    }
+    private readonly IWeatherClient _weatherClient = weatherClient;
+    private readonly IValidator<ForecastRequest> _validator = validator;
 
     public async Task<ForecastResponse> HandleAsync(
         ForecastRequest request,
         bool searched,
         CancellationToken cancellationToken = default)
     {
-        var exampleCities = WeatherClient.KnownCities.ToArray();
+        ArgumentNullException.ThrowIfNull(request);
+
+        string[] exampleCities = [.. WeatherClient.KnownCities];
 
         if (!searched)
         {
             return ForecastResponse.Empty(request, exampleCities);
         }
 
-        var validation = await _validator.ValidateAsync(request, cancellationToken);
+        ValidationResult validation = await _validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)
         {
             return ForecastResponse.Invalid(request, validation.Errors[0].ErrorMessage, exampleCities);
         }
 
-        var readings = await _weatherClient.GetForecastAsync(request.City!, request.Days, cancellationToken);
-        if (readings.Count == 0)
-        {
-            return ForecastResponse.NotFound(request, request.City!, exampleCities);
-        }
-
-        return ForecastResponse.FromReadings(request, readings, exampleCities);
+        IReadOnlyList<WeatherReading> readings = await _weatherClient.GetForecastAsync(request.City!, request.Days, cancellationToken);
+        return readings.Count == 0
+            ? ForecastResponse.NotFound(request, request.City!, exampleCities)
+            : ForecastResponse.FromReadings(request, readings, exampleCities);
     }
 }

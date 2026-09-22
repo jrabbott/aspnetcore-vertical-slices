@@ -5,24 +5,24 @@ namespace WeatherApp.Unit.Tests;
 
 public sealed class SearchResponseFactoryTests
 {
-    private static readonly SearchRequest Request = new() { City = "London" };
-    private static readonly string[] ExampleCities = ["London", "Paris"];
+    private static readonly SearchRequest _request = new() { City = "London" };
+    private static readonly string[] _exampleCities = ["London", "Paris"];
 
     [Fact]
     public void Empty_MarksAsNotSearched()
     {
-        var response = SearchResponse.Empty(Request, ExampleCities);
+        var response = SearchResponse.Empty(_request, _exampleCities);
 
         Assert.False(response.Searched);
         Assert.False(response.Found);
         Assert.Null(response.ErrorMessage);
-        Assert.Equal(ExampleCities, response.ExampleCities);
+        Assert.Equal(_exampleCities, response.ExampleCities);
     }
 
     [Fact]
     public void Invalid_UsesProvidedErrorMessage()
     {
-        var response = SearchResponse.Invalid(Request, "Please enter a city name.", ExampleCities);
+        var response = SearchResponse.Invalid(_request, "Please enter a city name.", _exampleCities);
 
         Assert.True(response.Searched);
         Assert.False(response.Found);
@@ -32,7 +32,7 @@ public sealed class SearchResponseFactoryTests
     [Fact]
     public void NotFound_FormatsUnknownCityMessage()
     {
-        var response = SearchResponse.NotFound(Request, "Atlantis", ExampleCities);
+        var response = SearchResponse.NotFound(_request, "Atlantis", _exampleCities);
 
         Assert.Contains("Atlantis", response.ErrorMessage);
         Assert.False(response.Found);
@@ -51,7 +51,7 @@ public sealed class SearchResponseFactoryTests
             WindSpeedKph = 18
         };
 
-        var response = SearchResponse.FromReading(Request, reading, ExampleCities);
+        var response = SearchResponse.FromReading(_request, reading, _exampleCities);
 
         Assert.True(response.Found);
         Assert.Equal("London", response.City);

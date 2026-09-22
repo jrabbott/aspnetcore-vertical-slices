@@ -13,7 +13,7 @@ public sealed class FavoritesHandlerTests
         var weather = new FakeWeatherClient(FakeWeatherClient.Reading("London", "United Kingdom", 12, "Cloudy"));
         var handler = new FavoritesHandler(store, weather);
 
-        var response = await handler.HandleAsync(new FavoritesRequest());
+        FavoritesResponse response = await handler.HandleAsync(new FavoritesRequest());
 
         Assert.Equal(2, response.Cities.Count);
         Assert.Contains(response.Cities, c => c.City == "London" && c.HasWeather && c.TemperatureC == 12);

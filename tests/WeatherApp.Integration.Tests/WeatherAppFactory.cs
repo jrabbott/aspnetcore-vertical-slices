@@ -24,27 +24,21 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
         IEnumerable<string>? initialCities = null,
         WebApplicationFactoryClientOptions? options = null)
     {
-        var cities = initialCities?.ToArray() ?? [];
+        string[] cities = initialCities?.ToArray() ?? [];
 
-        return WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureTestServices(services =>
+        return WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
             {
                 services.RemoveAll<IFavoritesStore>();
                 services.AddSingleton<IFavoritesStore>(_ => new FavoritesStore(cities));
+            })).CreateClient(options ?? new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
             });
-        }).CreateClient(options ?? new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
     }
 
     public HttpClient CreateProductionClient(WebApplicationFactoryClientOptions? options = null)
     {
-        return WithWebHostBuilder(builder =>
-        {
-            builder.UseEnvironment("Production");
-        }).CreateClient(options ?? new WebApplicationFactoryClientOptions
+        return WithWebHostBuilder(builder => builder.UseEnvironment("Production")).CreateClient(options ?? new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false
         });

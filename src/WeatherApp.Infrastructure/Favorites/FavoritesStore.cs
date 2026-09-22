@@ -3,23 +3,17 @@ namespace WeatherApp.Infrastructure.Favorites;
 /// <summary>
 /// Process-wide in-memory favorites store for the sample application.
 /// </summary>
-public sealed class FavoritesStore : IFavoritesStore
+public sealed class FavoritesStore(IEnumerable<string> initialCities) : IFavoritesStore
 {
     private readonly object _gate = new();
-    private readonly List<string> _cities;
+    private readonly List<string> _cities = [.. initialCities
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Select(c => c.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)];
 
     public FavoritesStore()
         : this(["London", "Tokyo"])
     {
-    }
-
-    public FavoritesStore(IEnumerable<string> initialCities)
-    {
-        _cities = initialCities
-            .Where(c => !string.IsNullOrWhiteSpace(c))
-            .Select(c => c.Trim())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
     }
 
     public IReadOnlyList<string> GetAll()
@@ -39,7 +33,7 @@ public sealed class FavoritesStore : IFavoritesStore
             return false;
         }
 
-        var normalized = city.Trim();
+        string normalized = city.Trim();
 
         lock (_gate)
         {
@@ -62,7 +56,7 @@ public sealed class FavoritesStore : IFavoritesStore
 
         lock (_gate)
         {
-            var index = _cities.FindIndex(c =>
+            int index = _cities.FindIndex(c =>
                 string.Equals(c, city.Trim(), StringComparison.OrdinalIgnoreCase));
 
             if (index < 0)

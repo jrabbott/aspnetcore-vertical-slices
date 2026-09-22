@@ -1,3 +1,5 @@
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc.Razor;
 using WeatherApp.Features.Weather.AddFavorite;
 using WeatherApp.Features.Weather.Favorites;
 using WeatherApp.Features.Weather.Forecast;
@@ -6,17 +8,12 @@ using WeatherApp.Features.Weather.Search;
 using WeatherApp.Infrastructure.Favorites;
 using WeatherApp.Infrastructure.Weather;
 using WeatherApp.Razor;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc.Razor;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.Configure<RazorViewEngineOptions>(options =>
-{
-    options.ViewLocationExpanders.Add(new FeatureViewLocationExpander());
-});
+builder.Services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new FeatureViewLocationExpander()));
 
 builder.Services.AddSingleton<IWeatherClient, WeatherClient>();
 builder.Services.AddSingleton<IFavoritesStore, FavoritesStore>();
@@ -32,7 +29,7 @@ builder.Services.AddTransient<FavoritesHandler>();
 builder.Services.AddTransient<AddFavoriteHandler>();
 builder.Services.AddTransient<RemoveFavoriteHandler>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -54,5 +51,3 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
-
-public partial class Program;

@@ -17,6 +17,9 @@ public sealed class HomeController : Controller
 
 public sealed class ErrorViewModel
 {
-    public string? RequestId { get; init; }
+    public string? RequestId
+    {
+        get; init;
+    }
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }

@@ -5,13 +5,13 @@ namespace WeatherApp.Unit.Tests;
 
 public sealed class ForecastResponseFactoryTests
 {
-    private static readonly ForecastRequest Request = new() { City = "Paris", Days = 3 };
-    private static readonly string[] ExampleCities = ["Paris", "Tokyo"];
+    private static readonly ForecastRequest _request = new() { City = "Paris", Days = 3 };
+    private static readonly string[] _exampleCities = ["Paris", "Tokyo"];
 
     [Fact]
     public void Empty_MarksAsNotSearched()
     {
-        var response = ForecastResponse.Empty(Request, ExampleCities);
+        var response = ForecastResponse.Empty(_request, _exampleCities);
 
         Assert.False(response.Searched);
         Assert.Empty(response.Days);
@@ -20,8 +20,8 @@ public sealed class ForecastResponseFactoryTests
     [Fact]
     public void FromReadings_MapsDaysFromDomainReadings()
     {
-        var readings = new[]
-        {
+        WeatherReading[] readings =
+        [
             new WeatherReading
             {
                 Location = new Location { City = "Paris", Country = "France" },
@@ -40,9 +40,9 @@ public sealed class ForecastResponseFactoryTests
                 HumidityPercent = 45,
                 WindSpeedKph = 10
             }
-        };
+        ];
 
-        var response = ForecastResponse.FromReadings(Request, readings, ExampleCities);
+        var response = ForecastResponse.FromReadings(_request, readings, _exampleCities);
 
         Assert.True(response.Found);
         Assert.Equal("Paris", response.City);

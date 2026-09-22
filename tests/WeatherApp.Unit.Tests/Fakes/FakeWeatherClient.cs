@@ -3,28 +3,20 @@ using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Unit.Tests.Fakes;
 
-internal sealed class FakeWeatherClient : IWeatherClient
+internal sealed class FakeWeatherClient(params WeatherReading[] readings) : IWeatherClient
 {
-    private readonly Dictionary<string, WeatherReading> _readings;
-
-    public FakeWeatherClient(params WeatherReading[] readings)
-    {
-        _readings = readings.ToDictionary(
+    private readonly Dictionary<string, WeatherReading> _readings = readings.ToDictionary(
             r => r.Location.City,
             r => r,
             StringComparer.OrdinalIgnoreCase);
-    }
 
     public Task<WeatherReading?> GetCurrentAsync(string city, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (string.IsNullOrWhiteSpace(city) || !_readings.TryGetValue(city.Trim(), out var reading))
-        {
-            return Task.FromResult<WeatherReading?>(null);
-        }
-
-        return Task.FromResult<WeatherReading?>(reading);
+        return string.IsNullOrWhiteSpace(city) || !_readings.TryGetValue(city.Trim(), out WeatherReading? reading)
+            ? Task.FromResult<WeatherReading?>(null)
+            : Task.FromResult<WeatherReading?>(reading);
     }
 
     public Task<IReadOnlyList<WeatherReading>> GetForecastAsync(
@@ -34,13 +26,13 @@ internal sealed class FakeWeatherClient : IWeatherClient
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (string.IsNullOrWhiteSpace(city) || !_readings.TryGetValue(city.Trim(), out var reading))
+        if (string.IsNullOrWhiteSpace(city) || !_readings.TryGetValue(city.Trim(), out WeatherReading? reading))
         {
             return Task.FromResult<IReadOnlyList<WeatherReading>>(Array.Empty<WeatherReading>());
         }
 
         days = Math.Clamp(days, 1, 7);
-        var forecast = Enumerable.Range(0, days)
+        WeatherReading[] forecast = [.. Enumerable.Range(0, days)
             .Select(offset => new WeatherReading
             {
                 Location = reading.Location,
@@ -49,8 +41,7 @@ internal sealed class FakeWeatherClient : IWeatherClient
                 Summary = reading.Summary,
                 HumidityPercent = reading.HumidityPercent,
                 WindSpeedKph = reading.WindSpeedKph
-            })
-            .ToArray();
+            })];
 
         return Task.FromResult<IReadOnlyList<WeatherReading>>(forecast);
     }
@@ -59,8 +50,9 @@ internal sealed class FakeWeatherClient : IWeatherClient
         string city,
         string country = "Testland",
         int temperatureC = 20,
-        string summary = "Clear") =>
-        new()
+        string summary = "Clear")
+    {
+        return new()
         {
             Location = new Location { City = city, Country = country },
             Date = new DateOnly(2026, 9, 22),
@@ -69,4 +61,5 @@ internal sealed class FakeWeatherClient : IWeatherClient
             HumidityPercent = 50,
             WindSpeedKph = 10
         };
+    }
 }

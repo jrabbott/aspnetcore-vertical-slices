@@ -1,3 +1,4 @@
+using FluentValidation.Results;
 using WeatherApp.Features.Weather.AddFavorite;
 
 namespace WeatherApp.Unit.Tests;
@@ -12,7 +13,7 @@ public sealed class AddFavoriteRequestValidatorTests
     [InlineData("   ")]
     public async Task Validate_WhenCityMissing_Fails(string? city)
     {
-        var result = await _validator.ValidateAsync(new AddFavoriteRequest { City = city });
+        ValidationResult result = await _validator.ValidateAsync(new AddFavoriteRequest { City = city });
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.ErrorMessage == "Please enter a city name.");
@@ -21,7 +22,7 @@ public sealed class AddFavoriteRequestValidatorTests
     [Fact]
     public async Task Validate_WhenCityTooLong_Fails()
     {
-        var result = await _validator.ValidateAsync(new AddFavoriteRequest { City = new string('x', 101) });
+        ValidationResult result = await _validator.ValidateAsync(new AddFavoriteRequest { City = new string('x', 101) });
 
         Assert.False(result.IsValid);
         Assert.Contains(
@@ -32,7 +33,7 @@ public sealed class AddFavoriteRequestValidatorTests
     [Fact]
     public async Task Validate_WhenCityValid_Succeeds()
     {
-        var result = await _validator.ValidateAsync(new AddFavoriteRequest { City = "Madrid" });
+        ValidationResult result = await _validator.ValidateAsync(new AddFavoriteRequest { City = "Madrid" });
 
         Assert.True(result.IsValid);
     }

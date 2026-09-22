@@ -5,15 +5,17 @@ namespace WeatherApp.Unit.Tests;
 
 public sealed class SearchHandlerTests
 {
-    private static SearchHandler CreateHandler(FakeWeatherClient client) =>
-        new(client, new SearchRequestValidator());
+    private static SearchHandler CreateHandler(FakeWeatherClient client)
+    {
+        return new(client, new SearchRequestValidator());
+    }
 
     [Fact]
     public async Task HandleAsync_WhenNotSearched_ReturnsEmptyFormState()
     {
-        var handler = CreateHandler(new FakeWeatherClient());
+        SearchHandler handler = CreateHandler(new FakeWeatherClient());
 
-        var response = await handler.HandleAsync(new SearchRequest(), searched: false);
+        SearchResponse response = await handler.HandleAsync(new SearchRequest(), searched: false);
 
         Assert.False(response.Searched);
         Assert.False(response.Found);
@@ -24,9 +26,9 @@ public sealed class SearchHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityMissing_ReturnsValidationError()
     {
-        var handler = CreateHandler(new FakeWeatherClient());
+        SearchHandler handler = CreateHandler(new FakeWeatherClient());
 
-        var response = await handler.HandleAsync(new SearchRequest { City = "  " }, searched: true);
+        SearchResponse response = await handler.HandleAsync(new SearchRequest { City = "  " }, searched: true);
 
         Assert.True(response.Searched);
         Assert.False(response.Found);
@@ -36,9 +38,9 @@ public sealed class SearchHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityUnknown_ReturnsNotFoundMessage()
     {
-        var handler = CreateHandler(new FakeWeatherClient(FakeWeatherClient.Reading("London")));
+        SearchHandler handler = CreateHandler(new FakeWeatherClient(FakeWeatherClient.Reading("London")));
 
-        var response = await handler.HandleAsync(new SearchRequest { City = "Atlantis" }, searched: true);
+        SearchResponse response = await handler.HandleAsync(new SearchRequest { City = "Atlantis" }, searched: true);
 
         Assert.True(response.Searched);
         Assert.False(response.Found);
@@ -48,10 +50,10 @@ public sealed class SearchHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityKnown_ReturnsCurrentWeather()
     {
-        var handler = CreateHandler(
+        SearchHandler handler = CreateHandler(
             new FakeWeatherClient(FakeWeatherClient.Reading("Paris", "France", 16, "Partly cloudy")));
 
-        var response = await handler.HandleAsync(new SearchRequest { City = "paris" }, searched: true);
+        SearchResponse response = await handler.HandleAsync(new SearchRequest { City = "paris" }, searched: true);
 
         Assert.True(response.Found);
         Assert.Equal("Paris", response.City);

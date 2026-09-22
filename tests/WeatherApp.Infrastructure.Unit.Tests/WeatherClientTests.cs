@@ -1,3 +1,4 @@
+using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Infrastructure.Unit.Tests;
@@ -12,7 +13,7 @@ public sealed class WeatherClientTests
     [InlineData("New York")]
     public async Task GetCurrentAsync_KnownCity_ReturnsReading(string city)
     {
-        var reading = await _client.GetCurrentAsync(city);
+        WeatherReading? reading = await _client.GetCurrentAsync(city);
 
         Assert.NotNull(reading);
         Assert.False(string.IsNullOrWhiteSpace(reading.Location.City));
@@ -22,7 +23,7 @@ public sealed class WeatherClientTests
     [Fact]
     public async Task GetCurrentAsync_UnknownCity_ReturnsNull()
     {
-        var reading = await _client.GetCurrentAsync("Atlantis");
+        WeatherReading? reading = await _client.GetCurrentAsync("Atlantis");
 
         Assert.Null(reading);
     }
@@ -33,7 +34,7 @@ public sealed class WeatherClientTests
     [InlineData("   ")]
     public async Task GetCurrentAsync_BlankCity_ReturnsNull(string? city)
     {
-        var reading = await _client.GetCurrentAsync(city!);
+        WeatherReading? reading = await _client.GetCurrentAsync(city!);
 
         Assert.Null(reading);
     }
@@ -41,7 +42,7 @@ public sealed class WeatherClientTests
     [Fact]
     public async Task GetForecastAsync_KnownCity_ReturnsDays()
     {
-        var forecast = await _client.GetForecastAsync("Tokyo", days: 4);
+        IReadOnlyList<WeatherReading> forecast = await _client.GetForecastAsync("Tokyo", days: 4);
 
         Assert.Equal(4, forecast.Count);
         Assert.All(forecast, day => Assert.Equal("Tokyo", day.Location.City));
@@ -50,7 +51,7 @@ public sealed class WeatherClientTests
     [Fact]
     public async Task GetForecastAsync_UnknownCity_ReturnsEmpty()
     {
-        var forecast = await _client.GetForecastAsync("Nowhere", days: 5);
+        IReadOnlyList<WeatherReading> forecast = await _client.GetForecastAsync("Nowhere", days: 5);
 
         Assert.Empty(forecast);
     }
@@ -61,7 +62,7 @@ public sealed class WeatherClientTests
     [InlineData("   ")]
     public async Task GetForecastAsync_BlankCity_ReturnsEmpty(string? city)
     {
-        var forecast = await _client.GetForecastAsync(city!, days: 3);
+        IReadOnlyList<WeatherReading> forecast = await _client.GetForecastAsync(city!, days: 3);
 
         Assert.Empty(forecast);
     }
@@ -71,7 +72,7 @@ public sealed class WeatherClientTests
     [InlineData(99, 7)]
     public async Task GetForecastAsync_ClampsDays(int requestedDays, int expectedDays)
     {
-        var forecast = await _client.GetForecastAsync("London", requestedDays);
+        IReadOnlyList<WeatherReading> forecast = await _client.GetForecastAsync("London", requestedDays);
 
         Assert.Equal(expectedDays, forecast.Count);
     }

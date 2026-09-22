@@ -2,7 +2,7 @@ namespace WeatherApp.Infrastructure.Favorites;
 
 public interface IFavoritesStore
 {
-    IReadOnlyList<string> GetAll();
-    bool Add(string city);
-    bool Remove(string city);
+    public IReadOnlyList<string> GetAll();
+    public bool Add(string city);
+    public bool Remove(string city);
 }
