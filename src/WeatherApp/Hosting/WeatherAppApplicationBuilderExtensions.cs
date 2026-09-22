@@ -17,6 +17,7 @@ internal static class WeatherAppApplicationBuilderExtensions
     {
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseSession();
         app.UseAuthorization();
         app.MapStaticAssets();
         return app;
