@@ -54,7 +54,7 @@ Test projects:
 |---|---|
 | `tests/WeatherApp.Architecture.Tests` | Project + feature boundary rules (NetArchTest) |
 | `tests/WeatherApp.Integration.Tests` | HTTP routes via `WebApplicationFactory` |
-| `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler unit tests |
+| `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler + FluentValidation unit tests |
 | `tests/WeatherApp.Domain.Unit.Tests` | Domain model unit tests |
 | `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client + favorites store unit tests |
 
@@ -66,6 +66,7 @@ Architecture rules include:
 - Controllers and handlers live under `WeatherApp.Features`
 - Handlers do not depend on MVC `Controller`
 - Feature slices do not take compile-time dependencies on sibling slices
-- Each slice owns its Controller / Request / Handler (and Response for query slices)
+  - Each slice owns its Controller / Request / Handler (and Response for query slices)
+  - Request validators live in the same feature slice as their request model
 
 More detail: [Architecture](architecture.md).

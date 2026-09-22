@@ -4,8 +4,9 @@ using WeatherApp.Features.Weather.Forecast;
 using WeatherApp.Features.Weather.RemoveFavorite;
 using WeatherApp.Features.Weather.Search;
 using WeatherApp.Infrastructure.Favorites;
-using WeatherApp.Razor;
 using WeatherApp.Infrastructure.Weather;
+using WeatherApp.Razor;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,11 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
 
 builder.Services.AddSingleton<IWeatherClient, WeatherClient>();
 builder.Services.AddSingleton<IFavoritesStore, FavoritesStore>();
+
+builder.Services.AddTransient<IValidator<SearchRequest>, SearchRequestValidator>();
+builder.Services.AddTransient<IValidator<ForecastRequest>, ForecastRequestValidator>();
+builder.Services.AddTransient<IValidator<AddFavoriteRequest>, AddFavoriteRequestValidator>();
+builder.Services.AddTransient<IValidator<RemoveFavoriteRequest>, RemoveFavoriteRequestValidator>();
 
 builder.Services.AddTransient<SearchHandler>();
 builder.Services.AddTransient<ForecastHandler>();

@@ -180,6 +180,8 @@ Request and response models belong to their slice.
 - `ForecastRequest` / `ForecastResponse` live in Forecast
 - Command slices such as AddFavorite may return a small result type and redirect instead of rendering a view
 
+Request validation uses **FluentValidation**, with a slice-local validator next to the request model (for example `SearchRequestValidator`). Handlers invoke `IValidator<TRequest>` so validation stays in the use-case path rather than DataAnnotations attributes.
+
 It is acceptable for different response models to contain similar properties. Duplication across slices is preferred over premature extraction.
 
 ## Where infrastructure belongs

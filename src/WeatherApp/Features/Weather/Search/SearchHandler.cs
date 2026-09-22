@@ -1,3 +1,4 @@
+using FluentValidation;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Features.Weather.Search;
@@ -5,10 +6,12 @@ namespace WeatherApp.Features.Weather.Search;
 public sealed class SearchHandler
 {
     private readonly IWeatherClient _weatherClient;
+    private readonly IValidator<SearchRequest> _validator;
 
-    public SearchHandler(IWeatherClient weatherClient)
+    public SearchHandler(IWeatherClient weatherClient, IValidator<SearchRequest> validator)
     {
         _weatherClient = weatherClient;
+        _validator = validator;
     }
 
     public async Task<SearchResponse> HandleAsync(
@@ -28,19 +31,20 @@ public sealed class SearchHandler
             };
         }
 
-        if (string.IsNullOrWhiteSpace(request.City))
+        var validation = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validation.IsValid)
         {
             return new SearchResponse
             {
                 Request = request,
                 Searched = true,
                 Found = false,
-                ErrorMessage = "Please enter a city name.",
+                ErrorMessage = validation.Errors[0].ErrorMessage,
                 ExampleCities = exampleCities
             };
         }
 
-        var reading = await _weatherClient.GetCurrentAsync(request.City, cancellationToken);
+        var reading = await _weatherClient.GetCurrentAsync(request.City!, cancellationToken);
 
         if (reading is null)
         {
@@ -49,7 +53,7 @@ public sealed class SearchHandler
                 Request = request,
                 Searched = true,
                 Found = false,
-                ErrorMessage = $"No weather data found for \"{request.City.Trim()}\". Try one of the example cities.",
+                ErrorMessage = $"No weather data found for \"{request.City!.Trim()}\". Try one of the example cities.",
                 ExampleCities = exampleCities
             };
         }

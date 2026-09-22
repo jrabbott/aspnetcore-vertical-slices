@@ -5,10 +5,13 @@ namespace WeatherApp.Unit.Tests;
 
 public sealed class SearchHandlerTests
 {
+    private static SearchHandler CreateHandler(FakeWeatherClient client) =>
+        new(client, new SearchRequestValidator());
+
     [Fact]
     public async Task HandleAsync_WhenNotSearched_ReturnsEmptyFormState()
     {
-        var handler = new SearchHandler(new FakeWeatherClient());
+        var handler = CreateHandler(new FakeWeatherClient());
 
         var response = await handler.HandleAsync(new SearchRequest(), searched: false);
 
@@ -21,7 +24,7 @@ public sealed class SearchHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityMissing_ReturnsValidationError()
     {
-        var handler = new SearchHandler(new FakeWeatherClient());
+        var handler = CreateHandler(new FakeWeatherClient());
 
         var response = await handler.HandleAsync(new SearchRequest { City = "  " }, searched: true);
 
@@ -33,7 +36,7 @@ public sealed class SearchHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityUnknown_ReturnsNotFoundMessage()
     {
-        var handler = new SearchHandler(new FakeWeatherClient(FakeWeatherClient.Reading("London")));
+        var handler = CreateHandler(new FakeWeatherClient(FakeWeatherClient.Reading("London")));
 
         var response = await handler.HandleAsync(new SearchRequest { City = "Atlantis" }, searched: true);
 
@@ -45,7 +48,7 @@ public sealed class SearchHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityKnown_ReturnsCurrentWeather()
     {
-        var handler = new SearchHandler(
+        var handler = CreateHandler(
             new FakeWeatherClient(FakeWeatherClient.Reading("Paris", "France", 16, "Partly cloudy")));
 
         var response = await handler.HandleAsync(new SearchRequest { City = "paris" }, searched: true);

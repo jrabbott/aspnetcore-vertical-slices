@@ -5,10 +5,13 @@ namespace WeatherApp.Unit.Tests;
 
 public sealed class ForecastHandlerTests
 {
+    private static ForecastHandler CreateHandler(FakeWeatherClient client) =>
+        new(client, new ForecastRequestValidator());
+
     [Fact]
     public async Task HandleAsync_WhenCityKnown_ReturnsRequestedNumberOfDays()
     {
-        var handler = new ForecastHandler(
+        var handler = CreateHandler(
             new FakeWeatherClient(FakeWeatherClient.Reading("Tokyo", "Japan", 22, "Humid")));
 
         var response = await handler.HandleAsync(
@@ -25,7 +28,7 @@ public sealed class ForecastHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityUnknown_ReturnsError()
     {
-        var handler = new ForecastHandler(new FakeWeatherClient());
+        var handler = CreateHandler(new FakeWeatherClient());
 
         var response = await handler.HandleAsync(
             new ForecastRequest { City = "Nowhere" },
@@ -34,5 +37,18 @@ public sealed class ForecastHandlerTests
         Assert.False(response.Found);
         Assert.Contains("Nowhere", response.ErrorMessage);
         Assert.Empty(response.Days);
+    }
+
+    [Fact]
+    public async Task HandleAsync_WhenDaysOutOfRange_ReturnsValidationError()
+    {
+        var handler = CreateHandler(new FakeWeatherClient(FakeWeatherClient.Reading("Paris")));
+
+        var response = await handler.HandleAsync(
+            new ForecastRequest { City = "Paris", Days = 30 },
+            searched: true);
+
+        Assert.False(response.Found);
+        Assert.Equal("Days must be between 1 and 7.", response.ErrorMessage);
     }
 }

@@ -1,3 +1,4 @@
+using FluentValidation;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Features.Weather.Forecast;
@@ -5,10 +6,12 @@ namespace WeatherApp.Features.Weather.Forecast;
 public sealed class ForecastHandler
 {
     private readonly IWeatherClient _weatherClient;
+    private readonly IValidator<ForecastRequest> _validator;
 
-    public ForecastHandler(IWeatherClient weatherClient)
+    public ForecastHandler(IWeatherClient weatherClient, IValidator<ForecastRequest> validator)
     {
         _weatherClient = weatherClient;
+        _validator = validator;
     }
 
     public async Task<ForecastResponse> HandleAsync(
@@ -28,19 +31,20 @@ public sealed class ForecastHandler
             };
         }
 
-        if (string.IsNullOrWhiteSpace(request.City))
+        var validation = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validation.IsValid)
         {
             return new ForecastResponse
             {
                 Request = request,
                 Searched = true,
                 Found = false,
-                ErrorMessage = "Please enter a city name.",
+                ErrorMessage = validation.Errors[0].ErrorMessage,
                 ExampleCities = exampleCities
             };
         }
 
-        var readings = await _weatherClient.GetForecastAsync(request.City, request.Days, cancellationToken);
+        var readings = await _weatherClient.GetForecastAsync(request.City!, request.Days, cancellationToken);
 
         if (readings.Count == 0)
         {
@@ -49,7 +53,7 @@ public sealed class ForecastHandler
                 Request = request,
                 Searched = true,
                 Found = false,
-                ErrorMessage = $"No forecast found for \"{request.City.Trim()}\". Try one of the example cities.",
+                ErrorMessage = $"No forecast found for \"{request.City!.Trim()}\". Try one of the example cities.",
                 ExampleCities = exampleCities
             };
         }

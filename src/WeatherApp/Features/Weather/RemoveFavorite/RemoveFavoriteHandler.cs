@@ -1,3 +1,4 @@
+using FluentValidation;
 using WeatherApp.Infrastructure.Favorites;
 
 namespace WeatherApp.Features.Weather.RemoveFavorite;
@@ -5,20 +6,27 @@ namespace WeatherApp.Features.Weather.RemoveFavorite;
 public sealed class RemoveFavoriteHandler
 {
     private readonly IFavoritesStore _favoritesStore;
+    private readonly IValidator<RemoveFavoriteRequest> _validator;
 
-    public RemoveFavoriteHandler(IFavoritesStore favoritesStore)
+    public RemoveFavoriteHandler(
+        IFavoritesStore favoritesStore,
+        IValidator<RemoveFavoriteRequest> validator)
     {
         _favoritesStore = favoritesStore;
+        _validator = validator;
     }
 
-    public RemoveFavoriteResult Handle(RemoveFavoriteRequest request)
+    public async Task<RemoveFavoriteResult> HandleAsync(
+        RemoveFavoriteRequest request,
+        CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(request.City))
+        var validation = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validation.IsValid)
         {
-            return RemoveFavoriteResult.Fail("A city is required to remove a favorite.");
+            return RemoveFavoriteResult.Fail(validation.Errors[0].ErrorMessage);
         }
 
-        var city = request.City.Trim();
+        var city = request.City!.Trim();
         var removed = _favoritesStore.Remove(city);
 
         if (!removed)

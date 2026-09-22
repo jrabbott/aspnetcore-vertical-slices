@@ -1,3 +1,4 @@
+using FluentValidation;
 using WeatherApp.Infrastructure.Favorites;
 using WeatherApp.Infrastructure.Weather;
 
@@ -7,23 +8,29 @@ public sealed class AddFavoriteHandler
 {
     private readonly IFavoritesStore _favoritesStore;
     private readonly IWeatherClient _weatherClient;
+    private readonly IValidator<AddFavoriteRequest> _validator;
 
-    public AddFavoriteHandler(IFavoritesStore favoritesStore, IWeatherClient weatherClient)
+    public AddFavoriteHandler(
+        IFavoritesStore favoritesStore,
+        IWeatherClient weatherClient,
+        IValidator<AddFavoriteRequest> validator)
     {
         _favoritesStore = favoritesStore;
         _weatherClient = weatherClient;
+        _validator = validator;
     }
 
     public async Task<AddFavoriteResult> HandleAsync(
         AddFavoriteRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(request.City))
+        var validation = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validation.IsValid)
         {
-            return AddFavoriteResult.Fail("Please enter a city name.");
+            return AddFavoriteResult.Fail(validation.Errors[0].ErrorMessage);
         }
 
-        var city = request.City.Trim();
+        var city = request.City!.Trim();
         var reading = await _weatherClient.GetCurrentAsync(city, cancellationToken);
 
         if (reading is null)
