@@ -243,6 +243,11 @@ WeatherApp/
 ├── _ViewImports.cshtml
 ├── _ViewStart.cshtml
 └── Program.cs
+
+WeatherApp.Tests/
+├── Unit/
+├── Integration/
+└── Fakes/
 ```
 
 ### Routes
@@ -283,6 +288,17 @@ Then open the URL shown in the console (typically `http://localhost:5xxx`) and t
 - `/weather/search?city=London`
 - `/weather/forecast?city=Paris`
 - `/weather/favorites`
+
+## Tests
+
+The solution includes `WeatherApp.Tests` with:
+
+- **Unit tests** for slice handlers and `WeatherClient` (hand-written fakes, no mocking framework)
+- **Integration tests** using `WebApplicationFactory<Program>` for routes, feature views, layout, and favorites add/remove
+
+```bash
+dotnet test aspnetcore-vertical-slices.slnx
+```
 
 ## Dependency injection
 

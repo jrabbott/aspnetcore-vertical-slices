@@ -6,7 +6,21 @@ namespace WeatherApp.Infrastructure.Favorites;
 public sealed class FavoritesStore : IFavoritesStore
 {
     private readonly object _gate = new();
-    private readonly List<string> _cities = ["London", "Tokyo"];
+    private readonly List<string> _cities;
+
+    public FavoritesStore()
+        : this(["London", "Tokyo"])
+    {
+    }
+
+    public FavoritesStore(IEnumerable<string> initialCities)
+    {
+        _cities = initialCities
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Select(c => c.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
 
     public IReadOnlyList<string> GetAll()
     {
