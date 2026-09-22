@@ -1,0 +1,16 @@
+@model WeatherApp.Features.Home.ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<section class="page">
+    <header class="page-header">
+        <h1>Something went wrong</h1>
+        <p>An error occurred while processing your request.</p>
+    </header>
+
+    @if (Model.ShowRequestId)
+    {
+        <p class="muted"><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
+    }
+</section>
