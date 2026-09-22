@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace WeatherApp.Tests.Integration;
+namespace WeatherApp.Integration.Tests;
 
 public sealed class ForecastEndpointTests : IClassFixture<WeatherAppFactory>
 {

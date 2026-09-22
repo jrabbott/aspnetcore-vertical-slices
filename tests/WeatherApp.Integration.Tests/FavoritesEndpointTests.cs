@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace WeatherApp.Tests.Integration;
+namespace WeatherApp.Integration.Tests;
 
 public sealed class FavoritesEndpointTests : IClassFixture<WeatherAppFactory>
 {

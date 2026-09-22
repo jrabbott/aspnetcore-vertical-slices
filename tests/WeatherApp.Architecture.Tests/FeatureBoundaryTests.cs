@@ -1,7 +1,7 @@
 using System.Reflection;
 using NetArchTest.Rules;
 
-namespace WeatherApp.Tests.Architecture;
+namespace WeatherApp.Architecture.Tests;
 
 /// <summary>
 /// Enforces Vertical Slice boundaries: each feature owns its types and

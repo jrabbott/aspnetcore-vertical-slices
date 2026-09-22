@@ -23,7 +23,7 @@ Traditional layered organization spreads a single change across many folders. Ad
 
 VSA optimizes for **locality of change**: a developer can understand and modify the Search use case primarily by working inside `src/WeatherApp/Features/Weather/Search`.
 
-Architecture tests in `tests/WeatherApp.Tests/Architecture/FeatureBoundaryTests.cs` help keep that locality honest: feature slices must not take compile-time dependencies on sibling slices (for example Search must not reference Forecast or Favorites types). Navigation between pages via routes/Tag Helpers is fine; sharing request/response/handler types across slices is not.
+Architecture tests in `tests/WeatherApp.Architecture.Tests/FeatureBoundaryTests.cs` help keep that locality honest: feature slices must not take compile-time dependencies on sibling slices (for example Search must not reference Forecast or Favorites types). Navigation between pages via routes/Tag Helpers is fine; sharing request/response/handler types across slices is not.
 
 That remains valuable as an application grows — as long as shared concepts stay genuinely shared and slices do not become a dumping ground for unrelated logic.
 
@@ -237,7 +237,7 @@ There is no assembly scanning. Reading `Program.cs` should make the application'
 
 ## Architecture tests
 
-See [Getting started — Tests](getting-started.md#tests) for how to run them. The rules live under:
+Architecture tests live under:
 
-- `tests/WeatherApp.Tests/Architecture/ArchitectureTests.cs` — project boundaries
-- `tests/WeatherApp.Tests/Architecture/FeatureBoundaryTests.cs` — feature slice isolation
+- `tests/WeatherApp.Architecture.Tests/ArchitectureTests.cs` — project boundaries
+- `tests/WeatherApp.Architecture.Tests/FeatureBoundaryTests.cs` — feature slice isolation

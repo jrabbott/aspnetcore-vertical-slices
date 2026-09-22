@@ -25,7 +25,11 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 │   ├── WeatherApp.Domain/          # Domain model
 │   └── WeatherApp.Infrastructure/  # Weather client + favorites store
 ├── tests/
-│   └── WeatherApp.Tests/           # Unit, integration, architecture tests
+│   ├── WeatherApp.Architecture.Tests/
+│   ├── WeatherApp.Integration.Tests/
+│   ├── WeatherApp.Unit.Tests/                  # WeatherApp feature handlers
+│   ├── WeatherApp.Domain.Unit.Tests/
+│   └── WeatherApp.Infrastructure.Unit.Tests/
 ├── docs/
 │   ├── architecture.md
 │   └── getting-started.md
@@ -33,44 +37,6 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 ├── Directory.Build.props
 ├── global.json
 └── README.md
-```
-
-### Application projects (`src/`)
-
-```text
-src/WeatherApp/
-├── Features/
-│   ├── Home/
-│   └── Weather/
-│       ├── Search/
-│       ├── Forecast/
-│       ├── Favorites/
-│       ├── AddFavorite/
-│       └── RemoveFavorite/
-├── Razor/
-│   └── FeatureViewLocationExpander.cs
-├── Views/Shared/
-├── wwwroot/
-├── _ViewImports.cshtml
-├── _ViewStart.cshtml
-└── Program.cs
-
-src/WeatherApp.Domain/
-└── Weather/
-
-src/WeatherApp.Infrastructure/
-├── Weather/
-└── Favorites/
-```
-
-### Test project (`tests/`)
-
-```text
-tests/WeatherApp.Tests/
-├── Architecture/    # Project + feature boundary rules
-├── Unit/
-├── Integration/
-└── Fakes/
 ```
 
 ## Documentation

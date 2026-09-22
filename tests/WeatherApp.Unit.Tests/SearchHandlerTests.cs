@@ -1,7 +1,7 @@
 using WeatherApp.Features.Weather.Search;
-using WeatherApp.Tests.Fakes;
+using WeatherApp.Unit.Tests.Fakes;
 
-namespace WeatherApp.Tests.Unit;
+namespace WeatherApp.Unit.Tests;
 
 public sealed class SearchHandlerTests
 {

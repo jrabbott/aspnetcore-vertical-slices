@@ -4,7 +4,15 @@
     <Project Path="src/WeatherApp.Domain/WeatherApp.Domain.csproj" />
     <Project Path="src/WeatherApp.Infrastructure/WeatherApp.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/WeatherApp.Tests/WeatherApp.Tests.csproj" />
+  <Folder Name="/tests/Architecture/">
+    <Project Path="tests/WeatherApp.Architecture.Tests/WeatherApp.Architecture.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Integration/">
+    <Project Path="tests/WeatherApp.Integration.Tests/WeatherApp.Integration.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Unit/">
+    <Project Path="tests/WeatherApp.Unit.Tests/WeatherApp.Unit.Tests.csproj" />
+    <Project Path="tests/WeatherApp.Domain.Unit.Tests/WeatherApp.Domain.Unit.Tests.csproj" />
+    <Project Path="tests/WeatherApp.Infrastructure.Unit.Tests/WeatherApp.Infrastructure.Unit.Tests.csproj" />
   </Folder>
 </Solution>

@@ -4,7 +4,7 @@ using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Favorites;
 using WeatherApp.Infrastructure.Weather;
 
-namespace WeatherApp.Tests.Architecture;
+namespace WeatherApp.Architecture.Tests;
 
 public sealed class ArchitectureTests
 {

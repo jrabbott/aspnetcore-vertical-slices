@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WeatherApp.Infrastructure.Favorites;
 
-namespace WeatherApp.Tests.Integration;
+namespace WeatherApp.Integration.Tests;
 
 public sealed class WeatherAppFactory : WebApplicationFactory<Program>
 {

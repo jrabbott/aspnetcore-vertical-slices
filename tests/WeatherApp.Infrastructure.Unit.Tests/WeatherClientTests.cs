@@ -1,6 +1,6 @@
 using WeatherApp.Infrastructure.Weather;
 
-namespace WeatherApp.Tests.Unit;
+namespace WeatherApp.Infrastructure.Unit.Tests;
 
 public sealed class WeatherClientTests
 {

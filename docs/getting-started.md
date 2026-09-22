@@ -48,18 +48,24 @@ Unknown cities are handled cleanly with user-facing messages. No external API ke
 dotnet test aspnetcore-vertical-slices.slnx
 ```
 
-`tests/WeatherApp.Tests` includes:
+Test projects:
 
-- **Unit tests** for slice handlers and `WeatherClient` (hand-written fakes, no mocking framework)
-- **Integration tests** using `WebApplicationFactory<Program>` for routes, feature views, layout, and favorites add/remove
-- **Architecture tests** (NetArchTest + assembly-reference checks) that enforce:
-  - Domain does not reference Infrastructure, Web, or ASP.NET Core
-  - Infrastructure references Domain but not Web / MVC
-  - Web references Domain and Infrastructure
-  - Controllers and handlers live under `WeatherApp.Features`
-  - Handlers do not depend on MVC `Controller`
-  - Feature slices do not take compile-time dependencies on sibling slices
-  - Each slice owns its Controller / Request / Handler (and Response for query slices)
-  - Feature view location expander stays in the web project
+| Project | Purpose |
+|---|---|
+| `tests/WeatherApp.Architecture.Tests` | Project + feature boundary rules (NetArchTest) |
+| `tests/WeatherApp.Integration.Tests` | HTTP routes via `WebApplicationFactory` |
+| `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler unit tests |
+| `tests/WeatherApp.Domain.Unit.Tests` | Domain model unit tests |
+| `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client + favorites store unit tests |
+
+Architecture rules include:
+
+- Domain does not reference Infrastructure, Web, or ASP.NET Core
+- Infrastructure references Domain but not Web / MVC
+- Web references Domain and Infrastructure
+- Controllers and handlers live under `WeatherApp.Features`
+- Handlers do not depend on MVC `Controller`
+- Feature slices do not take compile-time dependencies on sibling slices
+- Each slice owns its Controller / Request / Handler (and Response for query slices)
 
 More detail: [Architecture](architecture.md).

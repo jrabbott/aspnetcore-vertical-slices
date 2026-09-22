@@ -1,7 +1,7 @@
 using WeatherApp.Features.Weather.RemoveFavorite;
 using WeatherApp.Infrastructure.Favorites;
 
-namespace WeatherApp.Tests.Unit;
+namespace WeatherApp.Unit.Tests;
 
 public sealed class RemoveFavoriteHandlerTests
 {

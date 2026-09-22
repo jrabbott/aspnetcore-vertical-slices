@@ -1,7 +1,7 @@
 using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Weather;
 
-namespace WeatherApp.Tests.Fakes;
+namespace WeatherApp.Unit.Tests.Fakes;
 
 internal sealed class FakeWeatherClient : IWeatherClient
 {
