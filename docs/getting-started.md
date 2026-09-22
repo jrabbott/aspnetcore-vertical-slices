@@ -30,9 +30,9 @@ Root (`/`) redirects to `/weather/search`.
 
 AddFavorite and RemoveFavorite are command slices without Razor views. They demonstrate that not every vertical slice is a page.
 
-## Supported cities
+## Cities and weather data
 
-The fake weather client supports:
+Weather data comes from the free [Open-Meteo](https://open-meteo.com/) geocoding + forecast APIs (no API key for non-commercial use). Any city Open-Meteo can geocode works. The UI suggests a few examples:
 
 - London
 - Paris
@@ -40,7 +40,7 @@ The fake weather client supports:
 - New York
 - Tokyo
 
-Unknown cities are handled cleanly with user-facing messages. No external API key is required.
+Unknown / ungeocodable cities are handled with user-facing messages.
 
 ## Tests
 

@@ -23,14 +23,14 @@ public sealed class FavoritesEndpointTests(WeatherAppFactory factory) : IClassFi
     [Fact]
     public async Task Favorites_CityWithoutWeather_ShowsUnavailableMessage()
     {
-        HttpClient client = _factory.CreateClientWithFavorites(["Atlantis"]);
+        HttpClient client = _factory.CreateClientWithFavorites(["Zzqxnotacity999"]);
         HttpResponseMessage response = await client.GetAsync("/weather/favorites");
         IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Contains(
             document.QuerySelectorAll("ul.favorites-list > li h2"),
-            heading => heading.TextContent.Trim() == "Atlantis");
+            heading => heading.TextContent.Trim() == "Zzqxnotacity999");
         Assert.Contains(
             "Weather unavailable for this city.",
             document.QuerySelector("p.muted")?.TextContent);
@@ -93,13 +93,13 @@ public sealed class FavoritesEndpointTests(WeatherAppFactory factory) : IClassFi
         IDocument page = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favorites"));
         string token = HtmlDocument.AntiForgeryToken(page);
 
-        using FormUrlEncodedContent content = Form(token, "Atlantis");
+        using FormUrlEncodedContent content = Form(token, "Zzqxnotacity999");
         HttpResponseMessage response = await client.PostAsync("/weather/favorites/add", content);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
 
         IDocument document = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favorites"));
         Assert.Contains(
-            "not a supported city",
+            "Could not find weather",
             document.QuerySelector(".alert.alert-error")?.TextContent);
         Assert.Empty(document.QuerySelectorAll("ul.favorites-list > li"));
     }

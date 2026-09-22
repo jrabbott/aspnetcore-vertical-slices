@@ -61,7 +61,7 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
     [Fact]
     public async Task Search_UnknownCity_ShowsError()
     {
-        HttpResponseMessage response = await _client.GetAsync("/weather/search?city=Atlantis");
+        HttpResponseMessage response = await _client.GetAsync("/weather/search?city=Zzqxnotacity999");
         IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -69,7 +69,7 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
         IElement? alert = document.QuerySelector(".alert.alert-error");
         Assert.NotNull(alert);
         Assert.Contains("No weather data found", alert.TextContent);
-        Assert.Contains("Atlantis", alert.TextContent);
+        Assert.Contains("Zzqxnotacity999", alert.TextContent);
         Assert.Null(document.QuerySelector("article.weather-result"));
     }
 

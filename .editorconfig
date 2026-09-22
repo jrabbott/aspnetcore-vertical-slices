@@ -307,6 +307,7 @@ dotnet_diagnostic.CA1506.severity = none
 
 [tests/**/*.cs]
 dotnet_diagnostic.CA1506.severity = none
+dotnet_diagnostic.CA2000.severity = none
 
 # ================================================================
 # GENERATED CODE

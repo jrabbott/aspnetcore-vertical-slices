@@ -43,7 +43,7 @@ public sealed class FavoritesHandler(IFavoritesStore favoritesStore, IWeatherCli
     {
         return
         [
-            .. WeatherClient.KnownCities
+            .. WeatherClient.ExampleCities
                 .Where(c => !favoriteCities.Contains(c, StringComparer.OrdinalIgnoreCase))
         ];
     }

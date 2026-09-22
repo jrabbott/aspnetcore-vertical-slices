@@ -17,7 +17,7 @@ public sealed class ForecastHandler(IWeatherClient weatherClient, IValidator<For
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        string[] exampleCities = [.. WeatherClient.KnownCities];
+        string[] exampleCities = [.. WeatherClient.ExampleCities];
 
         if (!searched)
         {

@@ -46,7 +46,7 @@ public sealed class ForecastEndpointTests(WeatherAppFactory factory) : IClassFix
     [Fact]
     public async Task Forecast_UnknownCity_ShowsError()
     {
-        HttpResponseMessage response = await _client.GetAsync("/weather/forecast?city=Nowhere");
+        HttpResponseMessage response = await _client.GetAsync("/weather/forecast?city=Zzqxnotacity999");
         AngleSharp.Dom.IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -54,7 +54,7 @@ public sealed class ForecastEndpointTests(WeatherAppFactory factory) : IClassFix
         AngleSharp.Dom.IElement? alert = document.QuerySelector(".alert.alert-error");
         Assert.NotNull(alert);
         Assert.Contains("No forecast found", alert.TextContent);
-        Assert.Contains("Nowhere", alert.TextContent);
+        Assert.Contains("Zzqxnotacity999", alert.TextContent);
         Assert.Null(document.QuerySelector("article.forecast-result"));
     }
 

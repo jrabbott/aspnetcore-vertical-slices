@@ -17,7 +17,7 @@ public sealed class SearchHandler(IWeatherClient weatherClient, IValidator<Searc
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        string[] exampleCities = [.. WeatherClient.KnownCities];
+        string[] exampleCities = [.. WeatherClient.ExampleCities];
 
         if (!searched)
         {

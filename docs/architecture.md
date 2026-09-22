@@ -193,7 +193,7 @@ Infrastructure is a separate project (`src/WeatherApp.Infrastructure`) and stays
 Examples in this app:
 
 - `src/WeatherApp.Infrastructure/Weather/IWeatherClient.cs`
-- `src/WeatherApp.Infrastructure/Weather/WeatherClient.cs` — deterministic fake weather data
+- `src/WeatherApp.Infrastructure/Weather/WeatherClient.cs` — Open-Meteo geocoding + forecast HTTP client
 - `src/WeatherApp.Infrastructure/Favorites/IFavoritesStore.cs`
 - `src/WeatherApp.Infrastructure/Favorites/FavoritesStore.cs` — in-memory favorites
 
@@ -234,7 +234,7 @@ For a trivial one-page app, VSA can be more structure than you need. Prefer the 
 
 - handlers
 - FluentValidation request validators
-- `IWeatherClient` / `WeatherClient`
+- `IWeatherClient` / `WeatherClient` (typed `HttpClient` → Open-Meteo)
 - `IFavoritesStore` / `FavoritesStore`
 - the feature view location expander
 

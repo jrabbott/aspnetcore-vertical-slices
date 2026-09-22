@@ -32,7 +32,7 @@ public sealed class AddFavoriteHandler(
 
         if (reading is null)
         {
-            return AddFavoriteResponse.Fail($"\"{city}\" is not a supported city.");
+            return AddFavoriteResponse.Fail($"Could not find weather for \"{city}\".");
         }
 
         bool added = _favoritesStore.Add(reading.Location.City);
