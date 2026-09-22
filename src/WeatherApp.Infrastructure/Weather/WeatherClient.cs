@@ -7,7 +7,7 @@ namespace WeatherApp.Infrastructure.Weather;
 /// </summary>
 public sealed class WeatherClient : IWeatherClient
 {
-    private static readonly Dictionary<string, CityWeatherProfile> Cities =
+    private static readonly Dictionary<string, CityWeatherProfile> _cities =
         new(StringComparer.OrdinalIgnoreCase)
         {
             ["London"] = new("London", "United Kingdom", 12, "Cloudy", 78, 18),
@@ -17,7 +17,7 @@ public sealed class WeatherClient : IWeatherClient
             ["Tokyo"] = new("Tokyo", "Japan", 22, "Humid", 70, 10),
         };
 
-    private static readonly string[] ForecastSummaries =
+    private static readonly string[] _forecastSummaries =
     [
         "Sunny",
         "Partly cloudy",
@@ -70,14 +70,14 @@ public sealed class WeatherClient : IWeatherClient
         for (int i = 0; i < days; i++)
         {
             int temperatureOffset = ((seed + i * 3) % 7) - 3;
-            int summaryIndex = Math.Abs(seed + i) % ForecastSummaries.Length;
+            int summaryIndex = Math.Abs(seed + i) % _forecastSummaries.Length;
 
             readings.Add(new WeatherReading
             {
                 Location = new Location { City = profile.City, Country = profile.Country },
                 Date = today.AddDays(i),
                 TemperatureC = profile.BaseTemperatureC + temperatureOffset,
-                Summary = ForecastSummaries[summaryIndex],
+                Summary = _forecastSummaries[summaryIndex],
                 HumidityPercent = Math.Clamp(profile.HumidityPercent + ((seed + i) % 11) - 5, 20, 95),
                 WindSpeedKph = Math.Clamp(profile.WindSpeedKph + ((seed + i * 2) % 9) - 4, 5, 40)
             });
@@ -86,13 +86,13 @@ public sealed class WeatherClient : IWeatherClient
         return Task.FromResult<IReadOnlyList<WeatherReading>>(readings);
     }
 
-    public static IReadOnlyCollection<string> KnownCities => Cities.Keys.OrderBy(c => c).ToArray();
+    public static IReadOnlyCollection<string> KnownCities => _cities.Keys.OrderBy(c => c).ToArray();
 
     private static bool TryResolveCity(string city, out CityWeatherProfile profile)
     {
         profile = default;
 
-        return !string.IsNullOrWhiteSpace(city) && Cities.TryGetValue(city.Trim(), out profile);
+        return !string.IsNullOrWhiteSpace(city) && _cities.TryGetValue(city.Trim(), out profile);
     }
 
     private static int StableHash(string value)

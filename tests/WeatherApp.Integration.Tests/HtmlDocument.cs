@@ -6,12 +6,12 @@ namespace WeatherApp.Integration.Tests;
 
 internal static class HtmlDocument
 {
-    private static readonly IBrowsingContext Context = BrowsingContext.New(Configuration.Default);
+    private static readonly IBrowsingContext _context = BrowsingContext.New(Configuration.Default);
 
     public static async Task<IDocument> ParseAsync(HttpResponseMessage response)
     {
         string html = await response.Content.ReadAsStringAsync();
-        return await Context.OpenAsync(request => request.Content(html));
+        return await _context.OpenAsync(request => request.Content(html));
     }
 
     public static string AntiForgeryToken(IDocument document)
