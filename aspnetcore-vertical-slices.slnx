@@ -1,6 +1,10 @@
 <Solution>
-  <Project Path="WeatherApp.Domain/WeatherApp.Domain.csproj" />
-  <Project Path="WeatherApp.Infrastructure/WeatherApp.Infrastructure.csproj" />
-  <Project Path="WeatherApp.Tests/WeatherApp.Tests.csproj" />
-  <Project Path="WeatherApp/WeatherApp.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/WeatherApp/WeatherApp.csproj" />
+    <Project Path="src/WeatherApp.Domain/WeatherApp.Domain.csproj" />
+    <Project Path="src/WeatherApp.Infrastructure/WeatherApp.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WeatherApp.Tests/WeatherApp.Tests.csproj" />
+  </Folder>
 </Solution>

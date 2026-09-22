@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -21,9 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WeatherApp\WeatherApp.csproj" />
-    <ProjectReference Include="..\WeatherApp.Domain\WeatherApp.Domain.csproj" />
-    <ProjectReference Include="..\WeatherApp.Infrastructure\WeatherApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\WeatherApp\WeatherApp.csproj" />
+    <ProjectReference Include="..\..\src\WeatherApp.Domain\WeatherApp.Domain.csproj" />
+    <ProjectReference Include="..\..\src\WeatherApp.Infrastructure\WeatherApp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
