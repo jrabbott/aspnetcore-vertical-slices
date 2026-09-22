@@ -6,7 +6,7 @@ namespace WeatherApp.Infrastructure.Weather;
 
 internal sealed class OpenMeteoForecastClient(HttpClient httpClient)
 {
-    private const string ForecastBase = "https://api.open-meteo.com/v1/forecast";
+    private const string _forecastBase = "https://api.open-meteo.com/v1/forecast";
 
     private readonly HttpClient _httpClient = httpClient;
 
@@ -15,7 +15,7 @@ internal sealed class OpenMeteoForecastClient(HttpClient httpClient)
         CancellationToken cancellationToken)
     {
         string url =
-            $"{ForecastBase}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
+            $"{_forecastBase}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
             + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m"
             + "&timezone=auto&wind_speed_unit=kmh";
 
@@ -32,7 +32,7 @@ internal sealed class OpenMeteoForecastClient(HttpClient httpClient)
         CancellationToken cancellationToken)
     {
         string url =
-            $"{ForecastBase}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
+            $"{_forecastBase}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
             + "&daily=weather_code,temperature_2m_max,relative_humidity_2m_mean,wind_speed_10m_max"
             + $"&forecast_days={days}&timezone=auto&wind_speed_unit=kmh";
 

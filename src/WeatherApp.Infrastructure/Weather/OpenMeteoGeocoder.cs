@@ -5,7 +5,7 @@ namespace WeatherApp.Infrastructure.Weather;
 
 internal sealed class OpenMeteoGeocoder(HttpClient httpClient)
 {
-    private const string GeocodingBase = "https://geocoding-api.open-meteo.com/v1/search";
+    private const string _geocodingBase = "https://geocoding-api.open-meteo.com/v1/search";
 
     private readonly HttpClient _httpClient = httpClient;
     private readonly ConcurrentDictionary<string, GeoLocation?> _cache = new(StringComparer.OrdinalIgnoreCase);
@@ -25,7 +25,7 @@ internal sealed class OpenMeteoGeocoder(HttpClient httpClient)
         }
 
         string url =
-            $"{GeocodingBase}?name={Uri.EscapeDataString(key)}&count=1&language=en&format=json";
+            $"{_geocodingBase}?name={Uri.EscapeDataString(key)}&count=1&language=en&format=json";
 
         GeocodingResponse? response = await _httpClient
             .GetFromJsonAsync<GeocodingResponse>(url, cancellationToken)
