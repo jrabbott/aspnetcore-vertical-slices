@@ -182,6 +182,8 @@ Request and response models belong to their slice.
 
 Request validation uses **FluentValidation**, with a slice-local validator next to the request model (for example `SearchRequestValidator`). Handlers invoke `IValidator<TRequest>` so validation stays in the use-case path rather than DataAnnotations attributes.
 
+Response construction uses **static factory methods** on the response types themselves (`SearchResponse.Empty`, `FromReading`, `Invalid`, and the existing `AddFavoriteResult.Ok` / `Fail` pattern). That keeps named construction paths close to the model without introducing separate Builder/Factory classes or shared response infrastructure across slices.
+
 It is acceptable for different response models to contain similar properties. Duplication across slices is preferred over premature extraction.
 
 ## Where infrastructure belongs
@@ -231,6 +233,7 @@ For a trivial one-page app, VSA can be more structure than you need. Prefer the 
 `src/WeatherApp/Program.cs` registers dependencies explicitly:
 
 - handlers
+- FluentValidation request validators
 - `IWeatherClient` / `WeatherClient`
 - `IFavoritesStore` / `FavoritesStore`
 - the feature view location expander

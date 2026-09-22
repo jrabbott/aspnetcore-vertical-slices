@@ -23,58 +23,21 @@ public sealed class ForecastHandler
 
         if (!searched)
         {
-            return new ForecastResponse
-            {
-                Request = request,
-                Searched = false,
-                ExampleCities = exampleCities
-            };
+            return ForecastResponse.Empty(request, exampleCities);
         }
 
         var validation = await _validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)
         {
-            return new ForecastResponse
-            {
-                Request = request,
-                Searched = true,
-                Found = false,
-                ErrorMessage = validation.Errors[0].ErrorMessage,
-                ExampleCities = exampleCities
-            };
+            return ForecastResponse.Invalid(request, validation.Errors[0].ErrorMessage, exampleCities);
         }
 
         var readings = await _weatherClient.GetForecastAsync(request.City!, request.Days, cancellationToken);
-
         if (readings.Count == 0)
         {
-            return new ForecastResponse
-            {
-                Request = request,
-                Searched = true,
-                Found = false,
-                ErrorMessage = $"No forecast found for \"{request.City!.Trim()}\". Try one of the example cities.",
-                ExampleCities = exampleCities
-            };
+            return ForecastResponse.NotFound(request, request.City!, exampleCities);
         }
 
-        return new ForecastResponse
-        {
-            Request = request,
-            Searched = true,
-            Found = true,
-            City = readings[0].Location.City,
-            Country = readings[0].Location.Country,
-            Days = readings.Select(r => new ForecastDay
-            {
-                Date = r.Date,
-                TemperatureC = r.TemperatureC,
-                TemperatureF = r.TemperatureF,
-                Summary = r.Summary,
-                HumidityPercent = r.HumidityPercent,
-                WindSpeedKph = r.WindSpeedKph
-            }).ToArray(),
-            ExampleCities = exampleCities
-        };
+        return ForecastResponse.FromReadings(request, readings, exampleCities);
     }
 }

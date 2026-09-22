@@ -28,27 +28,13 @@ public sealed class FavoritesHandler
         foreach (var city in favoriteCities)
         {
             var reading = await _weatherClient.GetCurrentAsync(city, cancellationToken);
-
-            items.Add(new FavoriteCity
-            {
-                City = city,
-                Country = reading?.Location.Country,
-                TemperatureC = reading?.TemperatureC,
-                Summary = reading?.Summary,
-                HasWeather = reading is not null
-            });
+            items.Add(FavoriteCity.FromReading(city, reading));
         }
 
         var suggested = WeatherClient.KnownCities
             .Where(c => !favoriteCities.Contains(c, StringComparer.OrdinalIgnoreCase))
             .ToArray();
 
-        return new FavoritesResponse
-        {
-            Cities = items,
-            SuggestedCities = suggested,
-            StatusMessage = statusMessage,
-            StatusIsError = statusIsError
-        };
+        return FavoritesResponse.Create(items, suggested, statusMessage, statusIsError);
     }
 }

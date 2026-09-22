@@ -23,54 +23,21 @@ public sealed class SearchHandler
 
         if (!searched)
         {
-            return new SearchResponse
-            {
-                Request = request,
-                Searched = false,
-                ExampleCities = exampleCities
-            };
+            return SearchResponse.Empty(request, exampleCities);
         }
 
         var validation = await _validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)
         {
-            return new SearchResponse
-            {
-                Request = request,
-                Searched = true,
-                Found = false,
-                ErrorMessage = validation.Errors[0].ErrorMessage,
-                ExampleCities = exampleCities
-            };
+            return SearchResponse.Invalid(request, validation.Errors[0].ErrorMessage, exampleCities);
         }
 
         var reading = await _weatherClient.GetCurrentAsync(request.City!, cancellationToken);
-
         if (reading is null)
         {
-            return new SearchResponse
-            {
-                Request = request,
-                Searched = true,
-                Found = false,
-                ErrorMessage = $"No weather data found for \"{request.City!.Trim()}\". Try one of the example cities.",
-                ExampleCities = exampleCities
-            };
+            return SearchResponse.NotFound(request, request.City!, exampleCities);
         }
 
-        return new SearchResponse
-        {
-            Request = request,
-            Searched = true,
-            Found = true,
-            City = reading.Location.City,
-            Country = reading.Location.Country,
-            TemperatureC = reading.TemperatureC,
-            TemperatureF = reading.TemperatureF,
-            Summary = reading.Summary,
-            HumidityPercent = reading.HumidityPercent,
-            WindSpeedKph = reading.WindSpeedKph,
-            ExampleCities = exampleCities
-        };
+        return SearchResponse.FromReading(request, reading, exampleCities);
     }
 }
