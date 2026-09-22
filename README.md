@@ -33,9 +33,13 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 ├── docs/
 │   ├── architecture.md
 │   └── getting-started.md
+├── .github/
+│   ├── workflows/ci.yml              # restore (locked) + build + test
+│   └── dependabot.yml                # grouped NuGet + Actions updates
 ├── aspnetcore-vertical-slices.slnx
 ├── Directory.Build.props
 ├── Directory.Packages.props          # Central Package Management
+├── CodeMetricsConfig.txt
 ├── global.json                       # .NET 10 SDK + MTP test runner
 └── README.md
 ```
