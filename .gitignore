@@ -44,6 +44,7 @@ bld/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+TestResults/
 
 # Dotnet tool
 .dotnet/
