@@ -66,7 +66,6 @@ Architecture rules include:
 - Controllers and handlers live under `WeatherApp.Features`
 - Handlers do not depend on MVC `Controller`
 - Feature slices do not take compile-time dependencies on sibling slices
-  - Each slice owns its Controller / Request / Handler (and Response for query slices)
-  - Request validators live in the same feature slice as their request model
+  - Each slice owns its Controller / Request / Handler / Response (validators where the slice accepts input)
 
 More detail: [Architecture](architecture.md).

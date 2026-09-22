@@ -16,14 +16,14 @@ public sealed class RemoveFavoriteHandler
         _validator = validator;
     }
 
-    public async Task<RemoveFavoriteResult> HandleAsync(
+    public async Task<RemoveFavoriteResponse> HandleAsync(
         RemoveFavoriteRequest request,
         CancellationToken cancellationToken = default)
     {
         var validation = await _validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)
         {
-            return RemoveFavoriteResult.Fail(validation.Errors[0].ErrorMessage);
+            return RemoveFavoriteResponse.Fail(validation.Errors[0].ErrorMessage);
         }
 
         var city = request.City!.Trim();
@@ -31,18 +31,9 @@ public sealed class RemoveFavoriteHandler
 
         if (!removed)
         {
-            return RemoveFavoriteResult.Fail($"{city} was not in your favorites.");
+            return RemoveFavoriteResponse.Fail($"{city} was not in your favorites.");
         }
 
-        return RemoveFavoriteResult.Ok($"{city} was removed from your favorites.");
+        return RemoveFavoriteResponse.Ok($"{city} was removed from your favorites.");
     }
-}
-
-public sealed class RemoveFavoriteResult
-{
-    public required bool Succeeded { get; init; }
-    public required string Message { get; init; }
-
-    public static RemoveFavoriteResult Ok(string message) => new() { Succeeded = true, Message = message };
-    public static RemoveFavoriteResult Fail(string message) => new() { Succeeded = false, Message = message };
 }

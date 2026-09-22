@@ -20,14 +20,14 @@ public sealed class AddFavoriteHandler
         _validator = validator;
     }
 
-    public async Task<AddFavoriteResult> HandleAsync(
+    public async Task<AddFavoriteResponse> HandleAsync(
         AddFavoriteRequest request,
         CancellationToken cancellationToken = default)
     {
         var validation = await _validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)
         {
-            return AddFavoriteResult.Fail(validation.Errors[0].ErrorMessage);
+            return AddFavoriteResponse.Fail(validation.Errors[0].ErrorMessage);
         }
 
         var city = request.City!.Trim();
@@ -35,24 +35,15 @@ public sealed class AddFavoriteHandler
 
         if (reading is null)
         {
-            return AddFavoriteResult.Fail($"\"{city}\" is not a supported city.");
+            return AddFavoriteResponse.Fail($"\"{city}\" is not a supported city.");
         }
 
         var added = _favoritesStore.Add(reading.Location.City);
         if (!added)
         {
-            return AddFavoriteResult.Fail($"{reading.Location.City} is already in your favorites.");
+            return AddFavoriteResponse.Fail($"{reading.Location.City} is already in your favorites.");
         }
 
-        return AddFavoriteResult.Ok($"{reading.Location.City} was added to your favorites.");
+        return AddFavoriteResponse.Ok($"{reading.Location.City} was added to your favorites.");
     }
-}
-
-public sealed class AddFavoriteResult
-{
-    public required bool Succeeded { get; init; }
-    public required string Message { get; init; }
-
-    public static AddFavoriteResult Ok(string message) => new() { Succeeded = true, Message = message };
-    public static AddFavoriteResult Fail(string message) => new() { Succeeded = false, Message = message };
 }

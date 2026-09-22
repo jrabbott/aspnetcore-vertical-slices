@@ -95,7 +95,9 @@ public sealed class FeatureBoundaryTests
     [InlineData("WeatherApp.Features.Weather.Search", "Search")]
     [InlineData("WeatherApp.Features.Weather.Forecast", "Forecast")]
     [InlineData("WeatherApp.Features.Weather.Favorites", "Favorites")]
-    public void Query_Feature_Slice_Should_Own_Its_Response(string sliceNamespace, string sliceName)
+    [InlineData("WeatherApp.Features.Weather.AddFavorite", "AddFavorite")]
+    [InlineData("WeatherApp.Features.Weather.RemoveFavorite", "RemoveFavorite")]
+    public void Feature_Slice_Should_Own_Its_Response(string sliceNamespace, string sliceName)
     {
         var types = Types.InAssembly(WebAssembly)
             .That()
