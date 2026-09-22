@@ -19,4 +19,34 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
             services.AddSingleton<IFavoritesStore>(_ => new FavoritesStore([]));
         });
     }
+
+    public HttpClient CreateClientWithFavorites(
+        IEnumerable<string>? initialCities = null,
+        WebApplicationFactoryClientOptions? options = null)
+    {
+        var cities = initialCities?.ToArray() ?? [];
+
+        return WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.RemoveAll<IFavoritesStore>();
+                services.AddSingleton<IFavoritesStore>(_ => new FavoritesStore(cities));
+            });
+        }).CreateClient(options ?? new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+    }
+
+    public HttpClient CreateProductionClient(WebApplicationFactoryClientOptions? options = null)
+    {
+        return WithWebHostBuilder(builder =>
+        {
+            builder.UseEnvironment("Production");
+        }).CreateClient(options ?? new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+    }
 }
