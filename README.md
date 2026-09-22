@@ -23,6 +23,8 @@ Traditional layered organization spreads a single change across many folders. Ad
 
 VSA optimizes for **locality of change**: a developer can understand and modify the Search use case primarily by working inside `Features/Weather/Search`.
 
+Architecture tests in `WeatherApp.Tests/Architecture/FeatureBoundaryTests.cs` help keep that locality honest: feature slices must not take compile-time dependencies on sibling slices (for example Search must not reference Forecast or Favorites types). Navigation between pages via routes/Tag Helpers is fine; sharing request/response/handler types across slices is not.
+
 That remains valuable as an application grows — as long as shared concepts stay genuinely shared and slices do not become a dumping ground for unrelated logic.
 
 ## How this differs from traditional layered organization
@@ -307,6 +309,8 @@ The solution includes `WeatherApp.Tests` with:
   - Web references Domain and Infrastructure
   - Controllers and handlers live under `WeatherApp.Features`
   - Handlers do not depend on MVC `Controller`
+  - Feature slices do not take compile-time dependencies on sibling slices
+  - Each slice owns its Controller / Request / Handler (and Response for query slices)
   - Feature view location expander stays in the web project
 
 ```bash
