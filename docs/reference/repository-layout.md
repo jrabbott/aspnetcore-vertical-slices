@@ -26,12 +26,18 @@
 │   └── skills/                     # Project Agent Skills (SKILL.md packages)
 ├── .github/
 │   ├── workflows/ci.yml
-│   └── dependabot.yml
+│   ├── dependabot.yml
+│   ├── ISSUE_TEMPLATE/             # bug + feature forms
+│   └── PULL_REQUEST_TEMPLATE.md
 ├── aspnetcore-vertical-slices.slnx
 ├── Directory.Build.props
 ├── Directory.Packages.props
 ├── CodeMetricsConfig.txt
 ├── global.json
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── SECURITY.md
+├── LICENSE
 └── README.md
 ```
 

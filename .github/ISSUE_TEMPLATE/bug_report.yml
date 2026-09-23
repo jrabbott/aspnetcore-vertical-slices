@@ -1,0 +1,46 @@
+name: Bug report
+description: Something in the sample does not work as documented
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please check [docs/README.md](https://github.com/jrabbott/aspnetcore-vertical-slices/blob/main/docs/README.md) first.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Clear description of the unexpected behaviour.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Commands, URLs, or UI steps that reliably reproduce the issue.
+      placeholder: |
+        1. dotnet run --project src/WeatherApp
+        2. Open /weather/search?city=London
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: sdk
+    attributes:
+      label: .NET SDK version
+      description: Output of `dotnet --version` (should match or roll forward from global.json).
+      placeholder: 10.0.x
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, OS, or links to related PRs (optional).

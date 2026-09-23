@@ -35,12 +35,18 @@ First-time walkthrough: [docs/tutorials/run-the-weather-app.md](docs/tutorials/r
 ├── .agents/skills/                 # Project Agent Skills
 ├── .github/
 │   ├── workflows/ci.yml              # restore (locked) + build + test
-│   └── dependabot.yml                # grouped NuGet + Actions updates
+│   ├── dependabot.yml                # grouped NuGet + Actions updates
+│   ├── ISSUE_TEMPLATE/               # bug + feature forms
+│   └── PULL_REQUEST_TEMPLATE.md
 ├── aspnetcore-vertical-slices.slnx
 ├── Directory.Build.props
 ├── Directory.Packages.props          # Central Package Management
 ├── CodeMetricsConfig.txt
 ├── global.json                       # .NET 10 SDK + MTP test runner
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── SECURITY.md
+├── LICENSE
 └── README.md
 ```
 
@@ -51,7 +57,7 @@ Detail: [docs/reference/repository-layout.md](docs/reference/repository-layout.m
 | Need | Start here |
 |---|---|
 | Learn | [Run the weather app](docs/tutorials/run-the-weather-app.md) |
-| Do a task | [Add a feature slice](docs/how-to/add-a-feature-slice.md) · [Run, build, and test](docs/how-to/run-build-and-test.md) |
+| Do a task | [Add a feature slice](docs/how-to/add-a-feature-slice.md) · [Run, build, and test](docs/how-to/run-build-and-test.md) · [Replace the weather provider](docs/how-to/replace-the-weather-provider.md) |
 | Look up | [Routes](docs/reference/routes.md) · [Build & packages](docs/reference/build-and-packages.md) · [Tests](docs/reference/testing.md) |
 | Understand | [Vertical Slice Architecture](docs/explanation/vertical-slice-architecture.md) · [Design choices](docs/explanation/design-choices.md) |
 
@@ -64,3 +70,11 @@ ASP.NET Core MVC + Razor for presentation, with Vertical Slice Architecture for 
 ```text
 Browser → Controller → Request → Handler → Infrastructure / Domain → Response → Razor View
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for prerequisites, CI-parity commands, and pull request expectations. Prose, UI copy, and identifiers use **UK spelling** (e.g. Favourite, organisation). To extend the sample, start with [Add a feature slice](docs/how-to/add-a-feature-slice.md).
+
+## License
+
+MIT — see [LICENSE](LICENSE).

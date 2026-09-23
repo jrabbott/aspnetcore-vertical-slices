@@ -1,0 +1,28 @@
+name: Feature request
+description: Propose an improvement that fits this Vertical Slice sample
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep suggestions aligned with the sample’s goals (MVC + VSA, minimal ceremony). See [Design choices](https://github.com/jrabbott/aspnetcore-vertical-slices/blob/main/docs/explanation/design-choices.md).
+  - type: textarea
+    id: goal
+    attributes:
+      label: What do you want to achieve?
+      description: The outcome for learners or maintainers of this sample.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why does it belong in this sample?
+      description: How it improves teaching VSA on MVC, docs, tests, or contributor experience — without turning the repo into a full product.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Suggested approach (optional)
+      description: Sketches, file areas, or alternatives you have considered.
