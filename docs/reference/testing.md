@@ -26,9 +26,10 @@ Primary sources:
 
 ## Integration notes
 
-- `WeatherAppFactory` customises the host for tests (for example replacing weather/favourites dependencies).
+- `WeatherAppFactory` replaces `IWeatherClient` with a seeded `FakeWeatherClient` so HTTP/DOM tests stay offline (no live Open-Meteo).
+- Open-Meteo mapping is covered by `WeatherApp.Infrastructure.Unit.Tests` with `HttpMessageHandler` stubs.
 - Session cookie handling isolates favourites per `HttpClient` when exercising the real session store.
-- Prefer ungeocodable sentinel city names in Open-Meteo-backed scenarios (real place names can resolve unexpectedly).
+- Prefer ungeocodable sentinel city names (for example `Zzqxnotacity999`) when asserting “not found” paths.
 
 ## Related
 

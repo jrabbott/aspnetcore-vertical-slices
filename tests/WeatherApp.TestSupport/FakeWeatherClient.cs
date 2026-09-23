@@ -4,7 +4,7 @@ using WeatherApp.Infrastructure.Weather;
 namespace WeatherApp.TestSupport;
 
 /// <summary>
-/// In-memory <see cref="IWeatherClient"/> for unit tests.
+/// In-memory <see cref="IWeatherClient"/> for unit and integration tests.
 /// Production uses Open-Meteo-backed <c>WeatherClient</c> in Infrastructure.
 /// </summary>
 public sealed class FakeWeatherClient(params WeatherReading[] readings) : IWeatherClient

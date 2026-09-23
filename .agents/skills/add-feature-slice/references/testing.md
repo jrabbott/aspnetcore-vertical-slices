@@ -13,7 +13,7 @@ Load this when adding or changing tests for a slice. Project tables and CI comma
 ## Patterns
 
 - **Unit:** use `FakeWeatherClient` / `FakeFavouritesStore` from `WeatherApp.TestSupport` when the slice touches weather or favourites. Do not call live Open-Meteo.
-- **Integration:** `WeatherAppFactory` + AngleSharp (`HtmlDocument.ParseAsync`). Separate `HttpClient` instances for session isolation.
+- **Integration:** `WeatherAppFactory` + AngleSharp (`HtmlDocument.ParseAsync`). Weather is a seeded `FakeWeatherClient` (no live Open-Meteo). Separate `HttpClient` instances for session isolation.
 - **Architecture:** add the new namespace to slice lists / InlineData when slices change.
 
 ## Gotchas

@@ -20,7 +20,7 @@ Handlers are ordinary classes invoked directly from controllers. Mapping stays e
 
 ## Open-Meteo instead of a fake-only weather source
 
-Live geocoding + forecast calls make the infrastructure seam realistic. The free non-commercial API needs no key for typical local demos. Handlers still depend on `IWeatherClient`, so tests and alternate providers can substitute implementations ([how-to](../how-to/replace-the-weather-provider.md)).
+Live geocoding + forecast calls make the infrastructure seam realistic. The free non-commercial API needs no key for typical local demos. Handlers still depend on `IWeatherClient`, so tests and alternate providers can substitute implementations ([how-to](../how-to/replace-the-weather-provider.md)). Integration tests use a seeded `FakeWeatherClient` (offline); Open-Meteo HTTP mapping is covered by Infrastructure unit tests with stub handlers.
 
 ## Session-backed favourites
 
