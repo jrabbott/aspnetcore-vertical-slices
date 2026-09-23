@@ -46,7 +46,7 @@ Each use case under `src/WeatherApp/Features/<Area>/<Slice>/` (default area `Wea
 
 ## Agent Skills
 
-Project skills live in `.agents/skills/<skill-name>/SKILL.md` ([Agent Skills](https://agentskills.io/specification)). Current packages: `add-feature-slice`, `diataxis-docs`, `weatherapp-tests`.
+Project skills live in `.agents/skills/<skill-name>/SKILL.md` ([Agent Skills](https://agentskills.io/specification)). Current packages: `add-feature-slice`, `diataxis-docs`.
 
 ## Related
 

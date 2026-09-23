@@ -27,6 +27,8 @@ services.AddTransient<<Slice>Handler>();
 
 ## Tests to touch
 
+When adding tests, load [testing.md](testing.md).
+
 | Kind | Project | Action |
 |---|---|---|
 | Unit | `tests/WeatherApp.Unit.Tests` | Handler (± validator) tests |
