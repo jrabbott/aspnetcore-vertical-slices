@@ -20,7 +20,8 @@ Load this when adding or changing tests for a slice. Project tables and CI comma
 
 - Prefer ungeocodable sentinel cities such as `Zzqxnotacity999` (names like Atlantis/Nowhere can still geocode).
 - Match UK spelling in UI assertions.
-- Scrape the antiforgery token before POSTing forms.
+- Scrape the antiforgery token before POSTing forms (global `AutoValidateAntiforgeryToken` is enabled).
+- Blank Search/Forecast city validation surfaces as a single `.alert.alert-error` (not a duplicate `.field-error`).
 - Respect `_` private-field naming; CI treats warnings as errors when `CI=true`.
 
 ## AngleSharp snippets

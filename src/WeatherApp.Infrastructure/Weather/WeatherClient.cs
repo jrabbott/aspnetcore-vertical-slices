@@ -1,3 +1,4 @@
+using System.Text.Json;
 using WeatherApp.Domain.Weather;
 
 namespace WeatherApp.Infrastructure.Weather;
@@ -12,9 +13,15 @@ public sealed class WeatherClient : IWeatherClient
     private readonly OpenMeteoForecastClient _forecast;
 
     public WeatherClient(HttpClient httpClient)
+        : this(httpClient, new OpenMeteoGeocoder(httpClient))
+    {
+    }
+
+    internal WeatherClient(HttpClient httpClient, OpenMeteoGeocoder geocoder)
     {
         ArgumentNullException.ThrowIfNull(httpClient);
-        _geocoder = new OpenMeteoGeocoder(httpClient);
+        ArgumentNullException.ThrowIfNull(geocoder);
+        _geocoder = geocoder;
         _forecast = new OpenMeteoForecastClient(httpClient);
     }
 
@@ -37,10 +44,17 @@ public sealed class WeatherClient : IWeatherClient
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        GeoLocation? location = await _geocoder.ResolveAsync(city, cancellationToken).ConfigureAwait(false);
-        return location is null
-            ? null
-            : await _forecast.GetCurrentAsync(location, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            GeoLocation? location = await _geocoder.ResolveAsync(city, cancellationToken).ConfigureAwait(false);
+            return location is null
+                ? null
+                : await _forecast.GetCurrentAsync(location, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (IsTransientWeatherFailure(ex, cancellationToken))
+        {
+            return null;
+        }
     }
 
     public async Task<IReadOnlyList<WeatherReading>> GetForecastAsync(
@@ -50,13 +64,26 @@ public sealed class WeatherClient : IWeatherClient
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        GeoLocation? location = await _geocoder.ResolveAsync(city, cancellationToken).ConfigureAwait(false);
-        if (location is null)
+        try
+        {
+            GeoLocation? location = await _geocoder.ResolveAsync(city, cancellationToken).ConfigureAwait(false);
+            if (location is null)
+            {
+                return [];
+            }
+
+            days = Math.Clamp(days, 1, 7);
+            return await _forecast.GetDailyAsync(location, days, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (IsTransientWeatherFailure(ex, cancellationToken))
         {
             return [];
         }
+    }
 
-        days = Math.Clamp(days, 1, 7);
-        return await _forecast.GetDailyAsync(location, days, cancellationToken).ConfigureAwait(false);
+    private static bool IsTransientWeatherFailure(Exception exception, CancellationToken cancellationToken)
+    {
+        return exception is HttpRequestException or JsonException
+            || (exception is OperationCanceledException && !cancellationToken.IsCancellationRequested);
     }
 }

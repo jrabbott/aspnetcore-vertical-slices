@@ -40,9 +40,13 @@ Test projects use **xUnit.net v3** with the **Microsoft Testing Platform** runne
 
 ```bash
 dotnet test tests/WeatherApp.Unit.Tests
+dotnet test tests/WeatherApp.Domain.Unit.Tests
+dotnet test tests/WeatherApp.Infrastructure.Unit.Tests
 dotnet test tests/WeatherApp.Integration.Tests
 dotnet test tests/WeatherApp.Architecture.Tests
 ```
+
+Shared fakes live in `tests/WeatherApp.TestSupport` (class library, not a test project).
 
 ### What each project covers
 
@@ -52,8 +56,8 @@ See [Test projects](../reference/testing.md).
 
 ```bash
 CI=true dotnet restore aspnetcore-vertical-slices.slnx --locked-mode
-CI=true dotnet build aspnetcore-vertical-slices.slnx --no-restore
-CI=true dotnet test aspnetcore-vertical-slices.slnx --no-build
+CI=true dotnet build aspnetcore-vertical-slices.slnx --configuration Release --no-restore
+CI=true dotnet test aspnetcore-vertical-slices.slnx --configuration Release --no-build
 ```
 
 Details: [Build system and packages](../reference/build-and-packages.md).

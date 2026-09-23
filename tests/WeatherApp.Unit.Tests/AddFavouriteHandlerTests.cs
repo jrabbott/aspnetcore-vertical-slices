@@ -1,4 +1,5 @@
 using WeatherApp.Features.Weather.AddFavourite;
+using WeatherApp.Infrastructure.Favourites;
 using WeatherApp.TestSupport;
 
 namespace WeatherApp.Unit.Tests;
@@ -62,5 +63,21 @@ public sealed class AddFavouriteHandlerTests
         Assert.False(result.Succeeded);
         Assert.Equal("Please enter a city name.", result.Message);
         Assert.Empty(store.GetAll());
+    }
+
+    [Fact]
+    public async Task HandleAsync_WhenAtCapacity_Fails()
+    {
+        string[] cities = [.. Enumerable.Range(0, FavouritesLimits.MaxCities).Select(i => $"City{i}")];
+        var store = new FakeFavouritesStore(cities);
+        AddFavouriteHandler handler = CreateHandler(
+            store,
+            new FakeWeatherClient(FakeWeatherClient.Reading("Madrid", "Spain")));
+
+        AddFavouriteResponse result = await handler.HandleAsync(new AddFavouriteRequest { City = "Madrid" });
+
+        Assert.False(result.Succeeded);
+        Assert.Contains($"up to {FavouritesLimits.MaxCities}", result.Message);
+        Assert.DoesNotContain(store.GetAll(), c => c == "Madrid");
     }
 }

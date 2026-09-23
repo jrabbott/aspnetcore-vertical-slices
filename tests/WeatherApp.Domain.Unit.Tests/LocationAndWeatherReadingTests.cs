@@ -6,8 +6,8 @@ public sealed class WeatherReadingTests
 {
     [Theory]
     [InlineData(0, 32)]
-    [InlineData(100, 211)]
-    [InlineData(12, 53)]
+    [InlineData(100, 212)]
+    [InlineData(12, 54)]
     public void TemperatureF_ConvertsFromCelsius(int celsius, int expectedFahrenheit)
     {
         var reading = new WeatherReading

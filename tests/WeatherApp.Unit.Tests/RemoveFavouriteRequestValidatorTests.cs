@@ -20,6 +20,18 @@ public sealed class RemoveFavouriteRequestValidatorTests
     }
 
     [Fact]
+    public async Task Validate_WhenCityTooLong_Fails()
+    {
+        ValidationResult result = await _validator.ValidateAsync(
+            new RemoveFavouriteRequest { City = new string('a', 101) });
+
+        Assert.False(result.IsValid);
+        Assert.Contains(
+            result.Errors,
+            e => e.ErrorMessage == "City name must be between 1 and 100 characters.");
+    }
+
+    [Fact]
     public async Task Validate_WhenCityValid_Succeeds()
     {
         ValidationResult result = await _validator.ValidateAsync(new RemoveFavouriteRequest { City = "Tokyo" });

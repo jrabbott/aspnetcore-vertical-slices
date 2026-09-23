@@ -27,8 +27,8 @@ CI restores with lock files and treats warnings as errors when `CI=true`. Run th
 
 ```bash
 CI=true dotnet restore aspnetcore-vertical-slices.slnx --locked-mode
-CI=true dotnet build aspnetcore-vertical-slices.slnx --no-restore
-CI=true dotnet test aspnetcore-vertical-slices.slnx --no-build
+CI=true dotnet build aspnetcore-vertical-slices.slnx --configuration Release --no-restore
+CI=true dotnet test aspnetcore-vertical-slices.slnx --configuration Release --no-build
 ```
 
 If you change package versions in `Directory.Packages.props`, update the affected `packages.lock.json` files so `--locked-mode` succeeds.

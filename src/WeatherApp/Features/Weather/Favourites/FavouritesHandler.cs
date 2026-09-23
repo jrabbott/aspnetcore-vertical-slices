@@ -28,13 +28,12 @@ public sealed class FavouritesHandler(IFavouritesStore favouritesStore, IWeather
         IReadOnlyList<string> favouriteCities,
         CancellationToken cancellationToken)
     {
-        var items = new List<FavouriteCity>(favouriteCities.Count);
-
-        foreach (string city in favouriteCities)
-        {
-            WeatherReading? reading = await _weatherClient.GetCurrentAsync(city, cancellationToken);
-            items.Add(FavouriteCity.FromReading(city, reading));
-        }
+        FavouriteCity[] items = await Task.WhenAll(
+            favouriteCities.Select(async city =>
+            {
+                WeatherReading? reading = await _weatherClient.GetCurrentAsync(city, cancellationToken);
+                return FavouriteCity.FromReading(city, reading);
+            }));
 
         return items;
     }
