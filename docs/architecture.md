@@ -138,13 +138,18 @@ This approach is appropriate for ASP.NET Core 10 because:
 
 ## Shared Razor configuration (`_ViewImports` / `_ViewStart`)
 
-Feature views sit outside `Views/`, so they would not automatically inherit `Views/_ViewImports.cshtml` or `Views/_ViewStart.cshtml`.
+**Keep `_ViewImports.cshtml` and `_ViewStart.cshtml` at the web project root (`src/WeatherApp/`). Do not move them into `Views/` alone.**
 
-Razor discovers those files by walking up from the view's directory toward the content root. This project therefore places them at the **web project root**:
+Feature views live under `Features/...`, outside the conventional `Views/` tree. Razor discovers `_ViewImports` / `_ViewStart` by walking **up** from the view's directory toward the content root. Files under `Views/` only are **not** on that walk for a view in `Features/Search/Search.cshtml`, so those feature views would miss:
+
+- shared `@using` / Tag Helper imports
+- the default `Layout = "_Layout"` from `_ViewStart`
+
+Placing both files at the content root means every view under `Features/` and under `Views/` inherits them:
 
 ```text
 src/WeatherApp/
-├── _ViewImports.cshtml
+├── _ViewImports.cshtml   ← content root (covers Features/ and Views/)
 ├── _ViewStart.cshtml
 ├── Features/...
 └── Views/Shared/...
@@ -156,7 +161,7 @@ That gives both `Features/**/*.cshtml` and any remaining conventional views:
 - MVC Tag Helpers
 - the shared `_Layout`
 
-No per-feature copies are required.
+No per-feature copies are required. Optional deeper `_ViewImports` / `_ViewStart` files can still override or extend settings for a subtree; the root pair remains the shared baseline.
 
 ## How handlers work
 
