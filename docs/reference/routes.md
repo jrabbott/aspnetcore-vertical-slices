@@ -5,6 +5,7 @@ HTTP surface of the weather sample. Controllers use attribute routing under `src
 | Use case | Method | Route | Controller / endpoint | Renders view? |
 |---|---|---|---|---|
 | Home redirect | GET | `/` | Minimal `MapGet` in hosting | No — redirects to Search |
+| Health | GET | `/health` | ASP.NET Core health checks | No — plain `Healthy` for probes |
 | Search | GET | `/weather/search` | `SearchController` | Yes — `Features/Weather/Search/Index.cshtml` |
 | Forecast | GET | `/weather/forecast` | `ForecastController` | Yes — `Features/Weather/Forecast/Index.cshtml` |
 | Favourites | GET | `/weather/favourites` | `FavouritesController` | Yes — `Features/Weather/Favourites/Index.cshtml` |
@@ -14,7 +15,7 @@ HTTP surface of the weather sample. Controllers use attribute routing under `src
 
 ## Notes
 
-- Root `/` is registered in `WeatherAppApplicationBuilderExtensions.MapWeatherAppEndpoints` (not `HomeController`).
+- Root `/` and `/health` are registered in `WeatherAppApplicationBuilderExtensions.MapWeatherAppEndpoints` (not controllers).
 - Search and Forecast take `city` as a query string bound to the slice request model.
 - Add / Remove require an antiforgery token (global `AutoValidateAntiforgeryToken` plus form tokens) and a form `City` field.
 - Command slices set `TempData["StatusMessage"]` / `TempData["StatusIsError"]` for flash messaging on Favourites when the client wants HTML.

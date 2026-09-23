@@ -1,0 +1,4 @@
+# Used with: docker build -f Dockerfile --ignorefile .dockerignore <publish-dir>
+# Context is the publish output only (build once on the host/CI).
+**/*.pdb
+**/appsettings.Development.json

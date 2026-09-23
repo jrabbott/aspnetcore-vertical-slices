@@ -4,6 +4,7 @@ internal static class WeatherAppHostingExtensions
 {
     public static IServiceCollection AddWeatherApp(this IServiceCollection services)
     {
+        services.AddWeatherAppPlatform();
         services.AddWeatherAppMvc();
         services.AddWeatherAppInfrastructure();
         services.AddWeatherAppFeatures();

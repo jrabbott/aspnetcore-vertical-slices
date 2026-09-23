@@ -28,7 +28,9 @@
 ├── .agents/
 │   └── skills/                     # Project Agent Skills (SKILL.md packages)
 ├── .github/
-│   ├── workflows/ci.yml
+│   ├── actions/build-test-publish/ # Shared restore / build / test / publish
+│   ├── workflows/ci.yml            # Pull requests
+│   ├── workflows/cd.yml            # main → GHCR image
 │   ├── dependabot.yml
 │   ├── ISSUE_TEMPLATE/             # bug + feature forms
 │   └── PULL_REQUEST_TEMPLATE.md
@@ -37,6 +39,8 @@
 ├── Directory.Packages.props
 ├── CodeMetricsConfig.txt
 ├── global.json
+├── Dockerfile                      # Runtime-only image (publish output context)
+├── .dockerignore
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
 ├── SECURITY.md

@@ -1,0 +1,43 @@
+name: Build, test, and publish
+description: Locked restore, Release build, test, then publish WeatherApp once for Docker packaging.
+
+inputs:
+  publish:
+    description: When true, publish the web app to publish-path after tests.
+    required: false
+    default: "true"
+  publish-path:
+    description: Directory for dotnet publish output (Docker build context).
+    required: false
+    default: .publish/web
+
+runs:
+  using: composite
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+      with:
+        global-json-file: global.json
+        cache: true
+        cache-dependency-path: "**/packages.lock.json"
+
+    - name: Restore (locked)
+      shell: bash
+      run: dotnet restore aspnetcore-vertical-slices.slnx --locked-mode
+
+    - name: Build
+      shell: bash
+      run: dotnet build aspnetcore-vertical-slices.slnx --configuration Release --no-restore
+
+    - name: Test
+      shell: bash
+      run: dotnet test aspnetcore-vertical-slices.slnx --configuration Release --no-build --verbosity minimal
+
+    - name: Publish web app
+      if: inputs.publish == 'true'
+      shell: bash
+      run: >
+        dotnet publish src/WeatherApp/WeatherApp.csproj
+        --configuration Release
+        --no-build
+        --output "${{ inputs.publish-path }}"

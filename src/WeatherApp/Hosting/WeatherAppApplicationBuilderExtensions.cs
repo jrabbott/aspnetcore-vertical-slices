@@ -15,6 +15,7 @@ internal static class WeatherAppApplicationBuilderExtensions
 
     public static WebApplication UseWeatherAppRequestPipeline(this WebApplication app)
     {
+        app.UseForwardedHeaders();
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseSession();
@@ -26,6 +27,7 @@ internal static class WeatherAppApplicationBuilderExtensions
     public static WebApplication MapWeatherAppEndpoints(this WebApplication app)
     {
         app.MapGet("/", () => Results.Redirect("/weather/search"));
+        app.MapHealthChecks("/health");
 
         app.MapControllerRoute(
                 name: "default",

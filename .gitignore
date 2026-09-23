@@ -54,3 +54,6 @@ src/WeatherApp/wwwroot/js/**/*.js.map
 
 # Dotnet tool
 .dotnet/
+
+# Local / CI publish output for Docker packaging (build once)
+.publish/
