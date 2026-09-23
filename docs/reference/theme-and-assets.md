@@ -12,7 +12,9 @@ Presentation assets for the MVC host. There is no npm, LibMan, or CSS framework 
 | `Styles/components.scss` | `wwwroot/css/components.css` |
 | `Scripts/site.ts` | `wwwroot/js/site.js` |
 
-Configuration: `sasscompiler.json` (Styles → `wwwroot/css`) and `tsconfig.json` (Scripts → `wwwroot/js`). Edit the sources; rebuild before committing so generated CSS/JS stay in sync (they are kept in git for MapStaticAssets and clone-friendly runs).
+Configuration: `sasscompiler.json` (Styles → `wwwroot/css`) and `tsconfig.json` (Scripts → `wwwroot/js`).
+
+**Sources only in git.** Generated `wwwroot/css/*.css` and `wwwroot/js/*.js` are gitignored; `dotnet build` recreates them and registers them for MapStaticAssets. Keep `wwwroot/favicon.ico` (and other hand-authored static files) tracked. Empty `wwwroot/css/.gitkeep` and `wwwroot/js/.gitkeep` preserve the output folders.
 
 ## Stylesheets
 

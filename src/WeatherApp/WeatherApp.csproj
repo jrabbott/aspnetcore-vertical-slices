@@ -29,4 +29,21 @@
     <None Include="tsconfig.json" />
   </ItemGroup>
 
+  <!--
+    Generated CSS/JS are gitignored. SassCompiler already emits CSS and adds Content
+    before ResolveProjectStaticWebAssets. Run TypeScript early and register JS the same way
+    so MapStaticAssets fingerprints site.js after a clean checkout.
+  -->
+  <Target Name="CompileTypeScriptBeforeStaticWebAssets"
+          BeforeTargets="Build;ResolveScopedCssInputs;BundleMinify;ResolveProjectStaticWebAssets"
+          DependsOnTargets="SetTscExecutable;RunTscCompile"
+          Condition="'$(DesignTimeBuild)' != 'true'">
+    <ItemGroup>
+      <_GeneratedJs Include="wwwroot\js\**\*.js" />
+      <None Remove="@(_GeneratedJs)" />
+      <_NewGeneratedJs Include="@(_GeneratedJs)" Exclude="@(Content)" />
+      <Content Include="@(_NewGeneratedJs)" />
+    </ItemGroup>
+  </Target>
+
 </Project>

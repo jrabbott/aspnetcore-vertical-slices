@@ -47,5 +47,10 @@ artifacts/
 .artifacts/
 TestResults/
 
+# Generated front-end outputs (SCSS / TypeScript → wwwroot)
+src/WeatherApp/wwwroot/css/**/*.css
+src/WeatherApp/wwwroot/js/**/*.js
+src/WeatherApp/wwwroot/js/**/*.js.map
+
 # Dotnet tool
 .dotnet/

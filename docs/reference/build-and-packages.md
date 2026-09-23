@@ -39,10 +39,10 @@ The web project compiles SCSS and TypeScript during `dotnet build` (no Node):
 
 | Package | Role |
 |---|---|
-| `AspNetCore.SassCompiler` | `Styles/*.scss` → `wwwroot/css/*.css` |
-| `Microsoft.TypeScript.MSBuild` | `Scripts/*.ts` → `wwwroot/js/*.js` |
+| `AspNetCore.SassCompiler` | `Styles/*.scss` → `wwwroot/css/*.css` (gitignored) |
+| `Microsoft.TypeScript.MSBuild` | `Scripts/*.ts` → `wwwroot/js/*.js` (gitignored) |
 
-See [Theme and front-end assets](theme-and-assets.md).
+Generated CSS/JS are not committed; `dotnet build` is required before run/publish so MapStaticAssets can fingerprint the outputs. See [Theme and front-end assets](theme-and-assets.md).
 
 ## CI and Dependabot
 

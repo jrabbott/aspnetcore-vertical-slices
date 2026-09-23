@@ -28,7 +28,7 @@ Production uses `SessionFavouritesStore` (cookie session + in-memory distributed
 
 ## SCSS / TypeScript theme, progressive enhancement
 
-Presentation is a small design-system stack authored as SCSS (`Styles/`) and TypeScript (`Scripts/`), compiled on `dotnet build` into `wwwroot/css/` and `wwwroot/js/` — still no Bootstrap or npm. JavaScript is optional: favourite add/remove work as classic form posts; `site.js` (from `site.ts`) may request JSON when `fetch` is available. See [Progressive enhancement](progressive-enhancement.md) and [Theme and front-end assets](../reference/theme-and-assets.md).
+Presentation is a small design-system stack authored as SCSS (`Styles/`) and TypeScript (`Scripts/`), compiled on `dotnet build` into gitignored `wwwroot` CSS/JS — still no Bootstrap or npm. JavaScript is optional: favourite add/remove work as classic form posts; `site.js` (from `site.ts`) may request JSON when `fetch` is available. See [Progressive enhancement](progressive-enhancement.md) and [Theme and front-end assets](../reference/theme-and-assets.md).
 
 ## Explicit DI registration
 
