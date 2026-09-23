@@ -20,11 +20,11 @@ Handlers are ordinary classes invoked directly from controllers. Mapping stays e
 
 ## Open-Meteo instead of a fake-only weather source
 
-Live geocoding + forecast calls make the infrastructure seam realistic. The free non-commercial API needs no key for typical local demos. Handlers still depend on `IWeatherClient`, so tests and alternate providers can substitute implementations ([how-to](../how-to/replace-the-weather-provider.md)).
+Live geocoding + forecast calls make the infrastructure seam realistic. The free non-commercial API needs no key for typical local demos. Handlers still depend on `IWeatherClient`, so tests and alternate providers can substitute implementations ([how-to](../how-to/replace-the-weather-provider.md)). Integration tests use a seeded `FakeWeatherClient` (offline); Open-Meteo HTTP mapping is covered by Infrastructure unit tests with stub handlers.
 
 ## Session-backed favourites
 
-Production uses `SessionFavouritesStore` (cookie session + in-memory distributed cache by default). That keeps demos per-browser without a database. Closing the browser or expiring the session clears the list; different browsers do not share favourites. An in-memory `FavouritesStore` remains available as a test double.
+Production uses `SessionFavouritesStore` (cookie session + in-memory distributed cache by default). That keeps demos per-browser without a database. Closing the browser or expiring the session clears the list; different browsers do not share favourites. Shared test fakes (`FakeFavouritesStore`, `FakeWeatherClient`) live in `tests/WeatherApp.TestSupport`.
 
 ## Explicit DI registration
 

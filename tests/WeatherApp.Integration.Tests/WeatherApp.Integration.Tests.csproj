@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\WeatherApp\WeatherApp.csproj" />
+    <ProjectReference Include="..\WeatherApp.TestSupport\WeatherApp.TestSupport.csproj" />
   </ItemGroup>
 
 </Project>

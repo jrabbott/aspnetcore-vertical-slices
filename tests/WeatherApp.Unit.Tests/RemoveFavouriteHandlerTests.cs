@@ -1,11 +1,11 @@
 using WeatherApp.Features.Weather.RemoveFavourite;
-using WeatherApp.Infrastructure.Favourites;
+using WeatherApp.TestSupport;
 
 namespace WeatherApp.Unit.Tests;
 
 public sealed class RemoveFavouriteHandlerTests
 {
-    private static RemoveFavouriteHandler CreateHandler(FavouritesStore store)
+    private static RemoveFavouriteHandler CreateHandler(FakeFavouritesStore store)
     {
         return new(store, new RemoveFavouriteRequestValidator());
     }
@@ -13,7 +13,7 @@ public sealed class RemoveFavouriteHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityPresent_RemovesFavourite()
     {
-        var store = new FavouritesStore(["London", "Tokyo"]);
+        var store = new FakeFavouritesStore(["London", "Tokyo"]);
         RemoveFavouriteHandler handler = CreateHandler(store);
 
         RemoveFavouriteResponse result = await handler.HandleAsync(new RemoveFavouriteRequest { City = "London" });
@@ -25,7 +25,7 @@ public sealed class RemoveFavouriteHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityMissingFromStore_Fails()
     {
-        var store = new FavouritesStore(["Tokyo"]);
+        var store = new FakeFavouritesStore(["Tokyo"]);
         RemoveFavouriteHandler handler = CreateHandler(store);
 
         RemoveFavouriteResponse result = await handler.HandleAsync(new RemoveFavouriteRequest { City = "Paris" });
@@ -37,7 +37,7 @@ public sealed class RemoveFavouriteHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityBlank_FailsValidation()
     {
-        var store = new FavouritesStore(["Tokyo"]);
+        var store = new FakeFavouritesStore(["Tokyo"]);
         RemoveFavouriteHandler handler = CreateHandler(store);
 
         RemoveFavouriteResponse result = await handler.HandleAsync(new RemoveFavouriteRequest { City = " " });

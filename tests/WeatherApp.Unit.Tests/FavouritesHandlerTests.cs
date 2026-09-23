@@ -1,6 +1,5 @@
 using WeatherApp.Features.Weather.Favourites;
-using WeatherApp.Infrastructure.Favourites;
-using WeatherApp.Unit.Tests.Fakes;
+using WeatherApp.TestSupport;
 
 namespace WeatherApp.Unit.Tests;
 
@@ -9,7 +8,7 @@ public sealed class FavouritesHandlerTests
     [Fact]
     public async Task HandleAsync_ReturnsFavouritesWithWeatherWhenAvailable()
     {
-        var store = new FavouritesStore(["London", "Atlantis"]);
+        var store = new FakeFavouritesStore(["London", "Atlantis"]);
         var weather = new FakeWeatherClient(FakeWeatherClient.Reading("London", "United Kingdom", 12, "Cloudy"));
         var handler = new FavouritesHandler(store, weather);
 

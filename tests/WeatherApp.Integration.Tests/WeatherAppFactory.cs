@@ -4,14 +4,29 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WeatherApp.Infrastructure.Favourites;
+using WeatherApp.Infrastructure.Weather;
+using WeatherApp.TestSupport;
 
 namespace WeatherApp.Integration.Tests;
 
 public sealed class WeatherAppFactory : WebApplicationFactory<Program>
 {
+    private static readonly FakeWeatherClient _fakeWeather = new(
+        FakeWeatherClient.Reading("London", "United Kingdom", 12, "Cloudy"),
+        FakeWeatherClient.Reading("Paris", "France", 18, "Partly cloudy"),
+        FakeWeatherClient.Reading("Madrid", "Spain", 22, "Sunny"),
+        FakeWeatherClient.Reading("Tokyo", "Japan", 20, "Humid"),
+        FakeWeatherClient.Reading("New York", "United States", 15, "Clear"));
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Development");
+        builder.ConfigureTestServices(services =>
+        {
+            // Integration tests stay offline: no live Open-Meteo calls.
+            services.RemoveAll<IWeatherClient>();
+            services.AddSingleton<IWeatherClient>(_fakeWeather);
+        });
     }
 
     public HttpClient CreateClientWithFavourites(
@@ -30,11 +45,11 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
             return CreateClient(clientOptions);
         }
 
-        // Non-empty seed (including ungeocodable cities): deterministic in-memory store.
+        // Non-empty seed (including ungeocodable cities): deterministic in-memory fake.
         return WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
             {
                 services.RemoveAll<IFavouritesStore>();
-                services.AddSingleton<IFavouritesStore>(_ => new FavouritesStore(cities));
+                services.AddSingleton<IFavouritesStore>(_ => new FakeFavouritesStore(cities));
             })).CreateClient(clientOptions);
     }
 

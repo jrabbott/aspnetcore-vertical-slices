@@ -13,13 +13,14 @@
 │   │   ├── _ViewStart.cshtml
 │   │   └── wwwroot/
 │   ├── WeatherApp.Domain/          # Domain model (no ASP.NET / Infrastructure refs)
-│   └── WeatherApp.Infrastructure/  # Weather client + in-memory favourites store
+│   └── WeatherApp.Infrastructure/  # Weather client + IFavouritesStore
 ├── tests/
 │   ├── WeatherApp.Architecture.Tests/
 │   ├── WeatherApp.Integration.Tests/
 │   ├── WeatherApp.Unit.Tests/                  # Feature handlers / validators
 │   ├── WeatherApp.Domain.Unit.Tests/
-│   └── WeatherApp.Infrastructure.Unit.Tests/
+│   ├── WeatherApp.Infrastructure.Unit.Tests/
+│   └── WeatherApp.TestSupport/         # Shared fakes (FakeFavouritesStore, FakeWeatherClient)
 ├── docs/                           # Diátaxis documentation (this tree)
 ├── .agents/
 │   └── skills/                     # Project Agent Skills (SKILL.md packages)
