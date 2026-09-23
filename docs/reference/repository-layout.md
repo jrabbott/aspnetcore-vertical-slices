@@ -21,6 +21,8 @@
 │   ├── WeatherApp.Domain.Unit.Tests/
 │   └── WeatherApp.Infrastructure.Unit.Tests/
 ├── docs/                           # Diátaxis documentation (this tree)
+├── .agents/
+│   └── skills/                     # Project Agent Skills (SKILL.md packages)
 ├── .github/
 │   ├── workflows/ci.yml
 │   └── dependabot.yml
@@ -34,13 +36,17 @@
 
 ## Feature folders
 
-Each use case under `src/WeatherApp/Features/Weather/<Slice>/` typically owns:
+Each use case under `src/WeatherApp/Features/<Area>/<Slice>/` (default area `Weather`) typically owns:
 
 - `*Controller.cs`
 - `*Request.cs` / `*Response.cs`
 - `*Handler.cs`
 - `*RequestValidator.cs` when input is validated
 - `Index.cshtml` when the slice renders HTML
+
+## Agent Skills
+
+Project skills live in `.agents/skills/<skill-name>/SKILL.md` ([Agent Skills](https://agentskills.io/specification)). Current packages: `add-feature-slice`, `diataxis-docs`.
 
 ## Related
 

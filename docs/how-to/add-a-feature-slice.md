@@ -8,16 +8,17 @@ Use this when you want to extend the weather app with another capability — not
 
 - Solution builds: `dotnet build aspnetcore-vertical-slices.slnx`
 - You know whether the slice **renders a page** (like Search) or is a **command that redirects** (like AddFavourite)
+- You know the feature **area** (default `Weather`; `Home` is an existing non-Weather peer)
 
 ## 1. Create the slice folder
 
-Place the slice next to its peers:
+Place the slice under its area:
 
 ```text
-src/WeatherApp/Features/Weather/<SliceName>/
+src/WeatherApp/Features/<Area>/<Slice>/
 ```
 
-Example for a page slice named `Alerts`:
+Default `<Area>` is `Weather` unless you are adding a different area. Example for a page slice named `Alerts` in Weather:
 
 ```text
 src/WeatherApp/Features/Weather/Alerts/
@@ -29,7 +30,7 @@ src/WeatherApp/Features/Weather/Alerts/
 └── Index.cshtml                # only if the slice renders HTML
 ```
 
-Namespace everything as `WeatherApp.Features.Weather.<SliceName>` so [feature view discovery](../explanation/razor-view-discovery.md) can map the controller to `/Features/Weather/<SliceName>/{view}.cshtml`.
+Namespace everything as `WeatherApp.Features.<Area>.<Slice>` so [feature view discovery](../explanation/razor-view-discovery.md) can map the controller to `/Features/<Area>/<Slice>/{view}.cshtml`.
 
 ## 2. Add the request and response
 
@@ -114,3 +115,4 @@ dotnet test aspnetcore-vertical-slices.slnx
 - [Why VSA is organised this way](../explanation/vertical-slice-architecture.md)
 - [Routes reference](../reference/routes.md)
 - [How to replace the weather provider](replace-the-weather-provider.md)
+- Agent skill: `.agents/skills/add-feature-slice/`
