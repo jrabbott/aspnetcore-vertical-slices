@@ -24,7 +24,7 @@ Live geocoding + forecast calls make the infrastructure seam realistic. The free
 
 ## Session-backed favourites
 
-Production uses `SessionFavouritesStore` (cookie session + in-memory distributed cache by default). That keeps demos per-browser without a database. Closing the browser or expiring the session clears the list; different browsers do not share favourites. Tests use `FakeFavouritesStore` from `tests/WeatherApp.TestSupport` instead of a production in-memory Infrastructure type.
+Production uses `SessionFavouritesStore` (cookie session + in-memory distributed cache by default). That keeps demos per-browser without a database. Closing the browser or expiring the session clears the list; different browsers do not share favourites. Shared test fakes (`FakeFavouritesStore`, `FakeWeatherClient`) live in `tests/WeatherApp.TestSupport`.
 
 ## Explicit DI registration
 
