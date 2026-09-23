@@ -1,10 +1,10 @@
 using WeatherApp.Domain.Weather;
 
-namespace WeatherApp.Features.Weather.Favorites;
+namespace WeatherApp.Features.Weather.Favourites;
 
-public sealed class FavoritesResponse
+public sealed class FavouritesResponse
 {
-    public IReadOnlyList<FavoriteCity> Cities { get; init; } = [];
+    public IReadOnlyList<FavouriteCity> Cities { get; init; } = [];
     public IReadOnlyList<string> SuggestedCities { get; init; } = [];
     public string? StatusMessage
     {
@@ -15,8 +15,8 @@ public sealed class FavoritesResponse
         get; init;
     }
 
-    public static FavoritesResponse Create(
-        IReadOnlyList<FavoriteCity> cities,
+    public static FavouritesResponse Create(
+        IReadOnlyList<FavouriteCity> cities,
         IReadOnlyList<string> suggestedCities,
         string? statusMessage = null,
         bool statusIsError = false)
@@ -31,7 +31,7 @@ public sealed class FavoritesResponse
     }
 }
 
-public sealed class FavoriteCity
+public sealed class FavouriteCity
 {
     public required string City
     {
@@ -54,7 +54,7 @@ public sealed class FavoriteCity
         get; init;
     }
 
-    public static FavoriteCity FromReading(string city, WeatherReading? reading)
+    public static FavouriteCity FromReading(string city, WeatherReading? reading)
     {
         return new()
         {

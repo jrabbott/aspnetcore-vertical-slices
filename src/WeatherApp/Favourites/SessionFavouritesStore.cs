@@ -1,14 +1,14 @@
 using System.Text.Json;
-using WeatherApp.Infrastructure.Favorites;
+using WeatherApp.Infrastructure.Favourites;
 
-namespace WeatherApp.Favorites;
+namespace WeatherApp.Favourites;
 
 /// <summary>
-/// Per-browser favorites list stored in ASP.NET Core session (in-memory distributed cache by default).
+/// Per-browser favourites list stored in ASP.NET Core session (in-memory distributed cache by default).
 /// </summary>
-public sealed class SessionFavoritesStore(IHttpContextAccessor httpContextAccessor) : IFavoritesStore
+public sealed class SessionFavouritesStore(IHttpContextAccessor httpContextAccessor) : IFavouritesStore
 {
-    private const string _sessionKey = "WeatherApp.Favorites";
+    private const string _sessionKey = "WeatherApp.Favourites";
 
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 

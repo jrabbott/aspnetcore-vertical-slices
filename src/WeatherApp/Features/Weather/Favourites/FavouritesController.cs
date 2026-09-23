@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace WeatherApp.Features.Weather.Favorites;
+namespace WeatherApp.Features.Weather.Favourites;
 
-[Route("weather/favorites")]
-public sealed class FavoritesController(FavoritesHandler handler) : Controller
+[Route("weather/favourites")]
+public sealed class FavouritesController(FavouritesHandler handler) : Controller
 {
-    private readonly FavoritesHandler _handler = handler;
+    private readonly FavouritesHandler _handler = handler;
 
     [HttpGet("")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -13,8 +13,8 @@ public sealed class FavoritesController(FavoritesHandler handler) : Controller
         string? statusMessage = TempData["StatusMessage"] as string;
         bool statusIsError = TempData["StatusIsError"] as bool? ?? false;
 
-        FavoritesResponse response = await _handler.HandleAsync(
-            new FavoritesRequest(),
+        FavouritesResponse response = await _handler.HandleAsync(
+            new FavouritesRequest(),
             statusMessage,
             statusIsError,
             cancellationToken);

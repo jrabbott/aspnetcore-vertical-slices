@@ -15,9 +15,9 @@ public sealed class FeatureBoundaryTests
     [
         "WeatherApp.Features.Weather.Search",
         "WeatherApp.Features.Weather.Forecast",
-        "WeatherApp.Features.Weather.Favorites",
-        "WeatherApp.Features.Weather.AddFavorite",
-        "WeatherApp.Features.Weather.RemoveFavorite"
+        "WeatherApp.Features.Weather.Favourites",
+        "WeatherApp.Features.Weather.AddFavourite",
+        "WeatherApp.Features.Weather.RemoveFavourite"
     ];
 
     public static TheoryData<string, string> FeatureSlicePairs
@@ -57,9 +57,9 @@ public sealed class FeatureBoundaryTests
     [Theory]
     [InlineData("WeatherApp.Features.Weather.Search", "Search")]
     [InlineData("WeatherApp.Features.Weather.Forecast", "Forecast")]
-    [InlineData("WeatherApp.Features.Weather.Favorites", "Favorites")]
-    [InlineData("WeatherApp.Features.Weather.AddFavorite", "AddFavorite")]
-    [InlineData("WeatherApp.Features.Weather.RemoveFavorite", "RemoveFavorite")]
+    [InlineData("WeatherApp.Features.Weather.Favourites", "Favourites")]
+    [InlineData("WeatherApp.Features.Weather.AddFavourite", "AddFavourite")]
+    [InlineData("WeatherApp.Features.Weather.RemoveFavourite", "RemoveFavourite")]
     public void Feature_Slice_Should_Own_Its_Controller_Request_And_Handler(string sliceNamespace, string sliceName)
     {
         var types = Types.InAssembly(_webAssembly)
@@ -77,8 +77,8 @@ public sealed class FeatureBoundaryTests
     [Theory]
     [InlineData("WeatherApp.Features.Weather.Search", "Search")]
     [InlineData("WeatherApp.Features.Weather.Forecast", "Forecast")]
-    [InlineData("WeatherApp.Features.Weather.AddFavorite", "AddFavorite")]
-    [InlineData("WeatherApp.Features.Weather.RemoveFavorite", "RemoveFavorite")]
+    [InlineData("WeatherApp.Features.Weather.AddFavourite", "AddFavourite")]
+    [InlineData("WeatherApp.Features.Weather.RemoveFavourite", "RemoveFavourite")]
     public void Feature_Slice_Should_Own_Its_Request_Validator(string sliceNamespace, string sliceName)
     {
         var types = Types.InAssembly(_webAssembly)
@@ -94,9 +94,9 @@ public sealed class FeatureBoundaryTests
     [Theory]
     [InlineData("WeatherApp.Features.Weather.Search", "Search")]
     [InlineData("WeatherApp.Features.Weather.Forecast", "Forecast")]
-    [InlineData("WeatherApp.Features.Weather.Favorites", "Favorites")]
-    [InlineData("WeatherApp.Features.Weather.AddFavorite", "AddFavorite")]
-    [InlineData("WeatherApp.Features.Weather.RemoveFavorite", "RemoveFavorite")]
+    [InlineData("WeatherApp.Features.Weather.Favourites", "Favourites")]
+    [InlineData("WeatherApp.Features.Weather.AddFavourite", "AddFavourite")]
+    [InlineData("WeatherApp.Features.Weather.RemoveFavourite", "RemoveFavourite")]
     public void Feature_Slice_Should_Own_Its_Response(string sliceNamespace, string sliceName)
     {
         var types = Types.InAssembly(_webAssembly)
@@ -112,9 +112,9 @@ public sealed class FeatureBoundaryTests
     [Theory]
     [InlineData("WeatherApp.Features.Weather.Search")]
     [InlineData("WeatherApp.Features.Weather.Forecast")]
-    [InlineData("WeatherApp.Features.Weather.Favorites")]
-    [InlineData("WeatherApp.Features.Weather.AddFavorite")]
-    [InlineData("WeatherApp.Features.Weather.RemoveFavorite")]
+    [InlineData("WeatherApp.Features.Weather.Favourites")]
+    [InlineData("WeatherApp.Features.Weather.AddFavourite")]
+    [InlineData("WeatherApp.Features.Weather.RemoveFavourite")]
     public void Feature_Controller_Should_Only_Use_Handler_From_Same_Slice(string sliceNamespace)
     {
         string[] otherHandlers =

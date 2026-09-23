@@ -1,10 +1,10 @@
-namespace WeatherApp.Infrastructure.Favorites;
+namespace WeatherApp.Infrastructure.Favourites;
 
 /// <summary>
-/// In-memory favorites list. Used by unit tests and as a test double in integration tests.
-/// Production uses session-backed <c>SessionFavoritesStore</c> in the web host.
+/// In-memory favourites list. Used by unit tests and as a test double in integration tests.
+/// Production uses session-backed <c>SessionFavouritesStore</c> in the web host.
 /// </summary>
-public sealed class FavoritesStore(IEnumerable<string> initialCities) : IFavoritesStore
+public sealed class FavouritesStore(IEnumerable<string> initialCities) : IFavouritesStore
 {
     private readonly object _gate = new();
     private readonly List<string> _cities = [.. initialCities
@@ -12,7 +12,7 @@ public sealed class FavoritesStore(IEnumerable<string> initialCities) : IFavorit
             .Select(c => c.Trim())
             .Distinct(StringComparer.OrdinalIgnoreCase)];
 
-    public FavoritesStore()
+    public FavouritesStore()
         : this(["London", "Tokyo"])
     {
     }
