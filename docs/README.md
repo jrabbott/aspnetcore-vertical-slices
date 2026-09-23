@@ -48,11 +48,4 @@ Oriented to understanding. Context, trade-offs, and design rationale.
 | [Razor view discovery](explanation/razor-view-discovery.md) | Feature views + why `_ViewImports` / `_ViewStart` stay at the web root |
 | [Design choices](explanation/design-choices.md) | Goals, no MediatR/AutoMapper, Open-Meteo, session favourites |
 
-## Legacy paths
-
-Older links still resolve:
-
-- [architecture.md](architecture.md) → Vertical Slice Architecture
-- [getting-started.md](getting-started.md) → tutorial + how-to entry points
-
 The root [README](../README.md) remains the short repository entry point.
