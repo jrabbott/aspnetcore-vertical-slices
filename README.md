@@ -46,7 +46,7 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 
 ## Documentation
 
-- [Architecture](docs/architecture.md) — VSA, MVC + VSA together, Razor discovery, domain/infrastructure
+- [Architecture](docs/architecture.md) — VSA, MVC + VSA together, Razor discovery, why `_ViewImports` / `_ViewStart` stay at the web root, domain/infrastructure
 - [Getting started](docs/getting-started.md) — run, routes, cities, tests
 - [Docs index](docs/README.md)
 

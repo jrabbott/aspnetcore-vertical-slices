@@ -70,7 +70,7 @@ Architecture rules include:
 - Feature slices do not take compile-time dependencies on sibling slices
   - Each slice owns its Controller / Request / Handler / Response (validators where the slice accepts input)
 
-More detail: [Architecture](architecture.md).
+More detail: [Architecture](architecture.md) (including why `_ViewImports` / `_ViewStart` live at the web project root, not under `Views/` alone).
 
 ## Central Package Management
 
