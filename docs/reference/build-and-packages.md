@@ -44,12 +44,17 @@ The web project compiles SCSS and TypeScript during `dotnet build` (no Node):
 
 Generated CSS/JS are not committed; `dotnet build` is required before run/publish so MapStaticAssets can fingerprint the outputs. See [Theme and front-end assets](theme-and-assets.md).
 
-## CI and Dependabot
+## CI, CD, and Dependabot
 
 | Path | Role |
 |---|---|
-| `.github/workflows/ci.yml` | Locked restore, build, test on `main` and pull requests |
+| `.github/actions/build-test-publish/` | Shared composite: locked restore, Release build, test, publish to `.publish/web` |
+| `.github/workflows/ci.yml` | Pull requests: composite action, runtime `docker build`, `/health` smoke (no registry push) |
+| `.github/workflows/cd.yml` | Push to `main`: same composite, push image to `ghcr.io/<owner>/<repo>/weatherapp` |
+| `Dockerfile` | Runtime-only image; context is publish output (build once) |
 | `.github/dependabot.yml` | Grouped NuGet (weekly) and GitHub Actions (monthly) updates |
+
+See [Run with Docker](../how-to/run-with-docker.md).
 
 ## SDK and test runner
 

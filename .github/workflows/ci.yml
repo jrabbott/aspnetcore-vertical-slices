@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
 
 concurrency:
@@ -14,7 +12,7 @@ permissions:
 
 jobs:
   build-and-test:
-    name: Build and test
+    name: Build, test, and package image
     runs-on: ubuntu-latest
     env:
       # Enables ContinuousIntegrationBuild + TreatWarningsAsErrors (Directory.Build.props).
@@ -27,18 +25,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
-        with:
-          global-json-file: global.json
-          cache: true
-          cache-dependency-path: "**/packages.lock.json"
+      - name: Build, test, and publish
+        uses: ./.github/actions/build-test-publish
 
-      - name: Restore (locked)
-        run: dotnet restore aspnetcore-vertical-slices.slnx --locked-mode
+      - name: Build container image
+        run: |
+          cp .dockerignore .publish/web/.dockerignore
+          docker build -f Dockerfile -t weatherapp:ci ./.publish/web
 
-      - name: Build
-        run: dotnet build aspnetcore-vertical-slices.slnx --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test aspnetcore-vertical-slices.slnx --configuration Release --no-build --verbosity minimal
+      - name: Smoke health endpoint
+        run: |
+          docker run --rm -d --name weatherapp-ci -p 8080:8080 weatherapp:ci
+          trap 'docker stop weatherapp-ci' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Health check did not become ready in time" >&2
+          docker logs weatherapp-ci >&2 || true
+          exit 1

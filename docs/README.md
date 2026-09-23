@@ -27,6 +27,7 @@ Oriented to goals. Steps assume you already know what you want.
 |---|---|
 | [Add a feature slice](how-to/add-a-feature-slice.md) | Extend the app with a new VSA use case |
 | [Run, build, and test](how-to/run-build-and-test.md) | Everyday restore / build / run / test (including CI-like) |
+| [Run with Docker](how-to/run-with-docker.md) | Publish once, runtime image, CI/CD and GHCR |
 | [Replace the weather provider](how-to/replace-the-weather-provider.md) | Swap Open-Meteo behind `IWeatherClient` |
 
 ## Reference

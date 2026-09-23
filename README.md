@@ -34,7 +34,9 @@ First-time walkthrough: [docs/tutorials/run-the-weather-app.md](docs/tutorials/r
 ├── docs/                           # Diátaxis: tutorials / how-to / reference / explanation
 ├── .agents/skills/                 # Project Agent Skills
 ├── .github/
-│   ├── workflows/ci.yml              # restore (locked) + build + test
+│   ├── actions/build-test-publish/   # Shared restore / build / test / publish
+│   ├── workflows/ci.yml              # Pull requests
+│   ├── workflows/cd.yml              # main → GHCR image
 │   ├── dependabot.yml                # grouped NuGet + Actions updates
 │   ├── ISSUE_TEMPLATE/               # bug + feature forms
 │   └── PULL_REQUEST_TEMPLATE.md
@@ -43,6 +45,8 @@ First-time walkthrough: [docs/tutorials/run-the-weather-app.md](docs/tutorials/r
 ├── Directory.Packages.props          # Central Package Management
 ├── CodeMetricsConfig.txt
 ├── global.json                       # .NET 10 SDK + MTP test runner
+├── Dockerfile                        # Runtime-only image (publish output context)
+├── .dockerignore
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
 ├── SECURITY.md
@@ -57,7 +61,7 @@ Detail: [docs/reference/repository-layout.md](docs/reference/repository-layout.m
 | Need | Start here |
 |---|---|
 | Learn | [Run the weather app](docs/tutorials/run-the-weather-app.md) |
-| Do a task | [Add a feature slice](docs/how-to/add-a-feature-slice.md) · [Run, build, and test](docs/how-to/run-build-and-test.md) · [Replace the weather provider](docs/how-to/replace-the-weather-provider.md) |
+| Do a task | [Add a feature slice](docs/how-to/add-a-feature-slice.md) · [Run, build, and test](docs/how-to/run-build-and-test.md) · [Run with Docker](docs/how-to/run-with-docker.md) · [Replace the weather provider](docs/how-to/replace-the-weather-provider.md) |
 | Look up | [Routes](docs/reference/routes.md) · [Theme & assets](docs/reference/theme-and-assets.md) · [Build & packages](docs/reference/build-and-packages.md) · [Tests](docs/reference/testing.md) |
 | Understand | [Vertical Slice Architecture](docs/explanation/vertical-slice-architecture.md) · [Progressive enhancement](docs/explanation/progressive-enhancement.md) · [Design choices](docs/explanation/design-choices.md) |
 

@@ -25,7 +25,7 @@ Full detail: [Run, build, and test](docs/how-to/run-build-and-test.md).
 
 ## Match CI before you open a PR
 
-CI restores with lock files and treats warnings as errors when `CI=true`. Run the same sequence locally:
+Pull request CI (`.github/workflows/ci.yml`) restores with lock files and treats warnings as errors when `CI=true`. It uses the shared `.github/actions/build-test-publish` action, then builds a runtime container image (no registry push). Pushes to `main` run CD (`.github/workflows/cd.yml`), which publishes that same output to GitHub Container Registry. Run the same build sequence locally:
 
 ```bash
 CI=true dotnet restore aspnetcore-vertical-slices.slnx --locked-mode
@@ -34,6 +34,8 @@ CI=true dotnet test aspnetcore-vertical-slices.slnx --configuration Release --no
 ```
 
 If you change package versions in `Directory.Packages.props`, update the affected `packages.lock.json` files so `--locked-mode` succeeds.
+
+Container packaging (publish once, then `docker build`): [Run with Docker](docs/how-to/run-with-docker.md).
 
 ## Where to change code
 

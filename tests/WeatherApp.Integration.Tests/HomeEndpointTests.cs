@@ -30,4 +30,14 @@ public sealed class HomeEndpointTests(WeatherAppFactory factory) : IClassFixture
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("Search weather", document.QuerySelector("h1")?.TextContent.Trim());
     }
+
+    [Fact]
+    public async Task Health_ReturnsHealthy()
+    {
+        HttpClient client = _factory.CreateClient();
+        HttpResponseMessage response = await client.GetAsync("/health");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("Healthy", await response.Content.ReadAsStringAsync());
+    }
 }
