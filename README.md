@@ -31,6 +31,7 @@ First-time walkthrough: [docs/tutorials/run-the-weather-app.md](docs/tutorials/r
 │   ├── WeatherApp.Domain.Unit.Tests/
 │   └── WeatherApp.Infrastructure.Unit.Tests/
 ├── docs/                           # Diátaxis: tutorials / how-to / reference / explanation
+├── .agents/skills/                 # Project Agent Skills
 ├── .github/
 │   ├── workflows/ci.yml              # restore (locked) + build + test
 │   └── dependabot.yml                # grouped NuGet + Actions updates
