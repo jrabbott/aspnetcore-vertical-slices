@@ -102,6 +102,8 @@ src/WeatherApp/Views/Shared/
 
 Shared layout, navigation, and reusable partials stay under `Views/Shared/` because they are application-wide — not owned by a single slice.
 
+`_ViewImports.cshtml` and `_ViewStart.cshtml` are **not** under `Views/` — they live at the web project root so feature views inherit them. See [Shared Razor configuration](#shared-razor-configuration-_viewimports--_viewstart).
+
 ## Feature-local Razor view discovery
 
 Feature views intentionally live outside the conventional `Views/` directory.
