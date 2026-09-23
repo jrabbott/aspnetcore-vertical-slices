@@ -37,6 +37,7 @@ Oriented to information. Accurate, concise descriptions you can scan.
 |---|---|
 | [Routes and endpoints](reference/routes.md) | HTTP methods, paths, controllers |
 | [Repository layout](reference/repository-layout.md) | Folders and what belongs where |
+| [Theme and front-end assets](reference/theme-and-assets.md) | CSS layers, `site.js`, enhancement hooks |
 | [Build system and packages](reference/build-and-packages.md) | CPM, lock files, analyzers, CI, Dependabot, MTP |
 | [Test projects](reference/testing.md) | Test assemblies and architecture rules |
 
@@ -48,6 +49,7 @@ Oriented to understanding. Context, trade-offs, and design rationale.
 |---|---|
 | [Vertical Slice Architecture](explanation/vertical-slice-architecture.md) | VSA on MVC, handlers, boundaries, DI |
 | [Razor view discovery](explanation/razor-view-discovery.md) | Feature views + why `_ViewImports` / `_ViewStart` stay at the web root |
+| [Progressive enhancement](explanation/progressive-enhancement.md) | HTML first; CSS second; optional fetch for favourites |
 | [Design choices](explanation/design-choices.md) | Goals, no MediatR/AutoMapper, Open-Meteo, session favourites |
 
 The root [README](../README.md) remains the short repository entry point.

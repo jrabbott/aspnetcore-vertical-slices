@@ -40,7 +40,12 @@
                     <div class="favourite-actions">
                         <a class="btn btn-secondary" asp-controller="Search" asp-action="Index" asp-route-city="@city.City">Search</a>
                         <a class="btn btn-secondary" asp-controller="Forecast" asp-action="Index" asp-route-city="@city.City">Forecast</a>
-                        <form method="post" asp-controller="RemoveFavourite" asp-action="Index" class="inline-form">
+                        <form method="post"
+                              asp-controller="RemoveFavourite"
+                              asp-action="Index"
+                              class="inline-form"
+                              data-enhance="favourite-command"
+                              data-on-success="remove-row">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="City" value="@city.City" />
                             <button type="submit" class="btn btn-danger">Remove</button>
@@ -53,7 +58,12 @@
 
     <section class="add-favourite">
         <h2>Add a favourite</h2>
-        <form method="post" asp-controller="AddFavourite" asp-action="Index" class="search-form">
+        <form method="post"
+              asp-controller="AddFavourite"
+              asp-action="Index"
+              class="search-form"
+              data-enhance="favourite-command"
+              data-on-success="reload">
             @Html.AntiForgeryToken()
             <div class="field">
                 <label for="City">City</label>
@@ -74,7 +84,12 @@
                 @foreach (var city in Model.SuggestedCities)
                 {
                     <li>
-                        <form method="post" asp-controller="AddFavourite" asp-action="Index" class="inline-form">
+                        <form method="post"
+                              asp-controller="AddFavourite"
+                              asp-action="Index"
+                              class="inline-form"
+                              data-enhance="favourite-command"
+                              data-on-success="reload">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="City" value="@city" />
                             <button type="submit" class="chip-button">@city</button>

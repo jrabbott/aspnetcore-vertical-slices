@@ -184,6 +184,71 @@ public sealed class FavouritesEndpointTests(WeatherAppFactory factory) : IClassF
             document.QuerySelector(".alert.alert-error")?.TextContent);
     }
 
+    [Fact]
+    public async Task AddFavourite_WithJsonAccept_ReturnsJsonWithoutRedirect()
+    {
+        HttpClient client = _factory.CreateClientWithFavourites([]);
+        IDocument page = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favourites"));
+        string token = HtmlDocument.AntiForgeryToken(page);
+
+        using FormUrlEncodedContent content = Form(token, "Madrid");
+        using HttpRequestMessage request = new(HttpMethod.Post, "/weather/favourites/add")
+        {
+            Content = content
+        };
+        request.Headers.Accept.ParseAdd("application/json");
+
+        HttpResponseMessage response = await client.SendAsync(request);
+        string body = await response.Content.ReadAsStringAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("application/json", response.Content.Headers.ContentType?.MediaType);
+        Assert.Contains("\"succeeded\":true", body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Madrid was added", body);
+
+        IDocument afterAdd = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favourites"));
+        Assert.Contains(
+            afterAdd.QuerySelectorAll("ul.favourites-list > li h2"),
+            heading => heading.TextContent.Trim() == "Madrid");
+        Assert.Null(afterAdd.QuerySelector(".alert"));
+    }
+
+    [Fact]
+    public async Task RemoveFavourite_WithJsonAccept_ReturnsJsonWithoutRedirect()
+    {
+        HttpClient client = _factory.CreateClientWithFavourites(["Madrid"]);
+        IDocument page = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favourites"));
+        string token = HtmlDocument.AntiForgeryToken(page);
+
+        using FormUrlEncodedContent content = Form(token, "Madrid");
+        using HttpRequestMessage request = new(HttpMethod.Post, "/weather/favourites/remove")
+        {
+            Content = content
+        };
+        request.Headers.Accept.ParseAdd("application/json");
+
+        HttpResponseMessage response = await client.SendAsync(request);
+        string body = await response.Content.ReadAsStringAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("\"succeeded\":true", body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Madrid was removed", body);
+
+        IDocument afterRemove = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favourites"));
+        Assert.Contains("You have no favourite cities yet", afterRemove.QuerySelector("p.empty")?.TextContent);
+        Assert.Null(afterRemove.QuerySelector(".alert"));
+    }
+
+    [Fact]
+    public async Task Favourites_Page_MarksCommandFormsForProgressiveEnhancement()
+    {
+        HttpClient client = _factory.CreateClientWithFavourites(["London"]);
+        IDocument document = await HtmlDocument.ParseAsync(await client.GetAsync("/weather/favourites"));
+
+        Assert.NotEmpty(document.QuerySelectorAll("form[data-enhance='favourite-command'][data-on-success='reload']"));
+        Assert.NotEmpty(document.QuerySelectorAll("form[data-enhance='favourite-command'][data-on-success='remove-row']"));
+    }
+
     private static FormUrlEncodedContent Form(string token, string city)
     {
         return new(new Dictionary<string, string>
