@@ -1,12 +1,12 @@
 using WeatherApp.Features.Weather.AddFavourite;
-using WeatherApp.Infrastructure.Favourites;
+using WeatherApp.TestSupport;
 using WeatherApp.Unit.Tests.Fakes;
 
 namespace WeatherApp.Unit.Tests;
 
 public sealed class AddFavouriteHandlerTests
 {
-    private static AddFavouriteHandler CreateHandler(FavouritesStore store, FakeWeatherClient client)
+    private static AddFavouriteHandler CreateHandler(FakeFavouritesStore store, FakeWeatherClient client)
     {
         return new(store, client, new AddFavouriteRequestValidator());
     }
@@ -14,7 +14,7 @@ public sealed class AddFavouriteHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCitySupported_AddsFavourite()
     {
-        var store = new FavouritesStore([]);
+        var store = new FakeFavouritesStore([]);
         AddFavouriteHandler handler = CreateHandler(
             store,
             new FakeWeatherClient(FakeWeatherClient.Reading("Madrid", "Spain")));
@@ -29,7 +29,7 @@ public sealed class AddFavouriteHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityUnsupported_Fails()
     {
-        var store = new FavouritesStore([]);
+        var store = new FakeFavouritesStore([]);
         AddFavouriteHandler handler = CreateHandler(store, new FakeWeatherClient());
 
         AddFavouriteResponse result = await handler.HandleAsync(new AddFavouriteRequest { City = "Atlantis" });
@@ -41,7 +41,7 @@ public sealed class AddFavouriteHandlerTests
     [Fact]
     public async Task HandleAsync_WhenAlreadyFavourite_Fails()
     {
-        var store = new FavouritesStore(["Paris"]);
+        var store = new FakeFavouritesStore(["Paris"]);
         AddFavouriteHandler handler = CreateHandler(
             store,
             new FakeWeatherClient(FakeWeatherClient.Reading("Paris", "France")));
@@ -55,7 +55,7 @@ public sealed class AddFavouriteHandlerTests
     [Fact]
     public async Task HandleAsync_WhenCityMissing_FailsValidation()
     {
-        var store = new FavouritesStore([]);
+        var store = new FakeFavouritesStore([]);
         AddFavouriteHandler handler = CreateHandler(store, new FakeWeatherClient());
 
         AddFavouriteResponse result = await handler.HandleAsync(new AddFavouriteRequest { City = " " });

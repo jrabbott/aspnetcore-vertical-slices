@@ -6,7 +6,8 @@
 | `tests/WeatherApp.Integration.Tests` | HTTP routes via `WebApplicationFactory`, AngleSharp DOM assertions |
 | `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler + FluentValidation unit tests |
 | `tests/WeatherApp.Domain.Unit.Tests` | Domain model unit tests |
-| `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client + favourites store unit tests |
+| `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client unit tests |
+| `tests/WeatherApp.TestSupport` | Shared test fakes (for example `FakeFavouritesStore`) |
 
 ## Architecture rules (summary)
 

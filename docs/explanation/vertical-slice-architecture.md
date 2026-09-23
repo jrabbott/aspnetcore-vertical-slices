@@ -110,10 +110,11 @@ Examples in this app:
 - `src/WeatherApp.Infrastructure/Weather/IWeatherClient.cs`
 - `src/WeatherApp.Infrastructure/Weather/WeatherClient.cs` — Open-Meteo geocoding + forecast HTTP client
 - `src/WeatherApp.Infrastructure/Favourites/IFavouritesStore.cs`
-- `src/WeatherApp.Infrastructure/Favourites/FavouritesStore.cs` — in-memory list (tests / doubles)
 - `src/WeatherApp/Favourites/SessionFavouritesStore.cs` — per-browser session store used in production
 
 Feature handlers depend on abstractions such as `IWeatherClient`, not on concrete providers.
+
+An in-memory `FakeFavouritesStore` lives under `tests/WeatherApp.TestSupport` for unit and integration tests — it is not a production Infrastructure adapter.
 
 The MVC-specific `FeatureViewLocationExpander` remains in the web project (`src/WeatherApp/Razor`) because it is presentation configuration, not application infrastructure.
 

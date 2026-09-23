@@ -23,13 +23,14 @@ First-time walkthrough: [docs/tutorials/run-the-weather-app.md](docs/tutorials/r
 ├── src/
 │   ├── WeatherApp/                 # MVC host + feature slices + Razor
 │   ├── WeatherApp.Domain/          # Domain model
-│   └── WeatherApp.Infrastructure/  # Weather client + favourites store
+│   └── WeatherApp.Infrastructure/  # Weather client + IFavouritesStore
 ├── tests/
 │   ├── WeatherApp.Architecture.Tests/
 │   ├── WeatherApp.Integration.Tests/
 │   ├── WeatherApp.Unit.Tests/                  # WeatherApp feature handlers
 │   ├── WeatherApp.Domain.Unit.Tests/
-│   └── WeatherApp.Infrastructure.Unit.Tests/
+│   ├── WeatherApp.Infrastructure.Unit.Tests/
+│   └── WeatherApp.TestSupport/                 # Shared test fakes
 ├── docs/                           # Diátaxis: tutorials / how-to / reference / explanation
 ├── .agents/skills/                 # Project Agent Skills
 ├── .github/

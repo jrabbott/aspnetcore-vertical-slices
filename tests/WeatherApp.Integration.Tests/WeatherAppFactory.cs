@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WeatherApp.Infrastructure.Favourites;
+using WeatherApp.TestSupport;
 
 namespace WeatherApp.Integration.Tests;
 
@@ -30,11 +31,11 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
             return CreateClient(clientOptions);
         }
 
-        // Non-empty seed (including ungeocodable cities): deterministic in-memory store.
+        // Non-empty seed (including ungeocodable cities): deterministic in-memory fake.
         return WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
             {
                 services.RemoveAll<IFavouritesStore>();
-                services.AddSingleton<IFavouritesStore>(_ => new FavouritesStore(cities));
+                services.AddSingleton<IFavouritesStore>(_ => new FakeFavouritesStore(cities));
             })).CreateClient(clientOptions);
     }
 

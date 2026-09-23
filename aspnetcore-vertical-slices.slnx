@@ -14,5 +14,6 @@
     <Project Path="tests/WeatherApp.Unit.Tests/WeatherApp.Unit.Tests.csproj" />
     <Project Path="tests/WeatherApp.Domain.Unit.Tests/WeatherApp.Domain.Unit.Tests.csproj" />
     <Project Path="tests/WeatherApp.Infrastructure.Unit.Tests/WeatherApp.Infrastructure.Unit.Tests.csproj" />
+    <Project Path="tests/WeatherApp.TestSupport/WeatherApp.TestSupport.csproj" />
   </Folder>
 </Solution>

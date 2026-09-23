@@ -1,13 +1,13 @@
-using WeatherApp.Infrastructure.Favourites;
+using WeatherApp.TestSupport;
 
-namespace WeatherApp.Infrastructure.Unit.Tests;
+namespace WeatherApp.Unit.Tests;
 
-public sealed class FavouritesStoreTests
+public sealed class FakeFavouritesStoreTests
 {
     [Fact]
     public void DefaultConstructor_SeedsLondonAndTokyo()
     {
-        var store = new FavouritesStore();
+        var store = new FakeFavouritesStore();
 
         Assert.Equal(["London", "Tokyo"], store.GetAll());
     }
@@ -15,7 +15,7 @@ public sealed class FavouritesStoreTests
     [Fact]
     public void Constructor_TrimsFiltersBlanksAndDedupes()
     {
-        var store = new FavouritesStore(["  Paris ", "", "paris", "  ", "Madrid"]);
+        var store = new FakeFavouritesStore(["  Paris ", "", "paris", "  ", "Madrid"]);
 
         Assert.Equal(["Madrid", "Paris"], store.GetAll());
     }
@@ -23,7 +23,7 @@ public sealed class FavouritesStoreTests
     [Fact]
     public void Add_ThenGetAll_ReturnsSortedCities()
     {
-        var store = new FavouritesStore([]);
+        var store = new FakeFavouritesStore([]);
 
         Assert.True(store.Add("Tokyo"));
         Assert.True(store.Add("London"));
@@ -34,7 +34,7 @@ public sealed class FavouritesStoreTests
     [Fact]
     public void Add_DuplicateCity_ReturnsFalse()
     {
-        var store = new FavouritesStore(["Paris"]);
+        var store = new FakeFavouritesStore(["Paris"]);
 
         Assert.False(store.Add("paris"));
         Assert.Equal(["Paris"], store.GetAll());
@@ -46,7 +46,7 @@ public sealed class FavouritesStoreTests
     [InlineData("   ")]
     public void Add_BlankCity_ReturnsFalse(string? city)
     {
-        var store = new FavouritesStore([]);
+        var store = new FakeFavouritesStore([]);
 
         Assert.False(store.Add(city!));
         Assert.Empty(store.GetAll());
@@ -55,7 +55,7 @@ public sealed class FavouritesStoreTests
     [Fact]
     public void Remove_ExistingCity_ReturnsTrue()
     {
-        var store = new FavouritesStore(["London", "Tokyo"]);
+        var store = new FakeFavouritesStore(["London", "Tokyo"]);
 
         Assert.True(store.Remove("London"));
         Assert.Equal(["Tokyo"], store.GetAll());
@@ -64,7 +64,7 @@ public sealed class FavouritesStoreTests
     [Fact]
     public void Remove_MissingCity_ReturnsFalse()
     {
-        var store = new FavouritesStore(["Tokyo"]);
+        var store = new FakeFavouritesStore(["Tokyo"]);
 
         Assert.False(store.Remove("Paris"));
         Assert.Equal(["Tokyo"], store.GetAll());
@@ -76,7 +76,7 @@ public sealed class FavouritesStoreTests
     [InlineData("   ")]
     public void Remove_BlankCity_ReturnsFalse(string? city)
     {
-        var store = new FavouritesStore(["Tokyo"]);
+        var store = new FakeFavouritesStore(["Tokyo"]);
 
         Assert.False(store.Remove(city!));
         Assert.Equal(["Tokyo"], store.GetAll());
