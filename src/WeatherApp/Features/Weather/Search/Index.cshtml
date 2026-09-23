@@ -49,7 +49,12 @@
                 </dl>
                 <p class="actions">
                     <a class="btn btn-secondary" asp-controller="Forecast" asp-action="Index" asp-route-city="@Model.City">View forecast</a>
-                    <form method="post" asp-controller="AddFavourite" asp-action="Index" class="inline-form">
+                    <form method="post"
+                          asp-controller="AddFavourite"
+                          asp-action="Index"
+                          class="inline-form"
+                          data-enhance="favourite-command"
+                          data-on-success="flash">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="City" value="@Model.City" />
                         <button type="submit" class="btn btn-secondary">Add to favourites</button>

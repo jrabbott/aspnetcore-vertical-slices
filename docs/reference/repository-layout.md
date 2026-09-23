@@ -9,9 +9,10 @@
 │   │   ├── Hosting/                # DI registration extensions
 │   │   ├── Razor/                  # FeatureViewLocationExpander
 │   │   ├── Views/Shared/           # Layout and shared chrome only
+│   │   ├── Mvc/                    # Small MVC helpers (e.g. Accept negotiation)
 │   │   ├── _ViewImports.cshtml     # Web root (covers Features/ + Views/)
 │   │   ├── _ViewStart.cshtml
-│   │   └── wwwroot/
+│   │   └── wwwroot/                # css/{tokens,base,components}.css + js/site.js
 │   ├── WeatherApp.Domain/          # Domain model (no ASP.NET / Infrastructure refs)
 │   └── WeatherApp.Infrastructure/  # Weather client + IFavouritesStore
 ├── tests/
@@ -59,4 +60,5 @@ Project skills live in `.agents/skills/<skill-name>/SKILL.md` ([Agent Skills](ht
 
 - [Vertical Slice Architecture](../explanation/vertical-slice-architecture.md)
 - [Razor view discovery](../explanation/razor-view-discovery.md)
+- [Theme and front-end assets](theme-and-assets.md)
 - [Build system and packages](build-and-packages.md)
