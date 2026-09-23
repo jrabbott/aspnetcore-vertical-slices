@@ -35,6 +35,11 @@ public sealed class SessionFavouritesStore(IHttpContextAccessor httpContextAcces
             return false;
         }
 
+        if (cities.Count >= FavouritesLimits.MaxCities)
+        {
+            return false;
+        }
+
         cities.Add(normalized);
         Write(cities);
         return true;

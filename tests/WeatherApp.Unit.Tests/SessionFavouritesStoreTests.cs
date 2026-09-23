@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using WeatherApp.Favourites;
+using WeatherApp.Infrastructure.Favourites;
 
 namespace WeatherApp.Unit.Tests;
 
@@ -43,6 +44,20 @@ public sealed class SessionFavouritesStoreTests
         SessionFavouritesStore store = CreateStore();
 
         Assert.Empty(store.GetAll());
+    }
+
+    [Fact]
+    public void Add_WhenAtCapacity_ReturnsFalse()
+    {
+        SessionFavouritesStore store = CreateStore();
+
+        for (int i = 0; i < FavouritesLimits.MaxCities; i++)
+        {
+            Assert.True(store.Add($"City{i}"));
+        }
+
+        Assert.False(store.Add("Overflow"));
+        Assert.Equal(FavouritesLimits.MaxCities, store.GetAll().Count);
     }
 
     private static SessionFavouritesStore CreateStore()

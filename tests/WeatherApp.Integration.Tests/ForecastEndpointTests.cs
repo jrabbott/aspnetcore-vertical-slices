@@ -59,18 +59,16 @@ public sealed class ForecastEndpointTests(WeatherAppFactory factory) : IClassFix
     }
 
     [Fact]
-    public async Task Forecast_BlankCity_ShowsFieldError()
+    public async Task Forecast_BlankCity_ShowsAlertError()
     {
         HttpResponseMessage response = await _client.GetAsync("/weather/forecast?city=");
         AngleSharp.Dom.IDocument document = await HtmlDocument.ParseAsync(response);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Null(document.QuerySelector(".field-error"));
         Assert.Equal(
             "Please enter a city name.",
-            document.QuerySelector(".field-error")?.TextContent.Trim());
-        Assert.Contains(
-            "Please enter a city name.",
-            document.QuerySelector(".alert.alert-error")?.TextContent);
+            document.QuerySelector(".alert.alert-error")?.TextContent.Trim());
         Assert.Null(document.QuerySelector("article.forecast-result"));
     }
 }

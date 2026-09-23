@@ -18,10 +18,6 @@
                    class="input"
                    placeholder="e.g. London"
                    autocomplete="off" />
-            @if (Model.Searched && string.IsNullOrWhiteSpace(Model.Request.City))
-            {
-                <span class="field-error">Please enter a city name.</span>
-            }
         </div>
         <button type="submit" class="btn btn-primary">Search</button>
     </form>

@@ -151,7 +151,7 @@ For a trivial one-page app, VSA can be more structure than you need. Prefer the 
 
 - handlers
 - FluentValidation request validators
-- `IWeatherClient` / `WeatherClient` (typed `HttpClient` → Open-Meteo)
+- `IWeatherClient` / `WeatherClient` via `AddOpenMeteoWeatherClient` (typed `HttpClient` → Open-Meteo; singleton geocode cache)
 - `IFavouritesStore` / `SessionFavouritesStore` (ASP.NET Core session; in-memory distributed cache)
 - the feature view location expander
 

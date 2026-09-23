@@ -29,15 +29,21 @@ public sealed class AddFavouriteHandler(
 
         string city = request.City!.Trim();
         WeatherReading? reading = await _weatherClient.GetCurrentAsync(city, cancellationToken);
+        return reading is null
+            ? AddFavouriteResponse.Fail($"Could not find weather for \"{city}\".")
+            : AddFavourite(reading.Location.City);
+    }
 
-        if (reading is null)
-        {
-            return AddFavouriteResponse.Fail($"Could not find weather for \"{city}\".");
-        }
+    private AddFavouriteResponse AddFavourite(string resolvedCity)
+    {
+        IReadOnlyList<string> favourites = _favouritesStore.GetAll();
 
-        bool added = _favouritesStore.Add(reading.Location.City);
-        return !added
-            ? AddFavouriteResponse.Fail($"{reading.Location.City} is already in your favourites.")
-            : AddFavouriteResponse.Ok($"{reading.Location.City} was added to your favourites.");
+        return favourites.Contains(resolvedCity, StringComparer.OrdinalIgnoreCase)
+            ? AddFavouriteResponse.Fail($"{resolvedCity} is already in your favourites.")
+            : favourites.Count >= FavouritesLimits.MaxCities
+            ? AddFavouriteResponse.Fail($"You can save up to {FavouritesLimits.MaxCities} favourites.")
+            : _favouritesStore.Add(resolvedCity)
+            ? AddFavouriteResponse.Ok($"{resolvedCity} was added to your favourites.")
+            : AddFavouriteResponse.Fail($"Could not add {resolvedCity} to your favourites.");
     }
 }

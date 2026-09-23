@@ -104,6 +104,53 @@ public sealed class WeatherClientTests
     }
 
     [Fact]
+    public async Task GetForecastAsync_TruncatedDailySeries_SkipsIncompleteDays()
+    {
+        WeatherClient client = CreateClient(StubHttpMessageHandler.WithTruncatedDaily());
+
+        IReadOnlyList<WeatherReading> forecast = await client.GetForecastAsync("London", days: 3);
+
+        Assert.Single(forecast);
+        Assert.Equal(new DateOnly(2026, 9, 22), forecast[0].Date);
+        Assert.Equal(16, forecast[0].TemperatureC);
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_HttpFailure_ReturnsNull()
+    {
+        WeatherClient client = CreateClient(StubHttpMessageHandler.Failing());
+
+        WeatherReading? reading = await client.GetCurrentAsync("London");
+
+        Assert.Null(reading);
+    }
+
+    [Fact]
+    public async Task GetForecastAsync_HttpFailure_ReturnsEmpty()
+    {
+        WeatherClient client = CreateClient(StubHttpMessageHandler.Failing());
+
+        IReadOnlyList<WeatherReading> forecast = await client.GetForecastAsync("London", days: 3);
+
+        Assert.Empty(forecast);
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_SharedGeocoder_CachesAcrossClients()
+    {
+        var handler = new StubHttpMessageHandler();
+        var httpClient = new HttpClient(handler);
+        var geocoder = new OpenMeteoGeocoder(httpClient);
+        var first = new WeatherClient(httpClient, geocoder);
+        var second = new WeatherClient(httpClient, geocoder);
+
+        Assert.NotNull(await first.GetCurrentAsync("London"));
+        Assert.NotNull(await second.GetCurrentAsync("London"));
+        Assert.Equal(1, handler.GeocodeRequestCount);
+        Assert.Equal(2, handler.ForecastRequestCount);
+    }
+
+    [Fact]
     public void ExampleCities_ContainsSuggestedCities()
     {
         Assert.Contains("London", WeatherClient.ExampleCities);
@@ -118,21 +165,68 @@ public sealed class WeatherClientTests
 
     private sealed class StubHttpMessageHandler : HttpMessageHandler
     {
+        private readonly bool _truncateDaily;
+        private readonly bool _failHttp;
+
+        public StubHttpMessageHandler()
+            : this(truncateDaily: false, failHttp: false)
+        {
+        }
+
+        private StubHttpMessageHandler(bool truncateDaily, bool failHttp)
+        {
+            _truncateDaily = truncateDaily;
+            _failHttp = failHttp;
+        }
+
+        public static StubHttpMessageHandler WithTruncatedDaily()
+        {
+            return new(truncateDaily: true, failHttp: false);
+        }
+
+        public static StubHttpMessageHandler Failing()
+        {
+            return new(truncateDaily: false, failHttp: true);
+        }
+
+        public int GeocodeRequestCount
+        {
+            get; private set;
+        }
+
+        public int ForecastRequestCount
+        {
+            get; private set;
+        }
+
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            if (_failHttp)
+            {
+                throw new HttpRequestException("Simulated upstream failure.");
+            }
+
             string url = request.RequestUri?.ToString() ?? string.Empty;
 
-            return url.Contains("geocoding-api.open-meteo.com", StringComparison.Ordinal)
-                ? Task.FromResult(JsonResponse(GeocodeJson(url)))
-                : url.Contains("api.open-meteo.com", StringComparison.Ordinal)
-                ? Task.FromResult(JsonResponse(url.Contains("daily=", StringComparison.Ordinal)
+            if (url.Contains("geocoding-api.open-meteo.com", StringComparison.Ordinal))
+            {
+                GeocodeRequestCount++;
+                return Task.FromResult(JsonResponse(GeocodeJson(url)));
+            }
+
+            if (url.Contains("api.open-meteo.com", StringComparison.Ordinal))
+            {
+                ForecastRequestCount++;
+                return Task.FromResult(JsonResponse(url.Contains("daily=", StringComparison.Ordinal)
                     ? ForecastDailyJson(url)
-                    : CurrentJson()))
-                : Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound));
+                    : CurrentJson()));
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound));
         }
 
         private static string GeocodeJson(string url)
@@ -197,7 +291,7 @@ public sealed class WeatherClientTests
             """;
         }
 
-        private static string ForecastDailyJson(string url)
+        private string ForecastDailyJson(string url)
         {
             int days = ParseForecastDays(url);
             var times = new List<string>(days);
@@ -213,6 +307,15 @@ public sealed class WeatherClientTests
                 temps.Add($"{16 + i}.0");
                 humidity.Add("55");
                 wind.Add("12.0");
+            }
+
+            if (_truncateDaily && days > 1)
+            {
+                // Only the first day has complete series data.
+                codes = [codes[0]];
+                temps = [temps[0]];
+                humidity = [humidity[0]];
+                wind = [wind[0]];
             }
 
             return $$"""

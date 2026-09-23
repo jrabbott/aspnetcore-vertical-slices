@@ -32,6 +32,18 @@ public sealed class ForecastRequestValidatorTests
     }
 
     [Fact]
+    public async Task Validate_WhenCityTooLong_Fails()
+    {
+        ValidationResult result = await _validator.ValidateAsync(
+            new ForecastRequest { City = new string('a', 101), Days = 3 });
+
+        Assert.False(result.IsValid);
+        Assert.Contains(
+            result.Errors,
+            e => e.ErrorMessage == "City name must be between 1 and 100 characters.");
+    }
+
+    [Fact]
     public async Task Validate_WhenRequestValid_Succeeds()
     {
         ValidationResult result = await _validator.ValidateAsync(new ForecastRequest { City = "Paris", Days = 3 });

@@ -67,14 +67,23 @@ internal sealed class OpenMeteoForecastClient(HttpClient httpClient)
 
         for (int i = 0; i < daily.Time.Count; i++)
         {
+            if (!TryGetValue(daily.Temperature2MMax, i, out double temperature)
+                || !TryGetValue(daily.WeatherCode, i, out double weatherCode)
+                || !TryGetValue(daily.RelativeHumidity2MMean, i, out double humidity)
+                || !TryGetValue(daily.WindSpeed10MMax, i, out double windSpeed)
+                || !DateOnly.TryParse(daily.Time[i], CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly date))
+            {
+                continue;
+            }
+
             readings.Add(new WeatherReading
             {
                 Location = new Location { City = location.City, Country = location.Country },
-                Date = DateOnly.Parse(daily.Time[i], CultureInfo.InvariantCulture),
-                TemperatureC = (int)Math.Round(ValueAt(daily.Temperature2MMax, i)),
-                Summary = WeatherCodeMapper.ToSummary((int)ValueAt(daily.WeatherCode, i)),
-                HumidityPercent = (int)Math.Round(ValueAt(daily.RelativeHumidity2MMean, i)),
-                WindSpeedKph = (int)Math.Round(ValueAt(daily.WindSpeed10MMax, i))
+                Date = date,
+                TemperatureC = (int)Math.Round(temperature),
+                Summary = WeatherCodeMapper.ToSummary((int)weatherCode),
+                HumidityPercent = (int)Math.Round(humidity),
+                WindSpeedKph = (int)Math.Round(windSpeed)
             });
         }
 
@@ -95,8 +104,15 @@ internal sealed class OpenMeteoForecastClient(HttpClient httpClient)
             : null;
     }
 
-    private static double ValueAt(List<double>? values, int index)
+    private static bool TryGetValue(List<double>? values, int index, out double value)
     {
-        return values is not null && index < values.Count ? values[index] : 0;
+        if (values is not null && index < values.Count)
+        {
+            value = values[index];
+            return true;
+        }
+
+        value = 0;
+        return false;
     }
 }

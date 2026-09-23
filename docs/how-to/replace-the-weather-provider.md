@@ -2,7 +2,7 @@
 
 Goal: swap Open-Meteo for another weather source without rewriting feature slices.
 
-Feature handlers depend on `IWeatherClient` in `WeatherApp.Infrastructure`. The concrete `WeatherClient` talks to Open-Meteo geocoding + forecast HTTP APIs. Production wiring lives in the web host’s infrastructure registration.
+Feature handlers depend on `IWeatherClient` in `WeatherApp.Infrastructure`. The concrete `WeatherClient` talks to Open-Meteo geocoding + forecast HTTP APIs. Production wiring lives in `AddOpenMeteoWeatherClient` (`WeatherApp.Infrastructure`) and the web host’s infrastructure registration.
 
 ## 1. Keep the abstraction stable
 
@@ -20,15 +20,15 @@ Unit-test the client in `tests/WeatherApp.Infrastructure.Unit.Tests` with `HttpM
 
 ## 3. Register the new client
 
-Update `src/WeatherApp/Hosting/WeatherAppInfrastructureServiceCollectionExtensions.cs` (typed `HttpClient`, options, API keys via configuration, and so on). Feature registration should stay unchanged.
+Update `AddOpenMeteoWeatherClient` / `src/WeatherApp/Hosting/WeatherAppInfrastructureServiceCollectionExtensions.cs` (typed `HttpClient`, options, API keys via configuration, and so on). Feature registration should stay unchanged.
 
 ## 4. Adjust integration tests
 
-`tests/WeatherApp.Integration.Tests` may replace `IWeatherClient` with a fake so route tests stay deterministic. Keep that seam when you change providers.
+`tests/WeatherApp.Integration.Tests/WeatherAppFactory` already replaces `IWeatherClient` with a seeded `FakeWeatherClient` from `WeatherApp.TestSupport` so route tests stay offline. Keep that seam when you change providers (update the factory seed if ExampleCities or expected HTML change).
 
 ## 5. Update docs that name Open-Meteo
 
-Touch user-facing copy and docs that assume Open-Meteo (README, tutorial, getting-started stubs) so operators know which API and credentials apply.
+Touch user-facing copy and docs that assume Open-Meteo (README, tutorial, design choices) so operators know which API and credentials apply.
 
 ## Related
 
