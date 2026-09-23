@@ -218,7 +218,7 @@ a:hover {
 
 .weather-result,
 .forecast-result,
-.add-favorite {
+.add-favourite {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--line);
@@ -275,7 +275,7 @@ a:hover {
 }
 
 .hint h2,
-.add-favorite h2 {
+.add-favourite h2 {
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
 }
@@ -309,7 +309,7 @@ a:hover {
 }
 
 .forecast-list,
-.favorites-list {
+.favourites-list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -318,7 +318,7 @@ a:hover {
 }
 
 .forecast-list li,
-.favorites-list li {
+.favourites-list li {
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 1rem;
@@ -326,7 +326,7 @@ a:hover {
 }
 
 .forecast-date,
-.favorites-list h2 {
+.favourites-list h2 {
     margin: 0;
     font-size: 1.05rem;
 }
@@ -347,18 +347,18 @@ a:hover {
     margin-top: 0.25rem;
 }
 
-.favorites-list li {
+.favourites-list li {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 1rem;
 }
 
-.favorite-main p {
+.favourite-main p {
     margin: 0.35rem 0 0;
 }
 
-.favorite-actions {
+.favourite-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;

@@ -1,6 +1,6 @@
-namespace WeatherApp.Features.Weather.AddFavorite;
+namespace WeatherApp.Features.Weather.AddFavourite;
 
-public sealed class AddFavoriteResponse
+public sealed class AddFavouriteResponse
 {
     public required bool Succeeded
     {
@@ -11,7 +11,7 @@ public sealed class AddFavoriteResponse
         get; init;
     }
 
-    public static AddFavoriteResponse Ok(string message)
+    public static AddFavouriteResponse Ok(string message)
     {
         return new()
         {
@@ -20,7 +20,7 @@ public sealed class AddFavoriteResponse
         };
     }
 
-    public static AddFavoriteResponse Fail(string message)
+    public static AddFavouriteResponse Fail(string message)
     {
         return new()
         {

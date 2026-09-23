@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using WeatherApp.Infrastructure.Favorites;
+using WeatherApp.Infrastructure.Favourites;
 
 namespace WeatherApp.Integration.Tests;
 
@@ -14,7 +14,7 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
         builder.UseEnvironment("Development");
     }
 
-    public HttpClient CreateClientWithFavorites(
+    public HttpClient CreateClientWithFavourites(
         IEnumerable<string>? initialCities = null,
         WebApplicationFactoryClientOptions? options = null)
     {
@@ -33,8 +33,8 @@ public sealed class WeatherAppFactory : WebApplicationFactory<Program>
         // Non-empty seed (including ungeocodable cities): deterministic in-memory store.
         return WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
             {
-                services.RemoveAll<IFavoritesStore>();
-                services.AddSingleton<IFavoritesStore>(_ => new FavoritesStore(cities));
+                services.RemoveAll<IFavouritesStore>();
+                services.AddSingleton<IFavouritesStore>(_ => new FavouritesStore(cities));
             })).CreateClient(clientOptions);
     }
 

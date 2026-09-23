@@ -14,7 +14,7 @@ Then open the URL shown in the console (typically `http://localhost:5xxx`) and t
 
 - `/weather/search?city=London`
 - `/weather/forecast?city=Paris`
-- `/weather/favorites`
+- `/weather/favourites`
 
 Root (`/`) redirects to `/weather/search`.
 
@@ -24,11 +24,11 @@ Root (`/`) redirects to `/weather/search`.
 |---|---|---|
 | Search | GET | `/weather/search` |
 | Forecast | GET | `/weather/forecast` |
-| Favorites | GET | `/weather/favorites` |
-| Add favorite | POST | `/weather/favorites/add` |
-| Remove favorite | POST | `/weather/favorites/remove` |
+| Favourites | GET | `/weather/favourites` |
+| Add favourite | POST | `/weather/favourites/add` |
+| Remove favourite | POST | `/weather/favourites/remove` |
 
-AddFavorite and RemoveFavorite are command slices without Razor views. They demonstrate that not every vertical slice is a page.
+AddFavourite and RemoveFavourite are command slices without Razor views. They demonstrate that not every vertical slice is a page.
 
 ## Cities and weather data
 
@@ -42,7 +42,7 @@ Weather data comes from the free [Open-Meteo](https://open-meteo.com/) geocoding
 
 Unknown / ungeocodable cities are handled with user-facing messages.
 
-Favorites are stored **per browser session** (cookie session + in-memory cache). Closing the browser or waiting out the idle timeout clears them; different browsers do not share a list.
+Favourites are stored **per browser session** (cookie session + in-memory cache). Closing the browser or waiting out the idle timeout clears them; different browsers do not share a list.
 
 ## Tests
 
@@ -58,7 +58,7 @@ Test projects:
 | `tests/WeatherApp.Integration.Tests` | HTTP routes via `WebApplicationFactory`, with AngleSharp DOM assertions |
 | `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler + FluentValidation unit tests |
 | `tests/WeatherApp.Domain.Unit.Tests` | Domain model unit tests |
-| `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client + favorites store unit tests |
+| `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client + favourites store unit tests |
 
 Architecture rules include:
 

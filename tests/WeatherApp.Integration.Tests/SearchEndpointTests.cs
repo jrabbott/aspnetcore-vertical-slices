@@ -36,7 +36,7 @@ public sealed class SearchEndpointTests : IClassFixture<WeatherAppFactory>
         Assert.Equal("Search weather", document.QuerySelector("h1")?.TextContent.Trim());
         Assert.Equal("WeatherApp", document.QuerySelector("a.brand")?.TextContent.Trim());
         Assert.NotNull(document.QuerySelector("nav.site-nav a[href='/weather/forecast']"));
-        Assert.NotNull(document.QuerySelector("nav.site-nav a[href='/weather/favorites']"));
+        Assert.NotNull(document.QuerySelector("nav.site-nav a[href='/weather/favourites']"));
         Assert.NotNull(document.QuerySelector("link[href*='site.css']"));
         Assert.NotNull(document.QuerySelector("form.search-form input[name='City']"));
     }

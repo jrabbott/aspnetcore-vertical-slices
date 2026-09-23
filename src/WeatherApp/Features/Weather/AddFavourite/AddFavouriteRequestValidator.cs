@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace WeatherApp.Features.Weather.AddFavorite;
+namespace WeatherApp.Features.Weather.AddFavourite;
 
-public sealed class AddFavoriteRequestValidator : AbstractValidator<AddFavoriteRequest>
+public sealed class AddFavouriteRequestValidator : AbstractValidator<AddFavouriteRequest>
 {
-    public AddFavoriteRequestValidator()
+    public AddFavouriteRequestValidator()
     {
         RuleFor(request => request.City)
             .Cascade(CascadeMode.Stop)

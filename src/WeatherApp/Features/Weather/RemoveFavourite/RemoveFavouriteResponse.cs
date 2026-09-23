@@ -1,6 +1,6 @@
-namespace WeatherApp.Features.Weather.RemoveFavorite;
+namespace WeatherApp.Features.Weather.RemoveFavourite;
 
-public sealed class RemoveFavoriteResponse
+public sealed class RemoveFavouriteResponse
 {
     public required bool Succeeded
     {
@@ -11,7 +11,7 @@ public sealed class RemoveFavoriteResponse
         get; init;
     }
 
-    public static RemoveFavoriteResponse Ok(string message)
+    public static RemoveFavouriteResponse Ok(string message)
     {
         return new()
         {
@@ -20,7 +20,7 @@ public sealed class RemoveFavoriteResponse
         };
     }
 
-    public static RemoveFavoriteResponse Fail(string message)
+    public static RemoveFavouriteResponse Fail(string message)
     {
         return new()
         {

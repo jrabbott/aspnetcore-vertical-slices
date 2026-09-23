@@ -1,7 +1,7 @@
 using System.Reflection;
 using NetArchTest.Rules;
 using WeatherApp.Domain.Weather;
-using WeatherApp.Infrastructure.Favorites;
+using WeatherApp.Infrastructure.Favourites;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Architecture.Tests;
@@ -123,7 +123,7 @@ public sealed class ArchitectureTests
         Assert.Equal("WeatherApp.Domain", typeof(Location).Assembly.GetName().Name);
         Assert.Equal("WeatherApp.Domain", typeof(WeatherReading).Assembly.GetName().Name);
         Assert.Equal("WeatherApp.Infrastructure", typeof(IWeatherClient).Assembly.GetName().Name);
-        Assert.Equal("WeatherApp.Infrastructure", typeof(IFavoritesStore).Assembly.GetName().Name);
+        Assert.Equal("WeatherApp.Infrastructure", typeof(IFavouritesStore).Assembly.GetName().Name);
         Assert.Equal("WeatherApp", typeof(Program).Assembly.GetName().Name);
     }
 

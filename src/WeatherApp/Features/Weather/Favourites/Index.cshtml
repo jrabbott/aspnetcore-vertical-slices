@@ -1,11 +1,11 @@
-@model WeatherApp.Features.Weather.Favorites.FavoritesResponse
+@model WeatherApp.Features.Weather.Favourites.FavouritesResponse
 @{
-    ViewData["Title"] = "Favorites";
+    ViewData["Title"] = "Favourites";
 }
 
 <section class="page">
     <header class="page-header">
-        <h1>Favorites</h1>
+        <h1>Favourites</h1>
         <p>Keep a short list of cities you check often.</p>
     </header>
 
@@ -18,15 +18,15 @@
 
     @if (Model.Cities.Count == 0)
     {
-        <p class="empty">You have no favorite cities yet. Add one below.</p>
+        <p class="empty">You have no favourite cities yet. Add one below.</p>
     }
     else
     {
-        <ul class="favorites-list">
+        <ul class="favourites-list">
             @foreach (var city in Model.Cities)
             {
                 <li>
-                    <div class="favorite-main">
+                    <div class="favourite-main">
                         <h2>@city.City</h2>
                         @if (city.HasWeather)
                         {
@@ -37,10 +37,10 @@
                             <p class="muted">Weather unavailable for this city.</p>
                         }
                     </div>
-                    <div class="favorite-actions">
+                    <div class="favourite-actions">
                         <a class="btn btn-secondary" asp-controller="Search" asp-action="Index" asp-route-city="@city.City">Search</a>
                         <a class="btn btn-secondary" asp-controller="Forecast" asp-action="Index" asp-route-city="@city.City">Forecast</a>
-                        <form method="post" asp-controller="RemoveFavorite" asp-action="Index" class="inline-form">
+                        <form method="post" asp-controller="RemoveFavourite" asp-action="Index" class="inline-form">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="City" value="@city.City" />
                             <button type="submit" class="btn btn-danger">Remove</button>
@@ -51,9 +51,9 @@
         </ul>
     }
 
-    <section class="add-favorite">
-        <h2>Add a favorite</h2>
-        <form method="post" asp-controller="AddFavorite" asp-action="Index" class="search-form">
+    <section class="add-favourite">
+        <h2>Add a favourite</h2>
+        <form method="post" asp-controller="AddFavourite" asp-action="Index" class="search-form">
             @Html.AntiForgeryToken()
             <div class="field">
                 <label for="City">City</label>
@@ -65,7 +65,7 @@
                     }
                 </datalist>
             </div>
-            <button type="submit" class="btn btn-primary">Add favorite</button>
+            <button type="submit" class="btn btn-primary">Add favourite</button>
         </form>
 
         @if (Model.SuggestedCities.Count > 0)
@@ -74,7 +74,7 @@
                 @foreach (var city in Model.SuggestedCities)
                 {
                     <li>
-                        <form method="post" asp-controller="AddFavorite" asp-action="Index" class="inline-form">
+                        <form method="post" asp-controller="AddFavourite" asp-action="Index" class="inline-form">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="City" value="@city" />
                             <button type="submit" class="chip-button">@city</button>

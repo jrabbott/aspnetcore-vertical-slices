@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Http;
-using WeatherApp.Favorites;
+using WeatherApp.Favourites;
 
 namespace WeatherApp.Unit.Tests;
 
-public sealed class SessionFavoritesStoreTests
+public sealed class SessionFavouritesStoreTests
 {
     [Fact]
     public void Add_ThenGetAll_ReturnsSortedCities()
     {
-        SessionFavoritesStore store = CreateStore();
+        SessionFavouritesStore store = CreateStore();
 
         Assert.True(store.Add("Tokyo"));
         Assert.True(store.Add("London"));
@@ -19,7 +19,7 @@ public sealed class SessionFavoritesStoreTests
     [Fact]
     public void Add_DuplicateCity_ReturnsFalse()
     {
-        SessionFavoritesStore store = CreateStore();
+        SessionFavouritesStore store = CreateStore();
         Assert.True(store.Add("Paris"));
 
         Assert.False(store.Add("paris"));
@@ -29,7 +29,7 @@ public sealed class SessionFavoritesStoreTests
     [Fact]
     public void Remove_ExistingCity_ReturnsTrue()
     {
-        SessionFavoritesStore store = CreateStore();
+        SessionFavouritesStore store = CreateStore();
         Assert.True(store.Add("London"));
         Assert.True(store.Add("Tokyo"));
 
@@ -40,19 +40,19 @@ public sealed class SessionFavoritesStoreTests
     [Fact]
     public void StartsEmpty()
     {
-        SessionFavoritesStore store = CreateStore();
+        SessionFavouritesStore store = CreateStore();
 
         Assert.Empty(store.GetAll());
     }
 
-    private static SessionFavoritesStore CreateStore()
+    private static SessionFavouritesStore CreateStore()
     {
         var context = new DefaultHttpContext
         {
             Session = new FakeSession()
         };
         var accessor = new HttpContextAccessor { HttpContext = context };
-        return new SessionFavoritesStore(accessor);
+        return new SessionFavouritesStore(accessor);
     }
 
     private sealed class FakeSession : ISession

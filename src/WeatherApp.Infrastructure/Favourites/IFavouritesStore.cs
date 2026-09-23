@@ -1,6 +1,6 @@
-namespace WeatherApp.Infrastructure.Favorites;
+namespace WeatherApp.Infrastructure.Favourites;
 
-public interface IFavoritesStore
+public interface IFavouritesStore
 {
     public IReadOnlyList<string> GetAll();
     public bool Add(string city);

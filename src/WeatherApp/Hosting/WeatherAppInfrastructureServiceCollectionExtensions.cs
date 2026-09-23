@@ -1,5 +1,5 @@
-using WeatherApp.Favorites;
-using WeatherApp.Infrastructure.Favorites;
+using WeatherApp.Favourites;
+using WeatherApp.Infrastructure.Favourites;
 using WeatherApp.Infrastructure.Weather;
 
 namespace WeatherApp.Hosting;
@@ -25,7 +25,7 @@ internal static class WeatherAppInfrastructureServiceCollectionExtensions
             options.IdleTimeout = TimeSpan.FromHours(8);
         });
 
-        services.AddScoped<IFavoritesStore, SessionFavoritesStore>();
+        services.AddScoped<IFavouritesStore, SessionFavouritesStore>();
         return services;
     }
 }

@@ -23,7 +23,7 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 ├── src/
 │   ├── WeatherApp/                 # MVC host + feature slices + Razor
 │   ├── WeatherApp.Domain/          # Domain model
-│   └── WeatherApp.Infrastructure/  # Weather client + favorites store
+│   └── WeatherApp.Infrastructure/  # Weather client + favourites store
 ├── tests/
 │   ├── WeatherApp.Architecture.Tests/
 │   ├── WeatherApp.Integration.Tests/

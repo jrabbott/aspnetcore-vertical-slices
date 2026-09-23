@@ -1,19 +1,19 @@
-using WeatherApp.Features.Weather.Favorites;
-using WeatherApp.Infrastructure.Favorites;
+using WeatherApp.Features.Weather.Favourites;
+using WeatherApp.Infrastructure.Favourites;
 using WeatherApp.Unit.Tests.Fakes;
 
 namespace WeatherApp.Unit.Tests;
 
-public sealed class FavoritesHandlerTests
+public sealed class FavouritesHandlerTests
 {
     [Fact]
-    public async Task HandleAsync_ReturnsFavoritesWithWeatherWhenAvailable()
+    public async Task HandleAsync_ReturnsFavouritesWithWeatherWhenAvailable()
     {
-        var store = new FavoritesStore(["London", "Atlantis"]);
+        var store = new FavouritesStore(["London", "Atlantis"]);
         var weather = new FakeWeatherClient(FakeWeatherClient.Reading("London", "United Kingdom", 12, "Cloudy"));
-        var handler = new FavoritesHandler(store, weather);
+        var handler = new FavouritesHandler(store, weather);
 
-        FavoritesResponse response = await handler.HandleAsync(new FavoritesRequest());
+        FavouritesResponse response = await handler.HandleAsync(new FavouritesRequest());
 
         Assert.Equal(2, response.Cities.Count);
         Assert.Contains(response.Cities, c => c.City == "London" && c.HasWeather && c.TemperatureC == 12);

@@ -8,7 +8,7 @@ This sample shows how Vertical Slice Architecture (VSA) can be applied to a conv
 
 Vertical Slice Architecture organizes code around **user-facing use cases** rather than technical layers.
 
-Instead of grouping files by what they are (`Controllers/`, `Services/`, `Models/`, `Views/`), you group them by what they do (`Search/`, `Forecast/`, `AddFavorite/`).
+Instead of grouping files by what they are (`Controllers/`, `Services/`, `Models/`, `Views/`), you group them by what they do (`Search/`, `Forecast/`, `AddFavourite/`).
 
 Each slice owns the code that primarily exists for that use case:
 
@@ -23,7 +23,7 @@ Traditional layered organization spreads a single change across many folders. Ad
 
 VSA optimizes for **locality of change**: a developer can understand and modify the Search use case primarily by working inside `src/WeatherApp/Features/Weather/Search`.
 
-Architecture tests in `tests/WeatherApp.Architecture.Tests/FeatureBoundaryTests.cs` help keep that locality honest: feature slices must not take compile-time dependencies on sibling slices (for example Search must not reference Forecast or Favorites types). Navigation between pages via routes/Tag Helpers is fine; sharing request/response/handler types across slices is not.
+Architecture tests in `tests/WeatherApp.Architecture.Tests/FeatureBoundaryTests.cs` help keep that locality honest: feature slices must not take compile-time dependencies on sibling slices (for example Search must not reference Forecast or Favourites types). Navigation between pages via routes/Tag Helpers is fine; sharing request/response/handler types across slices is not.
 
 That remains valuable as an application grows — as long as shared concepts stay genuinely shared and slices do not become a dumping ground for unrelated logic.
 
@@ -177,7 +177,7 @@ Example flow for Search:
 4. Handler returns `SearchResponse`
 5. Controller returns `View(response)`
 
-Controllers stay thin. Handlers stay focused. There is no large `WeatherService` with unrelated methods for search, forecast, favorites, add, and remove.
+Controllers stay thin. Handlers stay focused. There is no large `WeatherService` with unrelated methods for search, forecast, favourites, add, and remove.
 
 ## Request and response models
 
@@ -185,11 +185,11 @@ Request and response models belong to their slice.
 
 - `SearchRequest` / `SearchResponse` live in Search
 - `ForecastRequest` / `ForecastResponse` live in Forecast
-- Command slices such as AddFavorite still return a slice-local `*Response` (for example `AddFavoriteResponse`) even when they redirect instead of rendering a view
+- Command slices such as AddFavourite still return a slice-local `*Response` (for example `AddFavouriteResponse`) even when they redirect instead of rendering a view
 
 Request validation uses **FluentValidation**, with a slice-local validator next to the request model (for example `SearchRequestValidator`). Handlers invoke `IValidator<TRequest>` so validation stays in the use-case path rather than DataAnnotations attributes.
 
-Response construction uses **static factory methods** on the response types themselves (`SearchResponse.Empty`, `FromReading`, `Invalid`, and `AddFavoriteResponse.Ok` / `Fail`). That keeps named construction paths close to the model without introducing separate Builder/Factory classes or shared response infrastructure across slices.
+Response construction uses **static factory methods** on the response types themselves (`SearchResponse.Empty`, `FromReading`, `Invalid`, and `AddFavouriteResponse.Ok` / `Fail`). That keeps named construction paths close to the model without introducing separate Builder/Factory classes or shared response infrastructure across slices.
 
 It is acceptable for different response models to contain similar properties. Duplication across slices is preferred over premature extraction.
 
@@ -201,9 +201,9 @@ Examples in this app:
 
 - `src/WeatherApp.Infrastructure/Weather/IWeatherClient.cs`
 - `src/WeatherApp.Infrastructure/Weather/WeatherClient.cs` — Open-Meteo geocoding + forecast HTTP client
-- `src/WeatherApp.Infrastructure/Favorites/IFavoritesStore.cs`
-- `src/WeatherApp.Infrastructure/Favorites/FavoritesStore.cs` — in-memory list (tests / doubles)
-- `src/WeatherApp/Favorites/SessionFavoritesStore.cs` — per-browser session store used in production
+- `src/WeatherApp.Infrastructure/Favourites/IFavouritesStore.cs`
+- `src/WeatherApp.Infrastructure/Favourites/FavouritesStore.cs` — in-memory list (tests / doubles)
+- `src/WeatherApp/Favourites/SessionFavouritesStore.cs` — per-browser session store used in production
 
 Feature handlers depend on abstractions such as `IWeatherClient`, not on concrete providers.
 
@@ -243,7 +243,7 @@ For a trivial one-page app, VSA can be more structure than you need. Prefer the 
 - handlers
 - FluentValidation request validators
 - `IWeatherClient` / `WeatherClient` (typed `HttpClient` → Open-Meteo)
-- `IFavoritesStore` / `SessionFavoritesStore` (ASP.NET Core session; in-memory distributed cache)
+- `IFavouritesStore` / `SessionFavouritesStore` (ASP.NET Core session; in-memory distributed cache)
 - the feature view location expander
 
 There is no assembly scanning. Reading `Program.cs` should make the application's wiring obvious.
