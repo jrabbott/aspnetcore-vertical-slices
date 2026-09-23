@@ -10,6 +10,8 @@ Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download) matching [`global.json`](global.json) (roll-forward to the latest feature band is allowed)
 
+No Node.js, npm, or LibMan is required. `dotnet build` compiles SCSS and TypeScript into `wwwroot` via NuGet MSBuild packages. Generated `wwwroot/css/*.css` and `wwwroot/js/*.js` are gitignored (sources-only workflow); see [Theme and front-end assets](docs/reference/theme-and-assets.md).
+
 ## Everyday workflow
 
 ```bash

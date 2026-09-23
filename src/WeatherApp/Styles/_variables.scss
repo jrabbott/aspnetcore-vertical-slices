@@ -1,0 +1,16 @@
+// Shared design tokens. Prefer CSS custom properties at runtime so themes stay cascade-friendly.
+$bg: #f3f6f8;
+$bg-accent: #e4eef5;
+$surface: #ffffff;
+$ink: #1c2b36;
+$muted: #5b6b77;
+$line: #d5e0e8;
+$brand: #0f6a8d;
+$brand-dark: #0b5571;
+$danger: #a33b3b;
+$success: #2f6b4f;
+$shadow: 0 10px 30px rgba(28, 43, 54, 0.08);
+$radius: 14px;
+$font: "Segoe UI", "Helvetica Neue", sans-serif;
+$brand-glow: rgba(15, 106, 141, 0.12);
+$focus-ring: rgba(15, 106, 141, 0.25);

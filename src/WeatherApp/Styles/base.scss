@@ -1,29 +1,32 @@
+@use "variables" as *;
+
 * {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     min-height: 100%;
     font-family: var(--font);
     color: var(--ink);
     background:
-        radial-gradient(circle at top left, rgba(15, 106, 141, 0.12), transparent 40%),
+        radial-gradient(circle at top left, #{$brand-glow}, transparent 40%),
         linear-gradient(180deg, var(--bg-accent), var(--bg) 40%);
 }
 
 a {
     color: var(--brand);
     text-decoration: none;
-}
 
-a:hover {
-    text-decoration: underline;
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .shell {
-    width: min(960px, calc(100% - 2rem));
+    width: #{"min(960px, calc(100% - 2rem))"};
     margin-inline: auto;
 }
 
@@ -55,15 +58,15 @@ a:hover {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-}
 
-.site-nav a {
-    color: var(--muted);
-    font-weight: 600;
-}
+    a {
+        color: var(--muted);
+        font-weight: 600;
 
-.site-nav a:hover {
-    color: var(--brand);
+        &:hover {
+            color: var(--brand);
+        }
+    }
 }
 
 .site-main {

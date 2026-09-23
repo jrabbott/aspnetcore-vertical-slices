@@ -1,12 +1,49 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <TypeScriptCompileBlocked>false</TypeScriptCompileBlocked>
+    <TypeScriptNoEmitOnError>true</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\WeatherApp.Domain\WeatherApp.Domain.csproj" />
     <ProjectReference Include="..\WeatherApp.Infrastructure\WeatherApp.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.SassCompiler" PrivateAssets="all" />
     <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- Sources are compiled into wwwroot; do not publish raw SCSS/TS as static files. -->
+    <Content Remove="Styles\**\*" />
+    <Content Remove="Scripts\**\*" />
+    <None Include="Styles\**\*" />
+    <None Include="Scripts\**\*" />
+    <Content Remove="sasscompiler.json" />
+    <None Include="sasscompiler.json" />
+    <Content Remove="tsconfig.json" />
+    <None Include="tsconfig.json" />
+  </ItemGroup>
+
+  <!--
+    Generated CSS/JS are gitignored. SassCompiler already emits CSS and adds Content
+    before ResolveProjectStaticWebAssets. Run TypeScript early and register JS the same way
+    so MapStaticAssets fingerprints site.js after a clean checkout.
+  -->
+  <Target Name="CompileTypeScriptBeforeStaticWebAssets"
+          BeforeTargets="Build;ResolveScopedCssInputs;BundleMinify;ResolveProjectStaticWebAssets"
+          DependsOnTargets="SetTscExecutable;RunTscCompile"
+          Condition="'$(DesignTimeBuild)' != 'true'">
+    <ItemGroup>
+      <_GeneratedJs Include="wwwroot\js\**\*.js" />
+      <None Remove="@(_GeneratedJs)" />
+      <_NewGeneratedJs Include="@(_GeneratedJs)" Exclude="@(Content)" />
+      <Content Include="@(_NewGeneratedJs)" />
+    </ItemGroup>
+  </Target>
 
 </Project>

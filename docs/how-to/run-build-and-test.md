@@ -18,6 +18,8 @@ dotnet build aspnetcore-vertical-slices.slnx
 
 Artifacts land under `.artifacts/` (configured in `Directory.Build.props`). When `CI=true`, builds treat warnings as errors.
 
+`dotnet build` also compiles SCSS (`Styles/`) and TypeScript (`Scripts/`) into `wwwroot` via NuGet MSBuild packages — no Node toolchain is required. Those CSS/JS outputs are gitignored; always build (or `dotnet run`, which builds) before expecting styled pages. See [Theme and front-end assets](../reference/theme-and-assets.md).
+
 ## Run the web app
 
 ```bash

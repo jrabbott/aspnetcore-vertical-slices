@@ -16,7 +16,7 @@ That order is **progressive enhancement**. The opposite approach — ship a JS-f
 |---|---|
 | POST form → antiforgery → handler → redirect to Favourites → flash via `TempData` | Same POST with `Accept: application/json` → JSON `{ succeeded, message }` → status alert / row removal / reload |
 
-Forms opt in with `data-enhance="favourite-command"` and a `data-on-success` hint (`flash`, `remove-row`, or `reload`). Shared behaviour lives in `wwwroot/js/site.js` (loaded with `defer`). Slice-specific scripts can still use the layout `Scripts` section.
+Forms opt in with `data-enhance="favourite-command"` and a `data-on-success` hint (`flash`, `remove-row`, or `reload`). Shared behaviour is authored in `Scripts/site.ts` and emitted to `wwwroot/js/site.js` (loaded with `defer`). Slice-specific scripts can still use the layout `Scripts` section.
 
 ## Design choice
 

@@ -26,9 +26,9 @@ Live geocoding + forecast calls make the infrastructure seam realistic. The free
 
 Production uses `SessionFavouritesStore` (cookie session + in-memory distributed cache by default). That keeps demos per-browser without a database. Closing the browser or expiring the session clears the list; different browsers do not share favourites. Shared test fakes (`FakeFavouritesStore`, `FakeWeatherClient`) live in `tests/WeatherApp.TestSupport`.
 
-## Hand-authored theme, progressive enhancement
+## SCSS / TypeScript theme, progressive enhancement
 
-Presentation CSS is a small design-system stack under `wwwroot/css/` (tokens, base, components) with no Bootstrap or npm build. JavaScript is optional: favourite add/remove work as classic form posts; `site.js` may request JSON when `fetch` is available. See [Progressive enhancement](progressive-enhancement.md) and [Theme and front-end assets](../reference/theme-and-assets.md).
+Presentation is a small design-system stack authored as SCSS (`Styles/`) and TypeScript (`Scripts/`), compiled on `dotnet build` into gitignored `wwwroot` CSS/JS — still no Bootstrap or npm. JavaScript is optional: favourite add/remove work as classic form posts; `site.js` (from `site.ts`) may request JSON when `fetch` is available. See [Progressive enhancement](progressive-enhancement.md) and [Theme and front-end assets](../reference/theme-and-assets.md).
 
 ## Explicit DI registration
 
