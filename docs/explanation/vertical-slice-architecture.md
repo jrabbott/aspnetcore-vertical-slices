@@ -114,7 +114,7 @@ Examples in this app:
 
 Feature handlers depend on abstractions such as `IWeatherClient`, not on concrete providers.
 
-An in-memory `FakeFavouritesStore` lives under `tests/WeatherApp.TestSupport` for unit and integration tests — it is not a production Infrastructure adapter.
+An in-memory `FakeFavouritesStore` and `FakeWeatherClient` live under `tests/WeatherApp.TestSupport` for tests — they are not production Infrastructure adapters.
 
 The MVC-specific `FeatureViewLocationExpander` remains in the web project (`src/WeatherApp/Razor`) because it is presentation configuration, not application infrastructure.
 

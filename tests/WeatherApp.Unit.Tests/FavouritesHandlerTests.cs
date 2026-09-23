@@ -1,6 +1,5 @@
 using WeatherApp.Features.Weather.Favourites;
 using WeatherApp.TestSupport;
-using WeatherApp.Unit.Tests.Fakes;
 
 namespace WeatherApp.Unit.Tests;
 

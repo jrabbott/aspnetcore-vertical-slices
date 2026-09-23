@@ -1,9 +1,13 @@
 using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Weather;
 
-namespace WeatherApp.Unit.Tests.Fakes;
+namespace WeatherApp.TestSupport;
 
-internal sealed class FakeWeatherClient(params WeatherReading[] readings) : IWeatherClient
+/// <summary>
+/// In-memory <see cref="IWeatherClient"/> for unit tests.
+/// Production uses Open-Meteo-backed <c>WeatherClient</c> in Infrastructure.
+/// </summary>
+public sealed class FakeWeatherClient(params WeatherReading[] readings) : IWeatherClient
 {
     private readonly Dictionary<string, WeatherReading> _readings = readings.ToDictionary(
             r => r.Location.City,

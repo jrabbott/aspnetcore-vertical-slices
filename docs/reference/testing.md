@@ -7,7 +7,7 @@
 | `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler + FluentValidation unit tests |
 | `tests/WeatherApp.Domain.Unit.Tests` | Domain model unit tests |
 | `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client unit tests |
-| `tests/WeatherApp.TestSupport` | Shared test fakes (for example `FakeFavouritesStore`) |
+| `tests/WeatherApp.TestSupport` | Shared test fakes (`FakeFavouritesStore`, `FakeWeatherClient`) |
 
 ## Architecture rules (summary)
 

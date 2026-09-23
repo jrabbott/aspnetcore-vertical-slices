@@ -1,5 +1,5 @@
 using WeatherApp.Features.Weather.Search;
-using WeatherApp.Unit.Tests.Fakes;
+using WeatherApp.TestSupport;
 
 namespace WeatherApp.Unit.Tests;
 

@@ -20,7 +20,7 @@
 │   ├── WeatherApp.Unit.Tests/                  # Feature handlers / validators
 │   ├── WeatherApp.Domain.Unit.Tests/
 │   ├── WeatherApp.Infrastructure.Unit.Tests/
-│   └── WeatherApp.TestSupport/         # Shared fakes (e.g. FakeFavouritesStore)
+│   └── WeatherApp.TestSupport/         # Shared fakes (FakeFavouritesStore, FakeWeatherClient)
 ├── docs/                           # Diátaxis documentation (this tree)
 ├── .agents/
 │   └── skills/                     # Project Agent Skills (SKILL.md packages)
