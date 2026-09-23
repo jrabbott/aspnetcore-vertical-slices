@@ -14,7 +14,7 @@ dotnet run --project src/WeatherApp
 dotnet test aspnetcore-vertical-slices.slnx
 ```
 
-Full instructions: [docs/getting-started.md](docs/getting-started.md)
+First-time walkthrough: [docs/tutorials/run-the-weather-app.md](docs/tutorials/run-the-weather-app.md)
 
 ## Repository layout
 
@@ -30,9 +30,7 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 │   ├── WeatherApp.Unit.Tests/                  # WeatherApp feature handlers
 │   ├── WeatherApp.Domain.Unit.Tests/
 │   └── WeatherApp.Infrastructure.Unit.Tests/
-├── docs/
-│   ├── architecture.md
-│   └── getting-started.md
+├── docs/                           # Diátaxis: tutorials / how-to / reference / explanation
 ├── .github/
 │   ├── workflows/ci.yml              # restore (locked) + build + test
 │   └── dependabot.yml                # grouped NuGet + Actions updates
@@ -44,11 +42,18 @@ Full instructions: [docs/getting-started.md](docs/getting-started.md)
 └── README.md
 ```
 
-## Documentation
+Detail: [docs/reference/repository-layout.md](docs/reference/repository-layout.md).
 
-- [Architecture](docs/architecture.md) — VSA, MVC + VSA together, Razor discovery, why `_ViewImports` / `_ViewStart` stay at the web root, domain/infrastructure
-- [Getting started](docs/getting-started.md) — run, routes, cities, tests
-- [Docs index](docs/README.md)
+## Documentation ([Diátaxis](https://diataxis.fr/))
+
+| Need | Start here |
+|---|---|
+| Learn | [Run the weather app](docs/tutorials/run-the-weather-app.md) |
+| Do a task | [Add a feature slice](docs/how-to/add-a-feature-slice.md) · [Run, build, and test](docs/how-to/run-build-and-test.md) |
+| Look up | [Routes](docs/reference/routes.md) · [Build & packages](docs/reference/build-and-packages.md) · [Tests](docs/reference/testing.md) |
+| Understand | [Vertical Slice Architecture](docs/explanation/vertical-slice-architecture.md) · [Design choices](docs/explanation/design-choices.md) |
+
+Full map: [docs/README.md](docs/README.md).
 
 ## Key principle
 

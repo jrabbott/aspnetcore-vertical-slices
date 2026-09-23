@@ -1,8 +1,10 @@
-# Architecture
+# Vertical Slice Architecture
 
-ASP.NET Core MVC + Razor for presentation, with Vertical Slice Architecture for feature organisation.
+This is an **explanation**: why and how this sample organises application code as vertical slices on top of ASP.NET Core MVC + Razor.
 
-This sample shows how Vertical Slice Architecture (VSA) can be applied to a conventional ASP.NET Core MVC + Razor Views app — without MediatR, AutoMapper, generic repositories, or other ceremony frameworks.
+- Learning path: [Run the weather app](../tutorials/run-the-weather-app.md)
+- Practical extension: [Add a feature slice](../how-to/add-a-feature-slice.md)
+- Product decisions: [Design choices](design-choices.md)
 
 ## What is Vertical Slice Architecture?
 
@@ -61,109 +63,15 @@ Response
 Razor View
 ```
 
-The resulting application is still a normal ASP.NET Core MVC application using:
-
-- Controllers
-- MVC routing
-- Model binding
-- Razor Views
-- Razor layouts
-- Tag Helpers
-- Built-in dependency injection
-- Standard ASP.NET Core middleware
+The resulting application is still a normal ASP.NET Core MVC application using controllers, routing, model binding, Razor Views and layouts, Tag Helpers, built-in DI, and standard middleware.
 
 VSA changes the **organization** of the code, not the fundamental MVC programming model.
 
 ### Why controllers and Razor Views still exist
 
-Controllers remain thin HTTP adapters. They receive the request, bind a slice-local request model, call a handler, and return a view.
+Controllers remain thin HTTP adapters. They receive the request, bind a slice-local request model, call a handler, and return a view (or redirect).
 
-Razor Views remain the HTML rendering mechanism. Feature-specific views simply live next to the use case they belong to, instead of in a distant `Views/` tree.
-
-## Why are the Razor views inside Features?
-
-Feature views belong to the use case. Keeping `Index.cshtml` beside the controller, request, handler, and response improves locality of change:
-
-```text
-src/WeatherApp/Features/Weather/Search/
-├── SearchController.cs
-├── SearchRequest.cs
-├── SearchHandler.cs
-├── SearchResponse.cs
-└── Index.cshtml
-```
-
-Genuinely shared Razor infrastructure remains conventional:
-
-```text
-src/WeatherApp/Views/Shared/
-└── _Layout.cshtml
-```
-
-Shared layout, navigation, and reusable partials stay under `Views/Shared/` because they are application-wide — not owned by a single slice.
-
-`_ViewImports.cshtml` and `_ViewStart.cshtml` are **not** under `Views/` — they live at the web project root so feature views inherit them. See [Shared Razor configuration](#shared-razor-configuration-_viewimports--_viewstart).
-
-## Feature-local Razor view discovery
-
-Feature views intentionally live outside the conventional `Views/` directory.
-
-This sample targets **.NET 10 / ASP.NET Core 10** and uses the standard MVC extension point:
-
-`IViewLocationExpander`
-
-Configured in `Program.cs` via `RazorViewEngineOptions`, and implemented by:
-
-`src/WeatherApp/Razor/FeatureViewLocationExpander.cs`
-
-(The expander is MVC presentation configuration, so it lives in the web project rather than `WeatherApp.Infrastructure`.)
-
-The expander reads the controller's namespace (for example `WeatherApp.Features.Weather.Search`) and adds:
-
-```text
-/Features/Weather/Search/{0}.cshtml
-```
-
-That means controllers can use normal MVC view resolution:
-
-```csharp
-return View(response);
-```
-
-No hard-coded view paths are required.
-
-This approach is appropriate for ASP.NET Core 10 because:
-
-1. `IViewLocationExpander` remains the idiomatic MVC API for customizing view lookup.
-2. Configuration is centralized — controllers stay unaware of physical view paths.
-3. Conventional `Views/Shared` locations continue to work for layouts and shared partials.
-
-## Shared Razor configuration (`_ViewImports` / `_ViewStart`)
-
-**Keep `_ViewImports.cshtml` and `_ViewStart.cshtml` at the web project root (`src/WeatherApp/`). Do not move them into `Views/` alone.**
-
-Feature views live under `Features/...`, outside the conventional `Views/` tree. Razor discovers `_ViewImports` / `_ViewStart` by walking **up** from the view's directory toward the content root. Files under `Views/` only are **not** on that walk for a view in `Features/Search/Search.cshtml`, so those feature views would miss:
-
-- shared `@using` / Tag Helper imports
-- the default `Layout = "_Layout"` from `_ViewStart`
-
-Placing both files at the content root means every view under `Features/` and under `Views/` inherits them:
-
-```text
-src/WeatherApp/
-├── _ViewImports.cshtml   ← content root (covers Features/ and Views/)
-├── _ViewStart.cshtml
-├── Features/...
-└── Views/Shared/...
-```
-
-That gives both `Features/**/*.cshtml` and any remaining conventional views:
-
-- shared namespaces
-- MVC Tag Helpers
-- the shared `_Layout`
-
-No per-feature copies are required. Optional deeper `_ViewImports` / `_ViewStart` files can still override or extend settings for a subtree; the root pair remains the shared baseline.
+Razor Views remain the HTML rendering mechanism. Feature-specific views live next to the use case. How discovery and `_ViewImports` / `_ViewStart` work is explained in [Razor view discovery](razor-view-discovery.md).
 
 ## How handlers work
 
@@ -254,3 +162,5 @@ Architecture tests live under:
 
 - `tests/WeatherApp.Architecture.Tests/ArchitectureTests.cs` — project boundaries
 - `tests/WeatherApp.Architecture.Tests/FeatureBoundaryTests.cs` — feature slice isolation
+
+See also [Test projects](../reference/testing.md).
