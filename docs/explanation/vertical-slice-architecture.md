@@ -8,7 +8,7 @@ This is an **explanation**: why and how this sample organises application code a
 
 ## What is Vertical Slice Architecture?
 
-Vertical Slice Architecture organizes code around **user-facing use cases** rather than technical layers.
+Vertical Slice Architecture organises code around **user-facing use cases** rather than technical layers.
 
 Instead of grouping files by what they are (`Controllers/`, `Services/`, `Models/`, `Views/`), you group them by what they do (`Search/`, `Forecast/`, `AddFavourite/`).
 
@@ -43,7 +43,7 @@ That remains valuable as an application grows — as long as shared concepts sta
 MVC and VSA are **not competing architectures**.
 
 - **MVC** describes the presentation / request-response mechanism.
-- **VSA** describes how application code is organized.
+- **VSA** describes how application code is organised.
 
 They combine cleanly:
 
