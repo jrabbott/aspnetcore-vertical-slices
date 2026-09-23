@@ -1,0 +1,53 @@
+# Normalise line endings to LF (matches .editorconfig end_of_line = lf).
+* text=auto eol=lf
+
+# Source and project files
+*.cs        text diff=csharp
+*.cshtml    text diff=html
+*.razor     text diff=html
+*.css       text diff=css
+*.js        text
+*.json      text
+*.xml       text
+*.config    text
+*.props     text
+*.targets   text
+*.csproj    text
+*.sln       text
+*.slnx      text
+*.resx      text
+
+# Docs and config
+*.md        text diff=markdown
+*.yml       text
+*.yaml      text
+*.editorconfig text
+*.gitignore    text
+*.gitattributes text
+*.txt       text
+*.sh        text eol=lf
+
+# Windows scripts keep CRLF when checked out on Windows
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+
+# Binary
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.svg       text
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.eot       binary
+*.dll       binary
+*.exe       binary
+*.pdb       binary
+*.snk       binary
+*.nupkg     binary
+*.zip       binary
+*.gz        binary
+*.pdf       binary
