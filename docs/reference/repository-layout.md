@@ -8,11 +8,13 @@
 │   │   ├── Favourites/             # Session-backed IFavouritesStore
 │   │   ├── Hosting/                # DI registration extensions
 │   │   ├── Razor/                  # FeatureViewLocationExpander
+│   │   ├── Styles/                 # SCSS sources (→ wwwroot/css)
+│   │   ├── Scripts/                # TypeScript sources (→ wwwroot/js)
 │   │   ├── Views/Shared/           # Layout and shared chrome only
 │   │   ├── Mvc/                    # Small MVC helpers (e.g. Accept negotiation)
 │   │   ├── _ViewImports.cshtml     # Web root (covers Features/ + Views/)
 │   │   ├── _ViewStart.cshtml
-│   │   └── wwwroot/                # css/{tokens,base,components}.css + js/site.js
+│   │   └── wwwroot/                # compiled css/{tokens,base,components}.css + js/site.js
 │   ├── WeatherApp.Domain/          # Domain model (no ASP.NET / Infrastructure refs)
 │   └── WeatherApp.Infrastructure/  # Weather client + IFavouritesStore
 ├── tests/

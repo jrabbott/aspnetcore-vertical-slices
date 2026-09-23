@@ -1,0 +1,17 @@
+@use "variables" as *;
+
+:root {
+    --bg: #{$bg};
+    --bg-accent: #{$bg-accent};
+    --surface: #{$surface};
+    --ink: #{$ink};
+    --muted: #{$muted};
+    --line: #{$line};
+    --brand: #{$brand};
+    --brand-dark: #{$brand-dark};
+    --danger: #{$danger};
+    --success: #{$success};
+    --shadow: #{$shadow};
+    --radius: #{$radius};
+    --font: #{"\"Segoe UI\", \"Helvetica Neue\", sans-serif"};
+}

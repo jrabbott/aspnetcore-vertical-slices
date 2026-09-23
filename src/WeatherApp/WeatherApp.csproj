@@ -1,12 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <TypeScriptCompileBlocked>false</TypeScriptCompileBlocked>
+    <TypeScriptNoEmitOnError>true</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\WeatherApp.Domain\WeatherApp.Domain.csproj" />
     <ProjectReference Include="..\WeatherApp.Infrastructure\WeatherApp.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.SassCompiler" PrivateAssets="all" />
     <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Sources are compiled into wwwroot; do not publish raw SCSS/TS as static files. -->
+    <Content Remove="Styles\**\*" />
+    <Content Remove="Scripts\**\*" />
+    <None Include="Styles\**\*" />
+    <None Include="Scripts\**\*" />
+    <Content Remove="sasscompiler.json" />
+    <None Include="sasscompiler.json" />
+    <Content Remove="tsconfig.json" />
+    <None Include="tsconfig.json" />
   </ItemGroup>
 
 </Project>

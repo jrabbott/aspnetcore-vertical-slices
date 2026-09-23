@@ -33,6 +33,17 @@ When `CI=true` (GitHub Actions):
 | `.editorconfig` | Formatting, naming, nullable gates, analyzer severities |
 | `CodeMetricsConfig.txt` | CA1501 / CA1502 / CA1505 / CA1506 thresholds (`AdditionalFiles`) |
 
+## Front-end compile (MSBuild)
+
+The web project compiles SCSS and TypeScript during `dotnet build` (no Node):
+
+| Package | Role |
+|---|---|
+| `AspNetCore.SassCompiler` | `Styles/*.scss` → `wwwroot/css/*.css` |
+| `Microsoft.TypeScript.MSBuild` | `Scripts/*.ts` → `wwwroot/js/*.js` |
+
+See [Theme and front-end assets](theme-and-assets.md).
+
 ## CI and Dependabot
 
 | Path | Role |

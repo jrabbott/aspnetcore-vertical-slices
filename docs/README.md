@@ -37,7 +37,7 @@ Oriented to information. Accurate, concise descriptions you can scan.
 |---|---|
 | [Routes and endpoints](reference/routes.md) | HTTP methods, paths, controllers |
 | [Repository layout](reference/repository-layout.md) | Folders and what belongs where |
-| [Theme and front-end assets](reference/theme-and-assets.md) | CSS layers, `site.js`, enhancement hooks |
+| [Theme and front-end assets](reference/theme-and-assets.md) | SCSS/TS sources, compiled CSS/JS, enhancement hooks |
 | [Build system and packages](reference/build-and-packages.md) | CPM, lock files, analyzers, CI, Dependabot, MTP |
 | [Test projects](reference/testing.md) | Test assemblies and architecture rules |
 
