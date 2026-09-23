@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/jrabbott/aspnetcore-vertical-slices/blob/main/docs/README.md
+    about: How-tos, reference, and explanations for this sample — check here before opening a question issue.
+  - name: Contributing guide
+    url: https://github.com/jrabbott/aspnetcore-vertical-slices/blob/main/CONTRIBUTING.md
+    about: Prerequisites, CI-parity commands, and pull request expectations.

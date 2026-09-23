@@ -28,7 +28,7 @@ Update `AddOpenMeteoWeatherClient` / `src/WeatherApp/Hosting/WeatherAppInfrastru
 
 ## 5. Update docs that name Open-Meteo
 
-Touch user-facing copy and docs that assume Open-Meteo (README, tutorial, design choices) so operators know which API and credentials apply.
+Touch user-facing copy and docs that assume Open-Meteo ([README](../../README.md), [tutorial](../tutorials/run-the-weather-app.md), [design choices](../explanation/design-choices.md)) so operators know which API and credentials apply.
 
 ## Related
 

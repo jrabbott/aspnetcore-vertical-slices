@@ -24,6 +24,7 @@ When choosing a quadrant or naming a page, load [references/quadrant-guide.md](r
 3. Update the tables in [docs/README.md](../../../docs/README.md) and the Diátaxis section of the root [README.md](../../../README.md) when adding a page.
 4. Cross-link other quadrants instead of copying long explanations into how-tos (and vice versa).
 5. Use **UK spelling** in prose and examples.
+6. Contribution workflow (prerequisites, CI-parity, PRs) lives in [CONTRIBUTING.md](../../../CONTRIBUTING.md) — link it; do not duplicate the process here.
 
 ## Principles
 
@@ -33,5 +34,6 @@ When choosing a quadrant or naming a page, load [references/quadrant-guide.md](r
 
 ## Related
 
+- [Contributing](../../../CONTRIBUTING.md)
 - [Repository layout](../../../docs/reference/repository-layout.md)
 - [Design choices](../../../docs/explanation/design-choices.md)

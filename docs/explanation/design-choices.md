@@ -32,7 +32,7 @@ Production uses `SessionFavouritesStore` (cookie session + in-memory distributed
 
 ## UK spelling
 
-User-facing and code identifiers use **Favourite** / **Favourites** consistently.
+User-facing copy, documentation prose, and code identifiers use **UK spelling** consistently (e.g. **Favourite** / **Favourites**, **organisation**).
 
 ## Related
 
