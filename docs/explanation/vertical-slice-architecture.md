@@ -21,7 +21,7 @@ Each slice owns the code that primarily exists for that use case:
 
 ## Why this example uses VSA
 
-Traditional layered organization spreads a single change across many folders. Adding a field to Search might touch a controller, a DTO, a service, and a view in four different places.
+Traditional layered organisation spreads a single change across many folders. Adding a field to Search might touch a controller, a DTO, a service, and a view in four different places.
 
 VSA optimizes for **locality of change**: a developer can understand and modify the Search use case primarily by working inside `src/WeatherApp/Features/Weather/Search`.
 
@@ -29,7 +29,7 @@ Architecture tests in `tests/WeatherApp.Architecture.Tests/FeatureBoundaryTests.
 
 That remains valuable as an application grows — as long as shared concepts stay genuinely shared and slices do not become a dumping ground for unrelated logic.
 
-## How this differs from traditional layered organization
+## How this differs from traditional layered organisation
 
 | Layered | Vertical slices |
 |---|---|
@@ -65,7 +65,7 @@ Razor View
 
 The resulting application is still a normal ASP.NET Core MVC application using controllers, routing, model binding, Razor Views and layouts, Tag Helpers, built-in DI, and standard middleware.
 
-VSA changes the **organization** of the code, not the fundamental MVC programming model.
+VSA changes the **organisation** of the code, not the fundamental MVC programming model.
 
 ### Why controllers and Razor Views still exist
 
@@ -143,7 +143,7 @@ Avoid extracting:
 
 ## When VSA may be unnecessary
 
-For a trivial one-page app, VSA can be more structure than you need. Prefer the simplest organization that keeps changes local. This sample uses VSA because it demonstrates how the pattern scales past a single page while remaining easy to read.
+For a trivial one-page app, VSA can be more structure than you need. Prefer the simplest organisation that keeps changes local. This sample uses VSA because it demonstrates how the pattern scales past a single page while remaining easy to read.
 
 ## Dependency injection
 

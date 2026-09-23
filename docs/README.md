@@ -2,6 +2,8 @@
 
 Docs follow the [Diátaxis](https://diataxis.fr/) system: four types of content for four needs. Pick the quadrant that matches what you are trying to do.
 
+**For contributors:** [CONTRIBUTING.md](../CONTRIBUTING.md) covers prerequisites, CI-parity commands, and pull requests. Prose and identifiers use **UK spelling** (e.g. Favourite, organisation).
+
 | Need | Type | Question it answers |
 |---|---|---|
 | Learn by doing | **Tutorials** | “Teach me to use this sample.” |

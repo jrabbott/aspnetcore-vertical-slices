@@ -59,6 +59,7 @@ All projects under `tests/` should pass. That includes architecture rules that k
 
 ## Next steps
 
+- **Want to change the sample?** [Contributing](../../CONTRIBUTING.md) and [Add a feature slice](../how-to/add-a-feature-slice.md)
 - **Task-oriented:** [Add a feature slice](../how-to/add-a-feature-slice.md), [Run, build, and test](../how-to/run-build-and-test.md)
 - **Understand the design:** [Vertical Slice Architecture](../explanation/vertical-slice-architecture.md)
 - **Look up details:** [Routes](../reference/routes.md), [Repository layout](../reference/repository-layout.md)
