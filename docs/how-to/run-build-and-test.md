@@ -69,6 +69,8 @@ Deployed mode (skip Testcontainers / WireMock):
 E2E_BASE_URL=https://example.com dotnet test tests/WeatherApp.E2E.Tests -c Release -p:IncludeE2E=true
 ```
 
+Scenarios tagged `@a11y` run axe WCAG 2.1 A/AA checks on the main pages (same project and CI/CD job as the functional e2e scenarios).
+
 ### What each project covers
 
 See [Test projects](../reference/testing.md).
