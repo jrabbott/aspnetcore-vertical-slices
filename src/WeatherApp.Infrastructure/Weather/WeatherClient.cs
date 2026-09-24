@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using WeatherApp.Domain.Weather;
 
 namespace WeatherApp.Infrastructure.Weather;
@@ -13,16 +14,27 @@ public sealed class WeatherClient : IWeatherClient
     private readonly OpenMeteoForecastClient _forecast;
 
     public WeatherClient(HttpClient httpClient)
-        : this(httpClient, new OpenMeteoGeocoder(httpClient))
+        : this(httpClient, new OpenMeteoOptions())
     {
     }
 
-    internal WeatherClient(HttpClient httpClient, OpenMeteoGeocoder geocoder)
+    public WeatherClient(HttpClient httpClient, OpenMeteoOptions options)
+        : this(httpClient, new OpenMeteoGeocoder(httpClient, options), options)
+    {
+    }
+
+    public WeatherClient(HttpClient httpClient, IOptions<OpenMeteoOptions> options)
+        : this(httpClient, options?.Value ?? throw new ArgumentNullException(nameof(options)))
+    {
+    }
+
+    internal WeatherClient(HttpClient httpClient, OpenMeteoGeocoder geocoder, OpenMeteoOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(httpClient);
         ArgumentNullException.ThrowIfNull(geocoder);
+        OpenMeteoOptions resolved = options ?? new OpenMeteoOptions();
         _geocoder = geocoder;
-        _forecast = new OpenMeteoForecastClient(httpClient);
+        _forecast = new OpenMeteoForecastClient(httpClient, resolved);
     }
 
     /// <summary>

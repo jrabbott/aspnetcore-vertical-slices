@@ -4,6 +4,7 @@
 |---|---|
 | `tests/WeatherApp.Architecture.Tests` | Project + feature boundary rules (NetArchTest) |
 | `tests/WeatherApp.Integration.Tests` | HTTP routes via `WebApplicationFactory`, AngleSharp DOM assertions |
+| `tests/WeatherApp.E2E.Tests` | Browser e2e (Playwright + Reqnroll + Page Object Model); Testcontainers + WireMock by default |
 | `tests/WeatherApp.Unit.Tests` | WeatherApp feature handler + FluentValidation unit tests |
 | `tests/WeatherApp.Domain.Unit.Tests` | Domain model unit tests |
 | `tests/WeatherApp.Infrastructure.Unit.Tests` | Weather client unit tests |
@@ -30,6 +31,14 @@ Primary sources:
 - Open-Meteo mapping is covered by `WeatherApp.Infrastructure.Unit.Tests` with `HttpMessageHandler` stubs.
 - Session cookie handling isolates favourites per `HttpClient` when exercising the real session store.
 - Prefer ungeocodable sentinel city names (for example `Zzqxnotacity999`) when asserting “not found” paths.
+
+## E2E notes
+
+- Default mode starts **WireMock** (stubbed Open-Meteo JSON) and the **app Docker image** via Testcontainers. The app points `OpenMeteo__GeocodingBaseUrl` / `OpenMeteo__ForecastBaseUrl` at WireMock through `host.docker.internal`.
+- Set `E2E_BASE_URL` to run against a deployed site (skips Testcontainers and WireMock).
+- Set `E2E_IMAGE` (default `weatherapp:ci`) when using container mode.
+- Solution-wide `dotnet test` **excludes** e2e unless `IncludeE2E=true`. CI/CD builds the image, then runs the e2e project with that property.
+- Accessibility (a11y) checks are **not** in this suite yet; the intended follow-up is tagged `@a11y` scenarios in the same project (not a separate suite).
 
 ## Related
 

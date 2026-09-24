@@ -1,14 +1,27 @@
 using System.Collections.Concurrent;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Options;
 
 namespace WeatherApp.Infrastructure.Weather;
 
-internal sealed class OpenMeteoGeocoder(HttpClient httpClient)
+internal sealed class OpenMeteoGeocoder
 {
-    private const string _geocodingBase = "https://geocoding-api.open-meteo.com/v1/search";
-
-    private readonly HttpClient _httpClient = httpClient;
+    private readonly HttpClient _httpClient;
+    private readonly OpenMeteoOptions _options;
     private readonly ConcurrentDictionary<string, GeoLocation?> _cache = new(StringComparer.OrdinalIgnoreCase);
+
+    public OpenMeteoGeocoder(HttpClient httpClient, IOptions<OpenMeteoOptions> options)
+        : this(httpClient, options?.Value ?? throw new ArgumentNullException(nameof(options)))
+    {
+    }
+
+    internal OpenMeteoGeocoder(HttpClient httpClient, OpenMeteoOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(httpClient);
+        ArgumentNullException.ThrowIfNull(options);
+        _httpClient = httpClient;
+        _options = options;
+    }
 
     public async Task<GeoLocation?> ResolveAsync(string city, CancellationToken cancellationToken)
     {
@@ -25,7 +38,7 @@ internal sealed class OpenMeteoGeocoder(HttpClient httpClient)
         }
 
         string url =
-            $"{_geocodingBase}?name={Uri.EscapeDataString(key)}&count=1&language=en&format=json";
+            $"{_options.GeocodingBaseUrl.TrimEnd('/')}?name={Uri.EscapeDataString(key)}&count=1&language=en&format=json";
 
         GeocodingResponse? response = await _httpClient
             .GetFromJsonAsync<GeocodingResponse>(url, cancellationToken)

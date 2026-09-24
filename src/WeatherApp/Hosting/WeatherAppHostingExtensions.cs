@@ -2,11 +2,11 @@ namespace WeatherApp.Hosting;
 
 internal static class WeatherAppHostingExtensions
 {
-    public static IServiceCollection AddWeatherApp(this IServiceCollection services)
+    public static IServiceCollection AddWeatherApp(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddWeatherAppPlatform();
         services.AddWeatherAppMvc();
-        services.AddWeatherAppInfrastructure();
+        services.AddWeatherAppInfrastructure(configuration);
         services.AddWeatherAppFeatures();
         return services;
     }

@@ -38,6 +38,8 @@ dotnet test aspnetcore-vertical-slices.slnx
 
 Test projects use **xUnit.net v3** with the **Microsoft Testing Platform** runner (`global.json` + `Directory.Build.props`).
 
+Solution-wide `dotnet test` runs architecture, integration, and unit projects. It does **not** run browser e2e (those need a Docker image or `E2E_BASE_URL`).
+
 ### Run one project
 
 ```bash
@@ -49,6 +51,23 @@ dotnet test tests/WeatherApp.Architecture.Tests
 ```
 
 Shared fakes live in `tests/WeatherApp.TestSupport` (class library, not a test project).
+
+### E2E (Playwright + Reqnroll)
+
+Container mode (default) — build the image first, then:
+
+```bash
+dotnet publish src/WeatherApp/WeatherApp.csproj -c Release -o .publish/web
+cp .dockerignore .publish/web/.dockerignore
+docker build -f Dockerfile -t weatherapp:ci ./.publish/web
+E2E_IMAGE=weatherapp:ci dotnet test tests/WeatherApp.E2E.Tests -c Release -p:IncludeE2E=true
+```
+
+Deployed mode (skip Testcontainers / WireMock):
+
+```bash
+E2E_BASE_URL=https://example.com dotnet test tests/WeatherApp.E2E.Tests -c Release -p:IncludeE2E=true
+```
 
 ### What each project covers
 

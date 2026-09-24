@@ -20,6 +20,7 @@
 ├── tests/
 │   ├── WeatherApp.Architecture.Tests/
 │   ├── WeatherApp.Integration.Tests/
+│   ├── WeatherApp.E2E.Tests/                   # Playwright + Reqnroll browser e2e
 │   ├── WeatherApp.Unit.Tests/                  # Feature handlers / validators
 │   ├── WeatherApp.Domain.Unit.Tests/
 │   ├── WeatherApp.Infrastructure.Unit.Tests/

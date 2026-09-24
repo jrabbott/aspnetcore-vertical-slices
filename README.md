@@ -27,6 +27,7 @@ First-time walkthrough: [docs/tutorials/run-the-weather-app.md](docs/tutorials/r
 ├── tests/
 │   ├── WeatherApp.Architecture.Tests/
 │   ├── WeatherApp.Integration.Tests/
+│   ├── WeatherApp.E2E.Tests/                   # Playwright + Reqnroll browser e2e
 │   ├── WeatherApp.Unit.Tests/                  # WeatherApp feature handlers
 │   ├── WeatherApp.Domain.Unit.Tests/
 │   ├── WeatherApp.Infrastructure.Unit.Tests/

@@ -20,6 +20,7 @@ jobs:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      E2E_IMAGE: weatherapp:ci
 
     steps:
       - name: Checkout
@@ -31,18 +32,11 @@ jobs:
       - name: Build container image
         run: |
           cp .dockerignore .publish/web/.dockerignore
-          docker build -f Dockerfile -t weatherapp:ci ./.publish/web
+          docker build -f Dockerfile -t "$E2E_IMAGE" ./.publish/web
 
-      - name: Smoke health endpoint
-        run: |
-          docker run --rm -d --name weatherapp-ci -p 8080:8080 weatherapp:ci
-          trap 'docker stop weatherapp-ci' EXIT
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:8080/health; then
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "Health check did not become ready in time" >&2
-          docker logs weatherapp-ci >&2 || true
-          exit 1
+      - name: Run e2e tests
+        run: >
+          dotnet test tests/WeatherApp.E2E.Tests/WeatherApp.E2E.Tests.csproj
+          --configuration Release
+          -p:IncludeE2E=true
+          --verbosity minimal

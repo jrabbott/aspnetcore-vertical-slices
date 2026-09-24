@@ -10,6 +10,9 @@
   <Folder Name="/tests/Integration/">
     <Project Path="tests/WeatherApp.Integration.Tests/WeatherApp.Integration.Tests.csproj" />
   </Folder>
+  <Folder Name="/tests/E2E/">
+    <Project Path="tests/WeatherApp.E2E.Tests/WeatherApp.E2E.Tests.csproj" />
+  </Folder>
   <Folder Name="/tests/Unit/">
     <Project Path="tests/WeatherApp.Unit.Tests/WeatherApp.Unit.Tests.csproj" />
     <Project Path="tests/WeatherApp.Domain.Unit.Tests/WeatherApp.Domain.Unit.Tests.csproj" />
