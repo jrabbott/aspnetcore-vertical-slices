@@ -38,8 +38,7 @@ Primary sources:
 - Set `E2E_BASE_URL` to run against a deployed site (skips Testcontainers and WireMock).
 - Set `E2E_IMAGE` (default `weatherapp:ci`) when using container mode.
 - Solution-wide `dotnet test` **excludes** e2e unless `IncludeE2E=true`. CI/CD builds the image, then runs the e2e project with that property.
-- Accessibility (a11y) checks are **not** in this suite yet; the intended follow-up is tagged `@a11y` scenarios in the same project (not a separate suite).
-
+- Accessibility scenarios are tagged `@a11y` and use **axe-core** (`Deque.AxeCore.Playwright`) with WCAG 2.1 A/AA tags against Search, Forecast, and Favourites (including search results). They run with the rest of the e2e suite in CI/CD.
 ## Related
 
 - [How to run, build, and test](../how-to/run-build-and-test.md)
