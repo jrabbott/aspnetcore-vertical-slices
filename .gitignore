@@ -52,6 +52,9 @@ src/WeatherApp/wwwroot/css/**/*.css
 src/WeatherApp/wwwroot/js/**/*.js
 src/WeatherApp/wwwroot/js/**/*.js.map
 
+# Generated Reqnroll code-behind (regenerated on build)
+*.feature.cs
+
 # Dotnet tool
 .dotnet/
 
