@@ -72,9 +72,10 @@ jobs:
           --verbosity minimal
 
       - name: Push image
-        run: |
-          set -euo pipefail
-          while IFS= read -r tag; do
-            [ -n "$tag" ] || continue
-            docker push "$tag"
-          done <<< "${{ steps.meta.outputs.tags }}"
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .publish/web
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
