@@ -1,21 +1,34 @@
 using System.Globalization;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Options;
 using WeatherApp.Domain.Weather;
 
 namespace WeatherApp.Infrastructure.Weather;
 
-internal sealed class OpenMeteoForecastClient(HttpClient httpClient)
+internal sealed class OpenMeteoForecastClient
 {
-    private const string _forecastBase = "https://api.open-meteo.com/v1/forecast";
+    private readonly HttpClient _httpClient;
+    private readonly OpenMeteoOptions _options;
 
-    private readonly HttpClient _httpClient = httpClient;
+    public OpenMeteoForecastClient(HttpClient httpClient, IOptions<OpenMeteoOptions> options)
+        : this(httpClient, options?.Value ?? throw new ArgumentNullException(nameof(options)))
+    {
+    }
+
+    internal OpenMeteoForecastClient(HttpClient httpClient, OpenMeteoOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(httpClient);
+        ArgumentNullException.ThrowIfNull(options);
+        _httpClient = httpClient;
+        _options = options;
+    }
 
     public async Task<WeatherReading?> GetCurrentAsync(
         GeoLocation location,
         CancellationToken cancellationToken)
     {
         string url =
-            $"{_forecastBase}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
+            $"{_options.ForecastBaseUrl.TrimEnd('/')}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
             + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m"
             + "&timezone=auto&wind_speed_unit=kmh";
 
@@ -32,7 +45,7 @@ internal sealed class OpenMeteoForecastClient(HttpClient httpClient)
         CancellationToken cancellationToken)
     {
         string url =
-            $"{_forecastBase}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
+            $"{_options.ForecastBaseUrl.TrimEnd('/')}?latitude={Format(location.Latitude)}&longitude={Format(location.Longitude)}"
             + "&daily=weather_code,temperature_2m_max,relative_humidity_2m_mean,wind_speed_10m_max"
             + $"&forecast_days={days}&timezone=auto&wind_speed_unit=kmh";
 

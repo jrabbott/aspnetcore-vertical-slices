@@ -1,0 +1,7 @@
+<Project>
+  <!-- Evaluated after SDK/test targets so solution-wide dotnet test skips this project. -->
+  <PropertyGroup Condition="'$(IncludeE2E)' != 'true'">
+    <IsTestProject>false</IsTestProject>
+    <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
+  </PropertyGroup>
+</Project>

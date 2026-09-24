@@ -1,5 +1,3 @@
-using System.Net;
-using System.Text;
 using WeatherApp.Domain.Weather;
 using WeatherApp.Infrastructure.Weather;
 
@@ -140,14 +138,35 @@ public sealed class WeatherClientTests
     {
         var handler = new StubHttpMessageHandler();
         var httpClient = new HttpClient(handler);
-        var geocoder = new OpenMeteoGeocoder(httpClient);
-        var first = new WeatherClient(httpClient, geocoder);
-        var second = new WeatherClient(httpClient, geocoder);
+        var options = new OpenMeteoOptions();
+        var geocoder = new OpenMeteoGeocoder(httpClient, options);
+        var first = new WeatherClient(httpClient, geocoder, options);
+        var second = new WeatherClient(httpClient, geocoder, options);
 
         Assert.NotNull(await first.GetCurrentAsync("London"));
         Assert.NotNull(await second.GetCurrentAsync("London"));
         Assert.Equal(1, handler.GeocodeRequestCount);
         Assert.Equal(2, handler.ForecastRequestCount);
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_CustomBaseUrls_AreRequested()
+    {
+        var handler = new StubHttpMessageHandler();
+        var options = new OpenMeteoOptions
+        {
+            GeocodingBaseUrl = "http://wiremock.test/v1/search",
+            ForecastBaseUrl = "http://wiremock.test/v1/forecast"
+        };
+        WeatherClient client = new(new HttpClient(handler), options);
+
+        WeatherReading? reading = await client.GetCurrentAsync("London");
+
+        Assert.NotNull(reading);
+        Assert.Equal(1, handler.GeocodeRequestCount);
+        Assert.Equal(1, handler.ForecastRequestCount);
+        Assert.Contains("wiremock.test/v1/search", handler.LastGeocodeUrl, StringComparison.Ordinal);
+        Assert.Contains("wiremock.test/v1/forecast", handler.LastForecastUrl, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -161,201 +180,5 @@ public sealed class WeatherClientTests
     private static WeatherClient CreateClient(HttpMessageHandler handler)
     {
         return new(new HttpClient(handler));
-    }
-
-    private sealed class StubHttpMessageHandler : HttpMessageHandler
-    {
-        private readonly bool _truncateDaily;
-        private readonly bool _failHttp;
-
-        public StubHttpMessageHandler()
-            : this(truncateDaily: false, failHttp: false)
-        {
-        }
-
-        private StubHttpMessageHandler(bool truncateDaily, bool failHttp)
-        {
-            _truncateDaily = truncateDaily;
-            _failHttp = failHttp;
-        }
-
-        public static StubHttpMessageHandler WithTruncatedDaily()
-        {
-            return new(truncateDaily: true, failHttp: false);
-        }
-
-        public static StubHttpMessageHandler Failing()
-        {
-            return new(truncateDaily: false, failHttp: true);
-        }
-
-        public int GeocodeRequestCount
-        {
-            get; private set;
-        }
-
-        public int ForecastRequestCount
-        {
-            get; private set;
-        }
-
-        protected override Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (_failHttp)
-            {
-                throw new HttpRequestException("Simulated upstream failure.");
-            }
-
-            string url = request.RequestUri?.ToString() ?? string.Empty;
-
-            if (url.Contains("geocoding-api.open-meteo.com", StringComparison.Ordinal))
-            {
-                GeocodeRequestCount++;
-                return Task.FromResult(JsonResponse(GeocodeJson(url)));
-            }
-
-            if (url.Contains("api.open-meteo.com", StringComparison.Ordinal))
-            {
-                ForecastRequestCount++;
-                return Task.FromResult(JsonResponse(url.Contains("daily=", StringComparison.Ordinal)
-                    ? ForecastDailyJson(url)
-                    : CurrentJson()));
-            }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound));
-        }
-
-        private static string GeocodeJson(string url)
-        {
-            if (url.Contains("Atlantis", StringComparison.OrdinalIgnoreCase)
-                || url.Contains("Nowhere", StringComparison.OrdinalIgnoreCase))
-            {
-                return """{"results":[]}""";
-            }
-
-            string city = "London";
-            string country = "United Kingdom";
-
-            if (url.Contains("Paris", StringComparison.OrdinalIgnoreCase))
-            {
-                city = "Paris";
-                country = "France";
-            }
-            else if (url.Contains("Tokyo", StringComparison.OrdinalIgnoreCase))
-            {
-                city = "Tokyo";
-                country = "Japan";
-            }
-            else if (url.Contains("New%20York", StringComparison.OrdinalIgnoreCase)
-                || url.Contains("New+York", StringComparison.OrdinalIgnoreCase))
-            {
-                city = "New York";
-                country = "United States";
-            }
-            else if (url.Contains("Madrid", StringComparison.OrdinalIgnoreCase))
-            {
-                city = "Madrid";
-                country = "Spain";
-            }
-
-            return $$"""
-                {
-                  "results": [
-                    {
-                      "name": "{{city}}",
-                      "country": "{{country}}",
-                      "latitude": 51.5,
-                      "longitude": -0.12
-                    }
-                  ]
-                }
-                """;
-        }
-
-        private static string CurrentJson()
-        {
-            return """
-            {
-              "current": {
-                "time": "2026-09-22T12:00",
-                "temperature_2m": 12.4,
-                "relative_humidity_2m": 78,
-                "weather_code": 3,
-                "wind_speed_10m": 18.2
-              }
-            }
-            """;
-        }
-
-        private string ForecastDailyJson(string url)
-        {
-            int days = ParseForecastDays(url);
-            var times = new List<string>(days);
-            var codes = new List<string>(days);
-            var temps = new List<string>(days);
-            var humidity = new List<string>(days);
-            var wind = new List<string>(days);
-
-            for (int i = 0; i < days; i++)
-            {
-                times.Add($"\"2026-09-{22 + i:00}\"");
-                codes.Add("2");
-                temps.Add($"{16 + i}.0");
-                humidity.Add("55");
-                wind.Add("12.0");
-            }
-
-            if (_truncateDaily && days > 1)
-            {
-                // Only the first day has complete series data.
-                codes = [codes[0]];
-                temps = [temps[0]];
-                humidity = [humidity[0]];
-                wind = [wind[0]];
-            }
-
-            return $$"""
-                {
-                  "daily": {
-                    "time": [{{string.Join(",", times)}}],
-                    "weather_code": [{{string.Join(",", codes)}}],
-                    "temperature_2m_max": [{{string.Join(",", temps)}}],
-                    "relative_humidity_2m_mean": [{{string.Join(",", humidity)}}],
-                    "wind_speed_10m_max": [{{string.Join(",", wind)}}]
-                  }
-                }
-                """;
-        }
-
-        private static int ParseForecastDays(string url)
-        {
-            const string key = "forecast_days=";
-            int start = url.IndexOf(key, StringComparison.Ordinal);
-            if (start < 0)
-            {
-                return 3;
-            }
-
-            start += key.Length;
-            int end = start;
-            while (end < url.Length && char.IsDigit(url[end]))
-            {
-                end++;
-            }
-
-            return int.TryParse(url[start..end], out int days) ? days : 3;
-        }
-
-        private static HttpResponseMessage JsonResponse(string json)
-        {
-            return new(HttpStatusCode.OK)
-            {
-                Content = new StringContent(json, Encoding.UTF8, "application/json")
-            };
-        }
     }
 }

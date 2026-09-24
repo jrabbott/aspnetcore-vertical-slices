@@ -22,6 +22,8 @@ Unit-test the client in `tests/WeatherApp.Infrastructure.Unit.Tests` with `HttpM
 
 Update `AddOpenMeteoWeatherClient` / `src/WeatherApp/Hosting/WeatherAppInfrastructureServiceCollectionExtensions.cs` (typed `HttpClient`, options, API keys via configuration, and so on). Feature registration should stay unchanged.
 
+Open-Meteo HTTP bases are configurable via the `OpenMeteo` section (`GeocodingBaseUrl`, `ForecastBaseUrl`), with production defaults matching the public Open-Meteo hosts. E2E container mode overrides these to point at WireMock.
+
 ## 4. Adjust integration tests
 
 `tests/WeatherApp.Integration.Tests/WeatherAppFactory` already replaces `IWeatherClient` with a seeded `FakeWeatherClient` from `WeatherApp.TestSupport` so route tests stay offline. Keep that seam when you change providers (update the factory seed if ExampleCities or expected HTML change).

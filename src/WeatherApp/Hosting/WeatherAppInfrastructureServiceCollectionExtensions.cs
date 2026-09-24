@@ -6,9 +6,11 @@ namespace WeatherApp.Hosting;
 
 internal static class WeatherAppInfrastructureServiceCollectionExtensions
 {
-    public static IServiceCollection AddWeatherAppInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddWeatherAppInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        services.AddOpenMeteoWeatherClient(ConfigureOpenMeteoClient);
+        services.AddOpenMeteoWeatherClient(configuration, ConfigureOpenMeteoClient);
         services.AddHttpContextAccessor();
         services.AddDistributedMemoryCache();
         services.AddSession(ConfigureSession);

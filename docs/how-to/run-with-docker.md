@@ -35,8 +35,8 @@ The process listens on HTTP port **8080**. TLS belongs at the ingress (for examp
 
 | Workflow | When | What |
 |---|---|---|
-| [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) | Pull requests | Shared [build-test-publish](../../.github/actions/build-test-publish/action.yml) action, then `docker build` (no push) and a `/health` smoke check |
-| [`.github/workflows/cd.yml`](../../.github/workflows/cd.yml) | Push to `main` (and `workflow_dispatch`) | Same action, then push the image to GHCR |
+| [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) | Pull requests | Shared [build-test-publish](../../.github/actions/build-test-publish/action.yml) action, then `docker build`, then Playwright e2e (Testcontainers + WireMock) against that image |
+| [`.github/workflows/cd.yml`](../../.github/workflows/cd.yml) | Push to `main` (and `workflow_dispatch`) | Same action, build the image locally, run e2e, then push to GHCR only if e2e passes |
 
 Image name:
 
