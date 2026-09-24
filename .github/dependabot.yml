@@ -1,4 +1,4 @@
-# Dependabot: few grouped PRs, weekly NuGet / monthly Actions.
+# Dependabot: few grouped PRs, weekly NuGet / monthly Actions + Docker.
 # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
@@ -45,3 +45,21 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+  # Runtime base image in Dockerfile (aspnet). Keep majors tied to TFM upgrades.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+      day: monday
+      time: "06:00"
+      timezone: Etc/UTC
+    open-pull-requests-limit: 1
+    labels:
+      - dependencies
+    commit-message:
+      prefix: deps
+    ignore:
+      - dependency-name: "mcr.microsoft.com/dotnet/aspnet"
+        update-types:
+          - "version-update:semver-major"
