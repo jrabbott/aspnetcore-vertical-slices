@@ -4,20 +4,20 @@
     "net10.0": {
       "Deque.AxeCore.Playwright": {
         "type": "Direct",
-        "requested": "[4.13.0, )",
-        "resolved": "4.13.0",
-        "contentHash": "tqzqVEsQfVg4fmx9/AkbgYjVMYHHOGI7WkTznKuP8ayi0uaBcd+2skOfxnVdUBlEhpHdu9stzxOZ6uPVhIS2JA==",
+        "requested": "[4.14.0, )",
+        "resolved": "4.14.0",
+        "contentHash": "3iY/i8yPmLlfAGNI3lAlxqVyEI533Tr2jNQF0IE5Iqbund06rlbF17AYrWXAxQuSHunMSX29xHV69BklKJktPQ==",
         "dependencies": {
-          "Deque.AxeCore.Commons": "4.13.0",
+          "Deque.AxeCore.Commons": "4.14.0",
           "Microsoft.Playwright": "1.20.2",
           "System.IO.Abstractions": "17.0.24"
         }
       },
       "Microsoft.Playwright": {
         "type": "Direct",
-        "requested": "[1.63.0, )",
-        "resolved": "1.63.0",
-        "contentHash": "O9F45Tt5vjauIo7mTTgQtahigL7cfRLvBMpErLJfdvgCnQ14yue5BmRASNnfNBWRBni4Mqp2YiD1eFGIO4nUUw==",
+        "requested": "[1.64.1, )",
+        "resolved": "1.64.1",
+        "contentHash": "DO8plHiCCUS/54XZxhsuzGtxI4RkyJ/5XOlVFoT0A0K1jNYdGhntry36ivkPjcCbv0uz6P/PmJ35gUgnAYGbiw==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "6.0.0",
           "System.ComponentModel.Annotations": "5.0.0"
@@ -50,13 +50,13 @@
       },
       "WireMock.Net.Testcontainers": {
         "type": "Direct",
-        "requested": "[2.19.0, )",
-        "resolved": "2.19.0",
-        "contentHash": "Ywz0b5FpQs1hWRrWD5pmSjednEn9kak/MxJ/vpYEqrC2ztCm4leRKsQtI58PGssBTBqolTE44/K0LQE1Hjav3g==",
+        "requested": "[2.20.0, )",
+        "resolved": "2.20.0",
+        "contentHash": "BqmyhqDNKu5uMCak4MG5V871CMVBfMY/0jsJgdfuItyjr/qdyRBRDNGzb2nPSOITV6e6DPsYwnOj7wwNFV+a1Q==",
         "dependencies": {
           "Stef.Validation": "0.3.0",
           "Testcontainers": "4.14.0",
-          "WireMock.Net.RestClient": "2.19.0"
+          "WireMock.Net.RestClient": "2.20.0"
         }
       },
       "xunit.v3": {
@@ -93,8 +93,8 @@
       },
       "Deque.AxeCore.Commons": {
         "type": "Transitive",
-        "resolved": "4.13.0",
-        "contentHash": "roq2z6OmKY4KVXGj1lSigUbjE7DnIcYLqPOVcnWrusS6CI7oB6/He8Oo3ZO/TCOlnaTS1hkJOuKPwL+PyhyC6w==",
+        "resolved": "4.14.0",
+        "contentHash": "6UpFIkOwSfJTstNrpbN3dDKsHrVCd+v5XKJt5xeRu0JIkkGN2P42CspxiJYxdgmtW2wYnK2kpYwowJa3ML0GZg==",
         "dependencies": {
           "NewtonSoft.Json": "13.0.1"
         }
@@ -313,18 +313,18 @@
       },
       "WireMock.Net.Abstractions": {
         "type": "Transitive",
-        "resolved": "2.19.0",
-        "contentHash": "I3vhSVi7SVPKU6U/N0w7Brzr9YA+TenygZDfg0521GeMUUIbZkhm4ffJOonnCQgIrKVJDF3J6lKpcB1txW3QAA=="
+        "resolved": "2.20.0",
+        "contentHash": "ujGb8NzK0NSJ15Te5aUquLfFq/wsMGrlea6QreioCqcrY8VPvY6yJobfethfy1nnINfIK6guWQies7/9XMiQuQ=="
       },
       "WireMock.Net.RestClient": {
         "type": "Transitive",
-        "resolved": "2.19.0",
-        "contentHash": "5kkxQ2vmP4+K2UgjYNy06NV0V69HkA/odI4ga61yRsmRMJS+2LvDbgcVVywqVSlvEU0eOOmzt4D8RlMklVb45g==",
+        "resolved": "2.20.0",
+        "contentHash": "c2b8vN1i8lRH4rj+k5yDrVaEX9OvHRD7ZnXFNnSIxRr61/MDO/WniA4v+id8Mexwpl0iExsTBMrKqvOYyWtHIg==",
         "dependencies": {
           "JsonConverter.Newtonsoft.Json": "0.13.0",
           "RestEase": "1.6.4",
           "Stef.Validation": "0.3.0",
-          "WireMock.Net.Abstractions": "2.19.0"
+          "WireMock.Net.Abstractions": "2.20.0"
         }
       },
       "xunit.analyzers": {
