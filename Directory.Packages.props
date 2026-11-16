@@ -7,8 +7,8 @@
     <!-- Application -->
     <PackageVersion Include="AspNetCore.SassCompiler" Version="1.105.1" />
     <PackageVersion Include="FluentValidation" Version="12.2.0" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="11.0.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="7.0.1" />
 
     <!-- Tests -->
